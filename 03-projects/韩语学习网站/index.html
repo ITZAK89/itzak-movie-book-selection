@@ -255,6 +255,7 @@ html,body{height:100%;background:var(--c-bg);color:var(--c-text);font-family:var
 <textarea id="shadow-subtitle-input" class="shadow-textarea" rows="6" placeholder="Paste VTT content here...&#10;WEBVTT&#10;00:00:01.000 --> 00:00:05.000&#10;안녕하세요."></textarea>
 </div>
 <button class="ctrl-btn ctrl-btn--accent" id="shadow-load-btn">Load &amp; Start</button>
+<button class="ctrl-btn" id="shadow-clear-btn">Clear All</button>
 <span class="shadow-msg" id="shadow-msg"></span>
 </div>
 </div>
@@ -320,7 +321,7 @@ var STR = {
     grammar_desc:'点击卡片展开详情 · 学习模式 ｜ 测验模式',
     shadow_desc:'粘贴 YouTube 链接和 VTT 字幕 · Reveal 显示字幕 · ← → 翻句',
     yt_label:'YouTube 链接',audio_label:'音频文件 (输入URL后自动填充)',audio_upload_label:'或上传音频文件 (MP3/M4A，全平台可用)',subtitle_label:'字幕 (VTT格式)',subtitle_placeholder:'在此粘贴 VTT 字幕内容...',
-    load_start:'加载并开始',reveal:'显示',conceal:'隐藏',
+    load_start:'加载并开始',clear_all:'一键清除',reveal:'显示',conceal:'隐藏',
     prev_btn:'← 上一句',next_btn:'下一句 →',
     mark_learned:'标记已学',learned_done:'✓ 已学',load_new:'加载新内容',
     full_transcript:'完整字幕',click_reveal:'点击显示',
@@ -347,7 +348,7 @@ var STR = {
     grammar_desc:'Click to expand · Study to learn ｜ Quiz to test',
     shadow_desc:'Paste YouTube link & VTT subtitles · Reveal to see text · ← → arrows',
     yt_label:'YouTube URL',audio_label:'Audio file (auto-filled after URL)',audio_upload_label:'Or upload audio file (MP3/M4A, works everywhere)',subtitle_label:'Subtitles (VTT format)',subtitle_placeholder:'Paste VTT content here...\nWEBVTT\n00:00:01.000 --> 00:00:05.000\n안녕하세요.',
-    load_start:'Load & Start',reveal:'Reveal',conceal:'Conceal',
+    load_start:'Load & Start',clear_all:'Clear All',reveal:'Reveal',conceal:'Conceal',
     prev_btn:'← Prev',next_btn:'Next →',
     mark_learned:'Mark Learned',learned_done:'✓ Learned',load_new:'Load New',
     full_transcript:'Full Transcript',click_reveal:'Click Reveal',
@@ -1258,6 +1259,14 @@ document.getElementById('shadow-load-btn').addEventListener('click', function(){
     doStart(audioPath);
   }
 });
+document.getElementById('shadow-clear-btn').addEventListener('click', function(){
+  document.getElementById('shadow-yt-url').value = '';
+  document.getElementById('shadow-audio-file').value = '';
+  document.getElementById('shadow-audio-upload').value = '';
+  document.getElementById('shadow-subtitle-input').value = '';
+  document.getElementById('shadow-msg').textContent = '';
+  document.getElementById('shadow-warn').style.display = 'none';
+});
 function startShadowSession(audioFile){
   shadowAudioReady = false;
   shadowPendingSeek = -1;
@@ -1443,6 +1452,7 @@ function refreshStaticText(){
   if(sls[0])sls[0].textContent=t('yt_label'); if(sls[1])sls[1].textContent=t('audio_label'); if(sls[2])sls[2].textContent=t('audio_upload_label'); if(sls[3])sls[3].textContent=t('subtitle_label');
   document.getElementById('shadow-subtitle-input').placeholder=t('subtitle_placeholder');
   document.getElementById('shadow-load-btn').textContent=t('load_start');
+  document.getElementById('shadow-clear-btn').textContent=t('clear_all');
   document.getElementById('echo-prev').textContent=t('prev_btn');
   document.getElementById('echo-next').textContent=t('next_btn');
   document.getElementById('shadow-reload-btn').textContent=t('load_new');
