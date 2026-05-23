@@ -1,0 +1,249 @@
+{
+  "main": {
+    "id": "026b9d408e31809b",
+    "type": "split",
+    "children": [
+      {
+        "id": "1de8d7deaf08cdfd",
+        "type": "tabs",
+        "children": [
+          {
+            "id": "c323b74ea28afe17",
+            "type": "leaf",
+            "state": {
+              "type": "markdown",
+              "state": {
+                "file": "05-resources/llm-wiki/outputs/韩语学习网站-2026-05-21.md",
+                "mode": "source",
+                "source": false
+              },
+              "icon": "lucide-file",
+              "title": "韩语学习网站-2026-05-21"
+            }
+          }
+        ]
+      }
+    ],
+    "direction": "vertical"
+  },
+  "left": {
+    "id": "2e3706e970c6a689",
+    "type": "split",
+    "children": [
+      {
+        "id": "3ca7dbd0dc4ae0f5",
+        "type": "tabs",
+        "children": [
+          {
+            "id": "858aba55bf923331",
+            "type": "leaf",
+            "state": {
+              "type": "file-explorer",
+              "state": {
+                "sortOrder": "alphabetical",
+                "autoReveal": false
+              },
+              "icon": "lucide-folder-closed",
+              "title": "文件列表"
+            }
+          },
+          {
+            "id": "b487550512c4d794",
+            "type": "leaf",
+            "state": {
+              "type": "search",
+              "state": {
+                "query": "",
+                "matchingCase": false,
+                "explainSearch": false,
+                "collapseAll": false,
+                "extraContext": false,
+                "sortOrder": "alphabetical"
+              },
+              "icon": "lucide-search",
+              "title": "搜索"
+            }
+          },
+          {
+            "id": "32f176e4d7a21a7e",
+            "type": "leaf",
+            "state": {
+              "type": "bookmarks",
+              "state": {},
+              "icon": "lucide-bookmark",
+              "title": "书签"
+            }
+          }
+        ]
+      }
+    ],
+    "direction": "horizontal",
+    "width": 200
+  },
+  "right": {
+    "id": "7604a29dd31dda00",
+    "type": "split",
+    "children": [
+      {
+        "id": "abafab0275607692",
+        "type": "tabs",
+        "children": [
+          {
+            "id": "ae25d9ea1e95d607",
+            "type": "leaf",
+            "state": {
+              "type": "backlink",
+              "state": {
+                "file": "欢迎.md",
+                "collapseAll": false,
+                "extraContext": false,
+                "sortOrder": "alphabetical",
+                "showSearch": false,
+                "searchQuery": "",
+                "backlinkCollapsed": false,
+                "unlinkedCollapsed": true
+              },
+              "icon": "links-coming-in",
+              "title": "欢迎 的反向链接列表"
+            }
+          },
+          {
+            "id": "ddf086cac218eb00",
+            "type": "leaf",
+            "state": {
+              "type": "outgoing-link",
+              "state": {
+                "file": "欢迎.md",
+                "linksCollapsed": false,
+                "unlinkedCollapsed": true
+              },
+              "icon": "links-going-out",
+              "title": "欢迎 的出链列表"
+            }
+          },
+          {
+            "id": "22a1f568274512c5",
+            "type": "leaf",
+            "state": {
+              "type": "tag",
+              "state": {
+                "sortOrder": "frequency",
+                "useHierarchy": true,
+                "showSearch": false,
+                "searchQuery": ""
+              },
+              "icon": "lucide-tags",
+              "title": "标签"
+            }
+          },
+          {
+            "id": "fd51570f7f2887fa",
+            "type": "leaf",
+            "state": {
+              "type": "all-properties",
+              "state": {
+                "sortOrder": "frequency",
+                "showSearch": false,
+                "searchQuery": ""
+              },
+              "icon": "lucide-archive",
+              "title": "添加笔记属性"
+            }
+          },
+          {
+            "id": "75126f98780b7d3b",
+            "type": "leaf",
+            "state": {
+              "type": "outline",
+              "state": {
+                "file": "欢迎.md",
+                "followCursor": false,
+                "showSearch": false,
+                "searchQuery": ""
+              },
+              "icon": "lucide-list",
+              "title": "欢迎 的大纲"
+            }
+          },
+          {
+            "id": "3f0343935b0fe539",
+            "type": "leaf",
+            "state": {
+              "type": "file-properties",
+              "state": {
+                "file": "临时/井底之蛙-PPT.md"
+              },
+              "icon": "lucide-info",
+              "title": "井底之蛙-PPT的笔记属性"
+            }
+          }
+        ],
+        "currentTab": 5
+      }
+    ],
+    "direction": "horizontal",
+    "width": 300,
+    "collapsed": true
+  },
+  "left-ribbon": {
+    "hiddenItems": {
+      "switcher:打开快速切换": false,
+      "graph:查看关系图谱": false,
+      "canvas:新建白板": false,
+      "daily-notes:打开/创建今天的日记": false,
+      "templates:插入模板": false,
+      "command-palette:打开命令面板": false,
+      "bases:新建数据库": false,
+      "marp-slides:Show Slide Preview": false
+    }
+  },
+  "active": "c323b74ea28afe17",
+  "lastOpenFiles": [
+    "05-resources/llm-wiki/outputs/韩语学习网站-2026-05-21.md.tmp.12569.cf5d819ab64d",
+    "05-resources/llm-wiki/outputs/Hook配置-2026-05-20.md",
+    "05-resources/llm-wiki/outputs/中剧出口-2026-05-22.md",
+    "05-resources/llm-wiki/outputs/韩语学习网站-2026-05-21.md",
+    "03-projects/kocowa/中剧美国出口.md",
+    "04-areas/finance/TIA-2026-05-23-BTC反彈無力！沒有加倉做空機會？繼續下行？.md",
+    "04-areas/finance/TIA-2026-05-21-BTC能反彈嗎？資金費悄悄漲起來了…….md",
+    "04-areas/finance/TIA-2026-05-20-BTC無力緩跌！毫無反彈跡象？會有回抽嗎？.md",
+    "04-areas/finance/btc-holdings.md",
+    "03-projects/韩语学习网站/项目笔记.md",
+    "03-projects/韩语学习网站/项目笔记.md.tmp.12569.a8f5be20b172",
+    "05-resources/llm-wiki/wiki/prompt-as-code.md",
+    "2026-05-20.md",
+    "05-resources/llm-wiki/raw/资本是如何引爆全球金融危机的？.md",
+    "05-resources/llm-wiki/raw/AI个人知识库搭建教程｜用Karpathy的LLM Wiki方法，三步让收藏夹真正发挥价值_哔哩哔哩_bilibili.md",
+    "05-resources/llm-wiki/raw/affaan-meverything-claude-code The agent harness performance optimization system. Skills, instincts, memory, security, and research-first development for Claude Code, Codex, Opencode, Cursor and beyond..md",
+    "05-resources/llm-wiki/raw/assets/slide-10.png",
+    "05-resources/llm-wiki/raw/assets/slide-01.png",
+    "临时/assets/slide-01.png",
+    "临时/assets/图片生成提示词.md",
+    "临时/assets/slide-04.jpg",
+    "05-resources/llm-wiki/raw/assets/slide-03.jpg",
+    "05-resources/llm-wiki/raw/assets/slide-02.jpg",
+    "05-resources/llm-wiki/raw/assets/slide-01 1.png",
+    "临时/井底之蛙-PPT.md",
+    "临时/井底之蛙-演讲稿.md",
+    "05-resources/llm-wiki/index.md",
+    "04-areas/finance/investment-plan.md",
+    "04-areas/finance/cash-flow.md",
+    "CLAUDE.md.tmp.12569.7c0cea985b8e",
+    "02-daily/todo/2026-05-15.md",
+    "CLAUDE.md.tmp.12569.491374a55539",
+    "03-projects/kocowa/给진명이형的回复-韩语版.md",
+    "03-projects/kocowa/FE string set-2026-05-21.md",
+    "05-resources/llm-wiki/outputs/韩语学习网站-2026-05-22.md",
+    "03-projects/韩语学习网站/index.html.tmp.96620.f787343821c4",
+    "03-projects/韩语学习网站/index.html.tmp.96620.e5cb2573e856",
+    "03-projects/韩语学习网站/index.html.tmp.96620.73065bce1ba7",
+    "03-projects/韩语学习网站/index.html.tmp.96620.336ad168b8e8",
+    "03-projects/韩语学习网站/index.html.tmp.96620.451975b5b2da",
+    "03-projects/韩语学习网站/index.html.tmp.96620.8d5927d7f88f",
+    "03-projects/韩语学习网站/index_backup_20260522.html",
+    "kocowa/FE string set-2026-05-21.md",
+    "临时/assets/slide-10.png",
+    "临时/assets/slide-09.png",
+    "临时/assets/slide-08.png"
+  ]
+}

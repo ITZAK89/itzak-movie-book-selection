@@ -1,0 +1,10 @@
+{
+  "attachmentFolderPath": "05-resources/llm-wiki/raw/assets",
+  "pdfExportSettings": {
+    "includeName": false,
+    "pageSize": "Letter",
+    "landscape": false,
+    "margin": "0",
+    "downscalePercent": 100
+  }
+}

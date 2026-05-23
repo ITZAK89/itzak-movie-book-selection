@@ -1,0 +1,345 @@
+,Key,String,,,,
+Word count,,En,Pt,Es,Cn,Vn
+1,w_accessibility,Accessibility,Acessibilidade,Accesibilidad,订阅相关说明,Khả năng  truy cập
+34,s_web_checkoutterm02,"I understand that I can cancel at any time, prior to the upcoming billing date, to avoid paying the retail price, and the monthly or annual subscription will be automatically renewed until I cancel.","A assinatura será renovada automaticamente no fim do período atual. Você pode cancelar a qualquer momento para evitar a cobrança do próximo ciclo. O acesso continua disponível até o fim da assinatura já paga.","Entiendo que puedo cancelar en cualquier momento, antes de la próxima fecha de facturación, para evitar pagar el precio de venta, y la suscripción mensual o anual se renovará automáticamente hasta que se cancele.",我了解，我可以在​​下一个账单日之前随时取消​​订阅，以避免支付零售价，月度或年度订阅​​将继续自动续订直至我取消​​。,"Tôi hiểu rằng tôi có thể hủy bất kỳ lúc nào trước ngày thanh toán tiếp theo để tránh phải trả phí theo giá bán lẻ, và gói đăng ký hàng tháng hoặc hàng năm sẽ tự động gia hạn cho đến khi tôi hủy."
+33,s_web_checkoutterm03,"I understand that I can cancel at any time, prior to the upcoming billing date, to avoid the next charge, and the monthly or annual subscription will be automatically renewed until I cancel.","A assinatura será renovada automaticamente no fim do período atual. Você pode cancelar a qualquer momento para evitar a cobrança do próximo ciclo. O acesso continua disponível até o fim da assinatura já paga.","Entiendo que puedo cancelar en cualquier momento, antes de la próxima fecha de facturación, para evitar el próximo cargo, y la suscripción mensual o anual se renovará automáticamente hasta que se cancele.",我了解，我可以在​​下一个账单日之前随时取消​​订阅，以避免下次扣款，月度或年度订阅​​将继续自动续续订直至我取消​​。,"Tôi hiểu rằng tôi có thể hủy bất kỳ lúc nào trước ngày thanh toán tiếp theo để tránh bị tính phí lần kế tiếp, và gói đăng ký hàng tháng hoặc hàng năm sẽ tự động gia hạn cho đến khi tôi hủy."
+2,w_billingdate,Billing Date,Data de cobrança,Fecha de facturación,账单日期​,Ngày Thanh Toán
+25,s_yourdowngradesubscription,"Your downgrade subscription will take effect on your next billing date {}. If you don’t wish to continue, you may cancel anytime before that date.","A mudança para o novo plano entrará em vigor na sua próxima data de cobrança. Se não quiser continuar, você pode cancelar a assinatura a qualquer momento antes dessa data.","El cambio de plan de tu suscripción entrará en vigor el siguiente día de facturación {}. Si no deseas continuar, puedes cancelar en cualquier momento antes de esa fecha.",您的降级操作将在您的下一个账单日 ​​{}​​ 生效。如果您不希望继续，请在该日期之前随时取消。,"Gói hạ cấp của bạn sẽ có hiệu lực vào ngày thanh toán tiếp theo là {}. Nếu bạn không muốn tiếp tục, bạn có thể hủy bất kỳ lúc nào trước ngày đó."
+1,w_day,day,dia,día,天,ngày
+10,s_premiumdesc,Stream on up to 4 devices - Perfect for families!,Assista em até 4 dispositivos ao mesmo tempo. Perfeito para toda a família!,Transmisión en hasta 4 dispositivos - ¡Perfecto para toda la familia!,​​最多可在 4 台设备上同时观看 - 全家适用理想之选！​,Xem trên tối đa 4 thiết bị — Hoàn hảo cho cả gia đình!
+8,s_basicdesc,Enjoy your favorite shows at the best price!,"Curta seus programas favoritos pelo melhor preço!",¡Disfruta de tus programas favoritos al mejor precio!,​​以最佳价格尽享您喜爱的节目！​,Thưởng thức các chương trình yêu thích với mức giá tốt nhất!
+5,s_annualdesc,{n}% Cheaper than Monthly Plan,{n}% mais barato que o plano mensal. ,{n}% más barato que el plan mensual,比月度计划节省 {n}%,Rẻ hơn {n}% so với Gói Hàng Tháng
+7,s_promodescn,Only {n} days left to save 30%,"Faltam só {n} dias para aproveitar 30% de desconto!",Solo quedan {n} días para ahorrar un 30%,仅剩 {n} 天可享 7 折优惠​​,Chỉ còn {n} ngày để hưởng ưu đãi tiết kiệm 30%
+7,s_promodesc1,Only 1 day left to save 30%,Falta só {n} dia para aproveitar 30% de desconto!,Solo queda 1 día para ahorrar un 30%,仅剩 1 天享 7 折优惠​​ ,Chỉ còn 1 ngày để hưởng ưu đãi tiết kiệm 30%
+6,s_promodesctoday,Only today left to save 30%!,Último dia para garantir 30% de desconto!,¡Último día para ahorrar un 30%!,仅剩今日享 7 折优惠！,Chỉ hôm nay để hưởng ưu đãi tiết kiệm 30%!
+2,s_yourplan,Your Plan,Seu plano,Tu plan,您的订阅计划,Gói Của Bạn
+4,s_comparebasic,Compared to Basic Plan:,Comparado ao Plano Básico:,Comparado con el plan Básico:,相比基础订阅计划,So với Gói Cơ bản:
+4,s_comparepremium,Compared to Premium Plan:,"Comparado ao Plano Premium:
+",Comparado con el plan Premium:,相比高级订阅计划,So với Gói Cao cấp:
+2,s_watchadfree,Watch Ad-Free,"Assista sem anúncios",Ver sin anuncios,无广告观看,Xem Không Quảng Cáo
+4,s_downloadwatch,Download & Watch Offline,"Baixe e assista offline",Descargar y ver sin conexión,下载并离线观看​,Tải Xuống & Xem Ngoại Tuyến
+4,s_uptoprofiles,Up to 4 Profiles,Até 4 perfis,Hasta 4 perfiles,最多 4个个人资料​,Tối Đa 4 Hồ Sơ
+7,s_saveannual,Save about {n}% with the Annual Plan!,Economize cerca de {n}% com o plano anual!,¡Ahorra alrededor de {n}% con el plan anual!,使用年度订阅计划可节省约 {n}%！​,Tiết kiệm {n}% với Gói Hàng Năm!
+22,s_web_checkoutterm04,I understand that this is a one-time purchase and will not renew automatically. No additional charges will be incurred unless I resubscribe.,"Entendo que esta é uma compra única e que a assinatura não será renovada automaticamente. Nenhuma cobrança adicional será feita, a menos que eu assine novamente.",Entiendo que esta es una compra única y no se renovará automáticamente. No se aplicarán cargos adicionales a menos que vuelva a suscribirme.,我了解，此为一次性购买，不会自动续订。除非我重新订阅，否则不会产生额外费用。​,Tôi hiểu rằng đây là giao dịch một lần và sẽ không tự động gia hạn. Sẽ không có khoản phí nào khác phát sinh trừ khi tôi đăng ký lại.
+2,w_discountamount,Discount Amount,Valor do desconto,Importe del descuento,优惠金额​​,Số Tiền Giảm Giá
+1,w_permonth,/mo,/mês,/mes,/月,/ tháng
+5,s_upgradeex,Upgrade for a Better Experience!,"Faça upgrade para uma experiência ainda melhor!",¡Actualizar para una mejor experiencia!,​​升级获得更佳体验！​​,Nâng Cấp Để Có Trải Nghiệm Tốt Hơn!
+4,s_yourcurplan,Your Current Plan :,Seu plano atual,Tu plan actual:,您当前的订阅计划：​,Gói Dịch Vụ Hiện Tại Của Bạn:
+10,s_moveright,Move right to view the plans and check their details.,"Deslize para a direita para ver os planos e conferir os detalhes.",Desliza hacia la derecha para ver los planes y comprobar sus detalles.,向右滑动查看订阅计划并了解其详情。​,Vuốt sang phải để xem các gói dịch vụ và thông tin chi tiết.
+22,s_koc_substogetcontent,"Subscribe to get priority access to over 40,000 hours of the best Korean Dramas, TV Shows, Movies, and Webcomics with premium subtitles.","Assine e tenha acesso prioritário a mais de 40.000 horas de dramas, séries, filmes e webcomics coreanos, com legendas premium.","Suscríbete para obtener acceso prioritario a más de 40 000 horas de los mejores dramas, programas de televisión, películas y webcómics coreanos con subtítulos premium.","立即订阅，优先观看超过 40,000 小时精选韩剧、电视节目、电影和网络漫画，均享高质量字幕。​","Đăng ký để được quyền truy cập hơn 40.000 giờ Phim Truyền Hình Hàn Quốc, Chương Trình Truyền Hình, Phim Điện Ảnh, và Webcomic hay nhất với phụ đề chất lượng cao."
+14,s_anotherplatform,"If you purchased from another platform, you must upgrade your plan through that platform.","Se você assinou por outra plataforma, será necessário fazer o upgrade por lá.","Si te suscribiste desde otra plataforma, debes actualizar tu plan a través de esa plataforma.",如果您是在其他平台购买的订阅，您必须通过该平台升级您的方案。​,"Nếu bạn mua gói dịch vụ từ nền tảng khác, bạn cần nâng cấp gói thông qua nền tảng đó."
+13,s_promofreetrial,"During promotion events, you won’t be able to access the 14-day Free Trial.","Durante eventos promocionais, o período de teste gratuito de 14 dias não estará disponível.","Durante los eventos de promoción, no podrás acceder a la prueba gratis de 14 días.",​​促销活动期间，您将无法享受 14 天免费试用。​,"Trong thời gian khuyến mãi, bạn sẽ không thể dùng thử miễn phí 14 ngày."
+1,w_permo,/mo,/mês,/mes,/月,/ tháng
+1,w_peryr,/yr,/ano,/año,​​/年,/ năm
+2,w_unlimitedcontents,Unlimited Contents,Conteúdo ilimitado,Contenido ilimitado,无限观看内容​,Nội Dung Không Giới Hạn
+4,s_downlaodandoffline,Download & Offline Playback,"Download e reprodução offline
+",Descarga y reproducción sin conexión,下载及离线播放,Tải Xuống & Xem Lại Ngoại Tuyến
+6,s_dayfreetrial,{}-day Free Trial (Once per account),Período de teste gratuito de {n} dias (uma vez por conta),Prueba gratis de {} días (una vez por cuenta),{}-天免费试用 (每账号限一次)​,Dùng Thử Miễn Phí {} ngày (mỗi tài khoản chỉ Một Lần)
+4,s_whychoose,Why Choose KOCOWA+ Service?,Por que escolher o KOCOWA+?,¿Por qué elegir KOCOWA+?,为何选择 KOCOWA+ 服务？​,Tại Sao Chọn Dịch Vụ KOCOWA+?
+1,w_exclusive,Exclusive,Exclusivo,Exclusivo,​​独家,Độc quyền
+4,w_koreandramaandmovies,Korean Drama & Movies,Dramas e filmes coreanos,Drama y películas coreanas,韩剧&电影​,Phim Truyền Hình & Phim Điện Ảnh Hàn Quốc
+8,s_watchtoprated,"Watch top-rated K-dramas and moives, only available here!","Assista a K-dramas e filmes mais populares — só aqui!
+","¡Mira los mejores K-dramas y películas, solo disponibles aquí!",​​观看顶级韩剧与电影，仅在此处提供！​,"Thưởng thức những bộ Phim Truyền Hình & Phim Điện Ảnh Hàn Quốc ăn khách, chỉ có tại đây!"
+2,w_multilanguagesubtitles,Multi-Language Subtitles,Legendas em vários idiomas,Subtítulos en varios idiomas,​​多语言字幕​,Phụ Đề Đa Ngôn Ngữ
+9,s_enjoycontentinyour,Enjoy Content in your preferred language with high-quality subtitles.,"Curta o conteúdo no seu idioma preferido com legendas de alta qualidade.",Disfruta del contenido en tu idioma preferido con subtítulos de alta calidad.,用您偏好的语言享受高质量字幕内容。​,Thưởng Thức Nội Dung bằng ngôn ngữ yêu thích với phụ đề chất lượng cao.
+4,s_fastseamless,Fast & Seamless Streaming,Streaming rápido e sem interrupções,Transmisión fluida y rápida,快速&流畅播放,Truyền Phát Nhanh & Mượt
+9,s_nobuffering,No buffering! High-speed streaming for the best viewing experience.,Nada de travamentos! Aproveite uma experiência fluida e de alta velocidade.,¡Sin búfer! Transmisión de alta velocidad para la mejor experiencia de visualización.,​​无缓冲卡顿！高速播放，带来最佳观影体验。​,Không bị giật hình! Trải nghiệm xem mượt mà với tốc độ cao.
+2,s_crossdevicesync,Cross-Device Sync,Sincronização entre dispositivos,Sincronización entre dispositivos,跨设备同步​,Đồng Bộ Đa Thiết Bị
+9,s_startononedevice,Start on one device and continue on another seamlessly.,"Continue do ponto onde parou, em qualquer dispositivo.
+",Iniciar en un dispositivo y continuar en otro sin problemas.,​​在一台设备上开始播放，无缝切换到另一台设备继续观看。​,Bắt đầu xem trên một thiết bị và tiếp tục xem trên thiết bị khác một cách liền mạch.
+4,s_flexibleplan,"Flexible Plan & Easy
+Cancellation",Plano flexível e cancelamento fácil,Plan flexible y cancelación fácil,"灵活方案&轻松
+取消",Gói Dịch Vụ Linh Hoạt & Dễ Dàng Hủy
+8,s_upgradedowngrade,"Upgrade, downgrade, or cancle anytime- no hidden fees!","Faça upgrade, downgrade ou cancele quando quiser — sem taxas escondidas!","Actualizar, bajar de categoría o cancelar en cualquier momento, ¡sin cargos ocultos!",随时升级、降级或取消 - 无隐藏费用！​,"Nâng cấp, hạ cấp hoặc hủy gói dịch vụ bất kỳ lúc nào — không có phí ẩn!"
+5,s_exclusivediscounts,Exclusive Discounts for Annual Plans,"
+Descontos exclusivos para planos anuais",Descuentos exclusivos para planes anuales,年度订阅计划专享优惠,Giảm Giá Độc Quyền cho Gói Hàng Năm
+8,s_savemorewhenyou,Save more when you choose our yearly plan!,Economize mais escolhendo a opção anual!,¡Ahorra más si eliges el plan anual!,选择我们全年订阅计划，节省更多！,Tiết kiệm nhiều hơn khi chọn gói dịch vụ theo năm!
+16,s_enjoyunlimitedaccess,"Enjoy Unlimited Access to Over 40,000 Hours of K-Content!
+New K-Drama & Shows Added Daily and Weekly!","Aproveite acesso ilimitado a mais de 40.000 horas de conteúdo coreano! 
+Novos K-dramas e programas adicionados diariamente e semanalmente!","¡Disfruta de acceso ilimitado a más de 40 000 horas de K-Content!
+¡Nuevos K-dramas y programas agregados a diario y semanalmente!","畅享超过 40,000 小时韩国影剧的无限制观看！​
+每日每周更新最新韩剧及节目！",Thưởng Thức Không Giới Hạn Hơn 40.000 Giờ Nội Dung Hàn Quốc! Phim & Các Chương Trình Truyền Hình Hàn Quốc mới được cập nhật hàng ngày và hàng tuần!
+2,s_upgradenow,Upgrade Now!,"Faça o upgrade agora!
+",¡Actualizar ahora!,立即升级！,Nâng Cấp Ngay!
+8,s_pleasecheckthedetails,Please check the details of each plan below.,"Confira os detalhes de cada plano abaixo.
+
+
+",Comprueba los detalles de cada plan a continuación.,请在下方查看各方案详情。​,Vui lòng kiểm tra chi tiết từng gói dịch vụ bên dưới.
+3,s_menualrenewal,Manual Renewal Required,"Você precisa renovar manualmente
+",Se requiere renovación manual,需手动续订​,Yêu Cầu Gia Hạn Thủ Công
+2,s_only,only {},"
+somente {}
+
+",solo {},​​仅需 {}​​,chỉ {}
+8,s_offfor1fullyear,{} Off for 1 Fulll Year of K-Content!,"{} de desconto por 1 ano inteiro de conteúdo coreano!
+",¡{} de descuento por 1 año completo de K-Content!,{} 折扣，享一整年韩国节目！,Giảm {} cho 1 Năm Trọn Vẹn nội dung Hàn Quốc!
+2,s_noads,No Ads,Sem anúncios,Sin anuncios,无广告​,Không Có Quảng Cáo
+6,s_getoff,Get {n}% off — available now!,{n}% de desconto — aproveite agora!,Obtén un {n}% de descuento — ¡disponible ahora!,享受{n}% 折扣 — 即刻生效！,Giảm {n}% — áp dụng ngay!
+21,s_subscribetogetpriority_nomovie,"Subscribe to get priority access to over 40,000 hours of the best Korean Dramas, TV Shows, and Webcomics with premium subtitles.","Assine para ter acesso prioritário a mais de 40.000 horas dos melhores dramas coreanos, programas de televisão e webcomics com legendas premium.","Suscríbete para obtener acceso prioritario a más de 40 000 horas de los mejores dramas, programas de televisión y webcómics coreanos con subtítulos premium.","立即订阅，优先观看超过 40,000 小时精选韩剧、电视节目和网络漫画，均享高质量字幕。​","Đăng ký gói để được ưu tiên truy cập vào hơn 40,000 giờ Phim, Chương Trình Truyền Hình và Webcomic Hàn Quốc hay nhất với phụ đề chất lượng cao."
+3,s_planchangeun,Plan Change Unavailable,Alteração de plano indisponível,Cambio de plan no disponible,无法更改订阅计划,Không Thể Thay Đổi Gói Đăng Ký.
+17,s_planchangeonplatfrom,"Please change your subscription on the {platform_name} you used to purchase. For help, visit our Help Center.","Altere sua assinatura na plataforma {platform_name} onde foi feita a compra. Para ajuda, acesse nossa Central de Ajuda.","Cambia tu suscripción en la plataforma {platform_name} que usaste para comprar. Para obtener ayuda, comunícate con nuestro Centro de ayuda.",请前往您当初购买订阅的{platform_name}更改您的订阅计划。如需帮助，请访问我们的帮助中心。,"Vui lòng thay đổi gói đăng ký trên nền tảng {platform_name} mà bạn đã dùng để mua. Để được hỗ trợ, vui lòng truy cập Trung Tâm Hỗ Trợ của chúng tôi."
+8,s_planchangefailed,Plan change failed. Please contact our Help Center.,Não foi possível alterar o plano. Entre em contato com a nossa Central de Ajuda.,Error en el cambio de plan. Comunícate con nuestro Centro de ayuda.,订阅计划更改失败。请联系我们的帮助中心。,Thay đổi gói đăng ký không thành công. Vui lòng liên hệ Trung Tâm Hỗ Trợ của chúng tôi.
+5,s_comparepremium,Compared to Premium Monthly Plan:,Comparado ao plano mensal Premium:,En comparación con el plan mensual premium:,与高级月度计划对比：,So sánh với Gói Cao Cấp Hàng Tháng:
+8,s_gui_checkpaymenu,"For purchase details, please check the Payment menu.","Para detalhes da compra, acesse o menu Pagamento.","Para obtener detalles de la compra, consulta el menú Pago.",确认购买详情，请查看付款菜单。,"Để kiểm tra chi tiết mua hàng, vui lòng vào mục Thanh Toán."
+19,,"Get priority access to thousands of hours of the best Korean dramas, TV shows, and Webcomics with premium subtitles.","Tenha acesso exclusivo a milhares de horas dos melhores dramas coreanos, programas de TV e webcomics com legendas premium.","Obtén acceso prioritario a miles de horas de los mejores dramas, programas de televisión y webcómics coreanos con subtítulos premium.",优先观看数千小时的精选韩剧、电视节目和网络漫画，均享高质量字幕。​,"Nhận quyền ưu tiên truy cập vào hàng nghìn giờ Phim, Chương Trình Truyền Hình, Webcomic Hàn Quốc với phụ đề chất lượng cao."
+5,,Sign In with Your Device,Entrar com seu dispositivo,Iniciar sesión con tu dispositivo,使用您的设备登录,Đăng Nhập bằng Thiết Bị Của Bạn
+4,,Scan the QR code,Escaneie o código QR,Escanea el código QR,扫描二维码,Quét Mã QR
+5,,Get a New QR Code,Gerar novo código QR,Obtener un nuevo código QR,获取新的二维码,Nhận Mã QR Mới
+4,,Don’t have an account?,Ainda não tem conta?,¿No tienes una cuenta?,还没有帐号？,Bạn chưa có tài khoản?
+11,,Scan the QR code on your device to create an account.,Escaneie o código QR no seu dispositivo para criar uma conta.,Escanea el código QR de tu dispositivo para crear una cuenta.,在您的设备上扫描二维码以创建帐号。,Quét mã QR trên thiết bị của bạn để tạo tài khoản.
+29,,"To change your subscripiton (upgrade or downgrade), please use the platform where you originally made your purchase, such as [{}]. If you need help, please visit our Help Center.","Para alterar sua assinatura (upgrade ou downgrade), use a plataforma onde a compra foi feita, como [{}]. Se precisar de ajuda, acesse nossa Central de Ajuda.","Para cambiar tu suscripción (subir o bajar de categoría), usa la plataforma donde realizaste la compra originalmente, como [{}]. Si necesitas ayuda, comunícate con nuestro Centro de ayuda.",如需更改您的订阅（升级或降级），请使用您当初购买订阅的平台进行操作，例如[{}]。如需帮助，请访问我们的帮助中心。,"Để thay đổi gói đăng ký (nâng cấp hoặc hạ cấp), vui lòng sử dụng nền tảng mà bạn đã mua ban đầu, ví dụ như [{}]. Nếu cần hỗ trợ, hãy truy cập Trung Tâm Hỗ Trợ của chúng tôi."
+5,,Plan Chnage Not Available Here,Alteração de plano indisponível aqui,Cambio de plan no disponible aquí,无法在此更改订阅计划,Không Thể Thay Đổi Gói Đăng Ký Tại Đây.
+4,,the Apple App Store,App Store da Apple,la App Store de Apple,苹果应用商店,Cửa Hàng Ứng Dụng của Apple
+2,,Google Play,Google Play,Google Play,Google Play,Google Play
+27,,"Starting from September 1st, sales in North America may be subject to combined state and or local tax. Applicable tax rates will show up as additional charges.","A partir do dia 1º de setembro, as vendas na América do Norte podem incluir impostos locais e estaduais. Esses valores serão exibidos como cobranças adicionais.","A partir del 1 de septiembre, las ventas en Norteamérica pueden incluir impuestos locales y estatales. Los impuestos aplicables se mostrarán como cargos adicionales.",自9月1日起，北美地区销售商品可能需缴纳州税和地方税组合税费。适用税率将作为附加费用显示在账单中。,"Bắt đầu từ ngày 1 tháng 9, doanh số bán hàng tại Bắc Mỹ có thể phải chịu thuế tiểu bang và/hoặc thuế địa phương. Mức thuế áp dụng sẽ được hiển thị dưới dạng các khoản phí bổ sung."
+13,,The download was interrupted due to an unstable network. Please try downloading again.,O download foi interrompido por instabilidade na rede. Tente baixar novamente.,La descarga se interrumpió debido a una red inestable. Intenta descargar de nuevo.,下载因网络不稳定而中断。请尝试重新下载。,Quá trình tải xuống bị gián đoạn do mạng không ổn định. Vui lòng thử lại.
+11,,Email not verified. Please complete the verification on mobile or web.,E-mail não verificado. Conclua a verificação pelo celular ou pelo site.,Email no verificado. Completa la verificación en el móvil o en la web.,邮箱未验证。请在手机或网页端完成验证。,Email chưa được xác minh. Vui lòng hoàn tất xác minh trên thiết bị di động hoặc trang web.
+9,,Subscribe now and enjoy unlimited access to KOCOWA+ content!,Assine agora e aproveite o acesso ilimitado ao conteúdo da KOCOWA+!,¡Suscríbete ahora y disfruta de acceso ilimitado al contenido de KOCOWA!,立即订阅，畅享无限制访问 KOCOWA+ 内容！,Đăng ký ngay và tận hưởng quyền truy cập không giới hạn vào nội dung KOCOWA+!
+2,,SERVICE HOME,PÁGINA INICIAL,PÁGINA DE INICIO,服务主页,TRANG CHỦ DỊCH VỤ
+8,,A verification email has been sent to {email},Enviamos um e-mail de verificação para {email}.,Se ha enviado un email de verificación a {email}.,验证邮件已发送至 {email},Email xác minh đã được gửi đến {email}.
+12,,Please check your inbox and follow the link to complete your registration.,Verifique sua caixa de entrada e clique no link para concluir o cadastro.,Revisa tu bandeja de entrada y sigue el enlace para completar tu registro.,请检查您的收件箱并点击链接完成注册。,Vui lòng kiểm tra hộp thư đến và nhấp vào liên kết để hoàn tất đăng ký.
+10,,"If you did not get any mail, Resend verification mail",Não recebeu o e-mail? Reenviar verificação.,¿No recibiste el email? Reenviar verificación.,若未收到邮件，请重新发送验证邮件,"Nếu bạn không nhận được bất kỳ email nào, hãy gửi lại email xác minh."
+13,,"If you have any other questions, please reach out to our Help Center.","Se tiver mais dúvidas, entre em contato com nossa Central de Ajuda.","Si tienes alguna otra pregunta, comunícate con nuestro Centro de ayuda.",如有任何其他问题，请联系我们的帮助中心。,"Nếu bạn có bất kỳ câu hỏi nào khác, vui lòng liên hệ Trung Tâm Trợ Giúp của chúng tôi."
+3,,Email Verification Required,É necessário verificar seu e-mail.,Se requiere verificación de email.,需进行邮箱验证,Yêu Cầu Xác Minh Email
+14,,This account isn't verified yet. You'll need to verify your email to use KOCOWA+.,Verifique seu e-mail para começar a usar o KOCOWA+.,Esta cuenta aún no está verificada. Verifica tu email para usar KOCOWA+.,此账户尚未验证。您需要验证邮箱才能使用 KOCOWA+。,Tài khoản này chưa được xác minh. Bạn cần xác minh email để sử dụng KOCOWA+.
+2,,Stay Here,Continuar aqui,Continuar aquí,留在此页,Ở Lại Trang
+3,,Verification Email Sent,E-mail de verificação enviado,Email de verificación enviado.,验证邮件已发送,Email Xác Minh Đã Được Gửi Lại
+15,,A new verification email has been sent to your email address. Please check your inbox.,Reenviamos o e-mail de verificação. Verifique sua caixa de entrada.,Reenviamos el email de verificación. Revisa tu bandeja de entrada.,新的验证邮件已发送至您的邮箱地址。请检查您的收件箱。,Một email xác minh mới đã được gửi đến địa chỉ email của bạn. Vui lòng kiểm tra hộp thư đến.
+4,,Failed to Send Email,Falha ao enviar o e-mail.,Error al enviar el email.,邮件发送失败,Gửi Email Không Thành Công
+15,,We couldn’t resent the verification email due to a server error. Please try again later.,Não foi possível reenviar o e-mail de verificação devido a um erro no servidor. Tente novamente mais tarde.,No pudimos reenviar el email de verificación debido a un error del servidor. Inténtalo de nuevo más tarde.,由于服务器错误，我们未能重新发送验证邮件。请稍后再试。,Chúng tôi không thể gửi lại email xác minh do lỗi máy chủ. Vui lòng thử lại sau.
+3,,Daily Limit Reached,Limite diário atingido.,Límite diario alcanzado,超过每日重发限制,Đã Hết Lượt Gửi Lại Trong Ngày.
+20,,You’ve reached the daily limit for resending verification emails. Please try again tomorrow or contact our Help Center for assistance.,Você já solicitou o número máximo de e-mails hoje. Tente novamente amanhã ou fale com nossa Central de Ajuda.,Has alcanzado el límite diario para reenviar emails de verificación. Inténtalo de nuevo mañana o comunícate con nuestro Centro de ayuda.,您已达到每日重新发送验证邮件的次数上限。请明天再试，或联系我们的帮助中心寻求协助。,Bạn đã hết lượt gửi lại email xác minh trong ngày. Vui lòng thử lại vào ngày mai hoặc liên hệ Trung Tâm Trợ Giúp của chúng tôi để được hỗ trợ.
+4,,Please Try Again Later,Tente novamente mais tarde,Inténtelo de nuevo más tarde,请稍后再试,Vui Lòng Thử Lại Sau
+13,,You’ve requested verification too many times. Please wait a moment before trying again.,Você solicitou verificação muitas vezes. Aguarde um momento antes de tentar novamente.,Has solicitado la verificación demasiadas veces. Espera un momento antes de volver a intentarlo.,您请求验证的次数过多。请稍等片刻后再试。,Bạn đã yêu cầu xác minh quá nhiều lần. Vui lòng đợi một chút trước khi thử lại.
+3,,Verification Link Invalid,Link de verificação inválido,Enlace de verificación no válido,验证链接无效,Liên Kết Xác Minh Không Hợp Lệ
+22,,"This link has expired or is no longer valid. Please use the most recent verification email, or request a new one below.",Este link expirou ou não é mais válido. Use o e-mail de verificação mais recente ou solicite um novo abaixo.,Este enlace ha caducado o ya no es válido. Usa el email de verificación más reciente o solicita uno nuevo a continuación.,此链接已过期或失效。请使用最新的验证邮件，或点击下方请求新的邮件。,Liên kết này đã hết hạn hoặc không hợp lệ. Vui lòng sử dụng email xác minh gần đây nhất hoặc yêu cầu email mới bên dưới.
+4,,Verify Your Email Now,Verifique seu e-mail agora,Verificar tu email ahora,立即验证您的邮箱,Xác Minh Email Ngay
+26,,"To continue using KOCOWA+ without restrictions, please verify your email address. If you email is incorrect, please go to My Account to update it before sending.","Para continuar usando o KOCOWA+ sem restrições, verifique seu endereço de e-mail. Se ele estiver incorreto, acesse Minha Conta para atualizá-lo antes de reenviar.","Para continuar usando KOCOWA+ sin restricciones, verifica tu email. Si es incorrecto, ve a Mi cuenta para actualizarlo antes de enviarlo.",为了继续畅享 KOCOWA+，请验证您的邮箱地址。如果您的邮箱地址有误，请在发送前前往我的账户进行更新。,"Để tiếp tục sử dụng KOCOWA+ không giới hạn, vui lòng xác minh địa chỉ email của bạn. Nếu địa chỉ email không chính xác, vui lòng vào mục Tài Khoản Của Tôi để cập nhật trước khi gửi."
+21,,"To continue using KOCOWA+ without restrictions, please verify your email address. If you email is incorrect, please contact our Help Center.","Para continuar usando o KOCOWA+ sem restrições, verifique seu endereço de e-mail. Se ele estiver incorreto, entre em contato com nossa Central de Ajuda.","Para continuar usando KOCOWA+ sin restricciones, verifica tu email. Si es incorrecto, comunícate con nuestro Centro de ayuda.",为了继续畅享 KOCOWA+，请验证您的邮箱地址。如果您的邮箱地址有误，请联系我们的帮助中心。,"Để tiếp tục sử dụng KOCOWA+ không giới hạn, vui lòng xác minh địa chỉ email của bạn. Nếu địa chỉ email không chính xác, vui lòng liên hệ Trung Tâm Trợ Giúp của chúng tôi."
+2,,Send Email,Enviar e-mail,Enviar email,发送邮件,Gửi Email
+10,,Your password must be between 6 and 20 characters long,A senha deve ter entre 6 e 20 caracteres.,La contraseña debe tener entre 6 y 20 caracteres.,您的密码长度必须为 6 到 20 个字符,Mật khẩu của bạn phải dài từ 6 đến 20 ký tự.
+12,,Your QR Code has expired. Please try again with a new code.,Seu código QR expirou. Tente novamente com um novo código.,Tu código QR ha caducado. Inténtalo de nuevo con un nuevo código.,您的二维码已过期。请获取并使用新二维码重试。,Mã QR của bạn đã hết hạn. Vui lòng thử lại với mã mới.
+4,,Please enter your email,Informe seu endereço de e-mail,Ingresa tu email,请输入您的邮箱,Vui lòng nhập email của bạn.
+2,,Email Verification,Verificação de e-mail,Verificación de email,邮箱验证,Xác Minh Email
+6,,A verifiation email has sent to,Um e-mail de verificação foi enviado para,Se ha enviado un email de verificación a,验证邮件已发送至,Email xác minh đã được gửi đến
+3,,Check Email Verificaiton,Verificar e-mail,Verificar el email,检查邮箱验证状态,Kiểm Tra Tình Trạng Xác Minh Email
+3,,Sign In Request,Solicitação de login,Solicitud de inicio de sesión,登录请求,Yêu Cầu Đăng Nhập
+12,,A sign-in attempt was made from {TV Platfrom}.\nWould you like to continue?,"Uma tentativa de login foi feita por sua TV ({TV Platform}).
+ Deseja continuar?",Se realizó un intento de inicio de sesión desde {TV Platform}.\n¿Desea continuar?,有来自 {TV Platfrom} 的登录尝试。\n是否继续？,Yêu cầu đăng nhập đã được thực hiện từ {TV Platform}.\nBạn có muốn tiếp tục không?
+2,,Signed In,Login realizado com sucesso,Iniciado sesión,已登录,Đăng Nhập Thành Công
+9,,You’re now signed in. Enjoy watching on your TV!,Você está conectado. Aproveite seus conteúdos na TV!,Ya has iniciado sesión. ¡Disfruta viendo en tu TV!,您已成功登录。请尽情在电视上观看吧！,Bạn đã đăng nhập thành công. Chúc bạn xem TV vui vẻ!
+2,,Sign-In Cancelled,Login cancelado,Inicio de sesión cancelado.,登录已取消,Hủy Đăng Nhập
+8,,Sign-in was cancelled. Please try again if needed.,"O login foi cancelado. Tente novamente, se necessário.",Se canceló el inicio de sesión. Inténtalo de nuevo si es necesario.,登录已取消。如果需要，请重试。,Đã hủy đăng nhập. Vui lòng thử lại nếu cần.
+2,,Request Expired,Solicitação expirada,Solicitud caducada,请求已过期,Yêu Cầu Đã Hết Hạn
+11,,The sign-in request has expired. Please scan the QR code again.,A solicitação de login expirou. Escaneie o QR Code novamente.,La solicitud de inicio de sesión ha caducado. Escanea el código QR nuevamente.,登录请求已过期。请重新扫描二维码。,Yêu cầu đăng nhập đã hết hạn. Vui lòng quét lại mã QR.
+12,,Your Email not Verified. Please use the service safety by email verification.,"Seu e-mail ainda não foi verificado. Para sua segurança, confirme o e-mail antes de continuar.",Tu email no está verificado. Usa el servicio de forma segura verificando tu email.,您的邮箱未验证。为安全使用服务，请验证邮箱。,Email của bạn chưa được xác minh. Vui lòng xác minh email để sử dụng dịch vụ an toàn.
+1,,Edit,Editar,Editar,编辑,Chỉnh sửa
+2,,Account Management,Gerenciar conta,Gestión de cuentas,账户管理,Quản Lý Tài Khoản
+12,,"If you change your email, you will need to re-verify your email.","Ao alterar seu e-mail, será necessário realizar nova verificação.","Si cambias tu email, tendrás que volver a verificarlo.",如果您更改了邮箱，则需要重新验证。,"Nếu bạn thay đổi email, bạn sẽ cần xác minh lại email mới."
+4,,Waiting for email verification,Aguardando verificação por e-mail,Esperando la verificación por email,等待邮箱验证,Đang chờ xác minh email
+3,,Email not verified,E-mail não verificado,Email no verificado,邮箱未验证,Email chưa được xác minh
+3,,Invalid email format,Formato de e-mail inválido,Formato de email no válido,邮箱格式无效,Định dạng email không hợp lệ
+5,,Email address cannot contain spaces,O e-mail não pode conter espaços,El email no puede contener espacios,邮箱地址不能包含空格,Địa chỉ email không được chứa khoảng trắng
+6,,This email is already in use,Este e-mail já está em uso.,Este email ya está en uso,此邮箱已被使用,Email này đã được sử dụng
+7,,This email is linked to another account,Este e-mail está vinculado a outra conta,Este email está vinculado a otra cuenta,此邮箱已关联至另一账户,Email này đã được liên kết với một tài khoản khác
+6,,This email account has been disabled,Esta conta de e-mail foi desativada,Esta cuenta de email ha sido desactivada,此邮箱账户已被禁用,Tài khoản email này đã bị vô hiệu hóa
+9,,New email must be different from your current email,O novo e-mail deve ser diferente do atual,El nuevo email debe ser diferente al actual,新邮箱必须与当前邮箱不同,Email mới phải khác với email hiện tại
+8,,Unable to update your email. Please try again,Não foi possível atualizar o e-mail. Tente novamente.,No fue posible actualizar tu email. Inténtalo de nuevo.,无法更新您的邮箱。请重试。,Không thể cập nhật email. Vui lòng thử lại
+14,,You’ve attempted to change your email too frequently. Please wait and try again later,Você tentou alterar o e-mail várias vezes seguidas. Espere um pouco antes de tentar novamente.,Has intentado cambiar tu email varias veces seguidas. Espera y vuelve a intentarlo más tarde.,您尝试更改邮箱过于频繁。请稍后再试。,Bạn đã cố thay đổi địa chỉ email quá nhiều lần. Vui lòng chờ và thử lại sau.
+3,,Send Veriification Mail,Enviar e-mail de verificação,Enviar email de verificación,发送验证邮件,Gửi Thư Xác Minh
+3,,Resend Veriification Mail,Reenviar e-mail de verificação,Reenviar email de verificación,重新发送验证邮件,Gửi Lại Thư Xác Minh
+7,,This is an already registered email account,Esta conta já foi registrada,Esta es una cuenta de email ya registrada,这是已注册的邮箱账户,Đây là một tài khoản email đã được đăng ký
+9,,This email is not registered. Please sign up first.,E-mail não cadastrado. Crie uma conta primeiro.,Email no registrado. Crea una cuenta primero.,此邮箱未注册。请先注册。,"Email này chưa được đăng ký. Trước tiên, vui lòng tạo tài khoản."
+3,,Update Billing Info,Atualizar detalhes de pagamento,Actualizar información de facturación,更新账单信息,Cập Nhật Thông Tin Thanh Toán
+18,,"You can update your payment card and billing information, including ZIP Code, using the [Update Billing Info] button.",Atualize seu cartão e dados de cobrança (incluindo CEP) clicando em [Atualizar detalhes de pagamento],"Puedes actualizar tu tarjeta de pago y la información de facturación, incluido el código postal, haciendo clic en [Actualizar información de facturación].",您可以使用[更新账单信息] 按钮更新您的支付卡及账单信息以及包括邮政编码。,"Bạn có thể cập nhật thẻ thanh toán và thông tin hóa đơn, bao gồm mã ZIP, bằng cách nhấn nút [Cập Nhật Thông Tin Thanh Toán]."
+5,,Please enter valid card information,Insira as informações do cartão corretamente,Ingresa la información válida de la tarjeta,请输入有效的卡片信息,Vui lòng nhập thông tin thẻ hợp lệ
+2,,Billing info,Dados de cobrança,Información de facturación,账单信息,Thông tin thanh toán
+14,,Final price may change due to taxes and will be reflected on the button.,O valor final poderá variar com impostos. Confira antes de confirmar.,El precio final puede cambiar debido a los impuestos y se reflejará en el botón.,最终价格可能因税额变动，并将反映在按钮上。,Giá cuối cùng có thể thay đổi do thuế và sẽ được hiển thị trên nút thanh toán.
+1,,Pay,Pagar,Pagar,支付,Thanh toán
+3,,Card added successfully,Cartão adicionado com sucesso,Tarjeta añadida con éxito,卡片新增成功,Đã thêm thẻ thành công
+3,,Card updated successfully,Cartão atualizado com sucesso,Tarjeta actualizada con éxito,卡片更新成功,Đã cập nhật thẻ thành công
+3,,Card deleted successfully,Cartão removido com sucesso,Tarjeta eliminada con éxito,卡片删除成功,Đã xóa thẻ thành công
+2,,PAYMENT SUMMARY,DETALHES DE PAGAMENTO,RESUMEN DE PAGO,付款摘要,TỔNG HỢP THANH TOÁN
+13,,The QR code has expired. Please generate a new code to sign in.,O QR Code expirou. Gere um novo para fazer login.,El código QR ha caducado. Genera un nuevo código para iniciar sesión.,二维码已过期。请刷新二维码登录。,Mã QR đã hết hạn. Vui lòng tạo mã mới để đăng nhập.
+2,,Email Verification,Verificação de e-mail,Verificación de email,邮箱验证,Xác Minh Email
+2,,Check Available,Verificar disponibilidade,Consultar disponibilidad,检查可用性,Kiểm Tra Khả Dụng
+2,,Go Back,Voltar,Regresar,返回,Quay Lại
+23,,"To complete the email change, you must verify your new email address.\nIf you go back now, your updated email will not be saved.","Confirme seu novo e-mail para concluir a alteração.\nSe você sair agora, a atualização não será salva.","Para completar el cambio de email, debes verificar tu nuevo email.\nSi regresas ahora, tu email actualizado no se guardará.",要完成邮箱更改，您必须验证您的新邮箱地址。\n如果现在返回，您更新的邮箱将不会被保存。,"Để hoàn tất việc thay đổi email, bạn cần xác minh địa chỉ email mới.
+ \nNếu bạn quay lại bây giờ, email vừa cập nhật sẽ không được lưu."
+3,,Email Change Restriction,Limite de alteração de e-mail,Restricción de cambio de email,邮箱更改限制,Giới Hạn Thay Đổi Email
+23,,You have exceeded the allowed number of email changes. \nYou may update your email again 24 hours after your most recent successful change.,Você atingiu o limite de alterações de e-mail.\nTente novamente 24 horas após sua última atualização.,Has excedido el número permitido de cambios de email.\nPuedes actualizar tu email nuevamente 24 horas después del cambio exitoso más reciente.,您已超过允许的邮箱更改次数限制。\n您需等到最近一次成功更改的24小时后，才能再次更新邮箱。,"Bạn đã vượt quá số lần thay đổi email cho phép.
+ \nBạn có thể cập nhật lại email sau 24 giờ kể từ lần thay đổi thành công gần nhất."
+16,,You can update your email again 15 minutes after the previous change. Please try again shortly.,Você poderá atualizar seu e-mail novamente 15 minutos após a última alteração.\nTente novamente em breve.,Puedes actualizar tu email 15 minutos después del último cambio. Inténtalo de nuevo en breve.,您需等到上一次更改的15分钟后才能再次更新邮箱。请稍后再试。,Bạn có thể cập nhật lại email sau 15 phút kể từ lần thay đổi trước đó. Vui lòng thử lại sau.
+3,,Email Not Available,E-mail indisponível,Email no disponible,邮箱不可用,Email Không Khả Dụng
+20,,"The email you entered cannot be used. Please enter a different email. \nFor further assistance, please contact our Help Center.","O e-mail informado não pode ser usado. Tente outro endereço.\nPara mais ajuda, acesse nossa Central de Ajuda.","El email que ingresaste no se puede usar. Ingresa un email diferente.\nPara obtener más ayuda, comunícate con nuestro Centro de ayuda.",您输入的邮箱无法使用。请输入其他邮箱。\n如需进一步协助，请联系我们的帮助中心。,"Email bạn nhập không thể sử dụng. Vui lòng nhập email khác.
+ Nếu cần thêm hỗ trợ, vui lòng liên hệ Trung Tâm Hỗ Trợ của chúng tôi."
+3,,{n} Month Free,{n} mês grátis,{n} mes gratis,免费{n}个月,Miễn Phí {n} Tháng
+3,,{n} Months Free,{n} meses grátis,{n} meses gratis,免费{n}个月,Miễn Phí {n} Tháng
+2,,Learn More,Saiba mais,Aprender más,了解更多,Tìm Hiểu Thêm
+21,,"The service is only available for those aged 18 and above, and I agree to the terms of service of KOCOWA+.","Este serviço está disponível apenas para maiores de 18 anos.\nAo continuar, você concorda com os Termos de Uso do KOCOWA+.","El servicio solo está disponible para mayores de 18 años, y acepto los términos de servicio de KOCOWA+.",本服务仅限18岁及以上用户使用，并且我同意KOCOWA+的服务条款。,Dịch vụ chỉ dành cho người từ 18 tuổi trở lên và tôi đồng ý với các điều khoản dịch vụ của KOCOWA+.
+2,,Resend Email,Reenviar e-mail ,Reenviar email,重新发送邮件,Gửi Lại Email
+3,,Email Already Verified,E-mail já verificado,Email ya verificado,邮箱已验证,Email Đã Được Xác Minh
+12,,Your email has already been verified. Please refresh the page to continue.,Seu e-mail já foi verificado. Atualize a página para continuar.,Tu email ya ha sido verificado. Actualiza la página para continuar.,您的邮箱已验证。请刷新页面继续。,Email của bạn đã được xác minh. Vui lòng làm mới trang để tiếp tục.
+7,,A verification email has sent to {email},Um e-mail de verificação foi enviado para {email}.,Se ha enviado un email de verificación a {email}.,验证邮件已发送至 {email},Email xác minh đã được gửi tới {email}.
+3,,Enter ZIP Code,Inserir CEP.,Ingresar código postal,输入邮政编码,Nhập Mã ZIP
+5,,Please enter your ZIP Code.,Insira seu CEP.,Ingresa tu código postal.,请输入您的邮政编码。,Vui lòng nhập Mã ZIP của bạn.
+6,,Your All-Access Pass to  Korean Entertainment,Seu Passe Completo para o Entretenimento Coreano,Tu pase de acceso total al entretenimiento coreano,您的韩流娱乐畅享通行证,Thẻ Truy Cập Toàn Diện Của Bạn Vào Thế Giới Giải Trí Hàn Quốc
+20,,Your email address has not been verified yet.\nPlease check your inbox for the verification email and complete the verification process.,Seu endereço de e-mail ainda não foi verificado.\nVerifique sua caixa de entrada e conclua o processo de verificação.,Tu dirección de email aún no ha sido verificada.\nRevisa tu bandeja de entrada para el email de verificación y completa el proceso. ,您的邮箱地址尚未验证。\n请检查您的收件箱，查收验证邮件并完成验证流程。,Địa chỉ email của bạn chưa được xác minh. \nVui lòng kiểm tra hộp thư đến để tìm email xác minh và hoàn tất quá trình.
+18,,"This email address has already been verified.\nIf you are not automatically redirected, press OK to reload this page","Este endereço de e-mail já foi verificado.\nSe você não for redirecionado automaticamente, clique em OK para recarregar esta página.","Esta dirección de email ya ha sido verificada.\nSi no se redirige automáticamente, presiona OK para volver a cargar esta página.",此邮箱地址已验证。\n如果您未被自动重定向，请按“确定”重新加载页面。,"Địa chỉ email này đã được xác minh.\nNếu bạn không được chuyển hướng tự động, hãy nhấn OK để tải lại trang này."
+10,,"Once email verification is completed, verification will be completed automatically.","Assim que a verificação do e-mail for concluída, ela será processada automaticamente.","Una vez completada la verificación por email, la verificación se completará automáticamente.",邮箱验证完成后，验证将自动完成。,"Khi việc xác minh email hoàn tất, hệ thống sẽ tự động cập nhật."
+11,,"If this screen is not automatically verified, click the check button.","Se esta tela não for verificada automaticamente, clique no botão de verificação.","Si esta pantalla no se verifica automáticamente, haz clic en el botón de verificación.",若此界面未自动完成验证，请点击检查按钮。,"Nếu màn hình này không được xác minh tự động, hãy nhấn nút kiểm tra."
+12,,Waiting for email verification. A verification email has been sent to {}.,Aguardando verificação de e-mail. Enviamos um e-mail de verificação para {}.,Esperando la verificación del email. Se ha enviado un email de verificación a {}.,正在等待邮箱验证。验证邮件已发送至 {}。,Đang chờ xác minh email. Email xác minh đã được gửi đến {}.
+12,,Please check your inbox and follow the link to complete your registration.,Confira sua caixa de entrada e siga o link para concluir seu cadastro.,Revisa tu bandeja de entrada y sigue el enlace para completar el registro.,请检查您的收件箱并点击链接以完成注册。,Vui lòng kiểm tra hộp thư đến và truy cập liên kết để hoàn tất đăng ký.
+20,,You haven’t completed your email verification yet. Please check your inbox and follow the verification link we sent to {}.,Você ainda não concluiu a verificação de e-mail. Verifique sua caixa de entrada e siga o link que enviamos para {}.,Aún no has completado la verificación del email. Revisa tu bandeja de entrada y sigue el enlace que enviamos a {}.,您尚未完成邮箱验证。请检查您的收件箱并点击我们发送至 {} 的验证链接。,Bạn chưa hoàn tất việc xác minh email. Vui lòng kiểm tra hộp thư đến và truy cập liên kết xác minh chúng tôi đã gửi đến {}.
+14,,Your email is not verified yet. Please click the verification link in your email.,Seu e-mail ainda não foi verificado. Clique no link de verificação que enviamos.,Tu correo electrónico aún no está verificado. Haz clic en el enlace de verificación.,您的邮箱尚未通过验证。请点击您邮件中的验证链接。,Email của bạn chưa được xác minh. Vui lòng nhấp vào liên kết xác minh trên email.
+8,,Please wait a few seconds before checking again.,Aguarde alguns segundos antes de tentar novamente.,Espera unos segundos antes de intentarlo de nuevo.,请等待几秒钟后再次检查。,Vui lòng chờ vài giây trước khi kiểm tra lại.
+3,,Too Many Checks,Muitas tentativas de verificação,Demasiados intentos ,验证请求过多,Đã vượt quá số lần kiểm tra cho phép.
+3,,Email successfully verified,E-mail verificado com sucesso,Email verificado con éxito,邮箱验证成功,Email đã được xác minh thành công.
+1,,Verified,Verificado,Verificado,已验证,Đã xác minh.
+4,,Suggesting content by keyword,Recomendação baseada em palavras-chave,Sugerir contenido por palabra clave,按关键词推荐内容,Gợi ý nội dung theo từ khóa
+6,,A verification email has sent to,Um e-mail de verificação foi enviado para,Un email de verificación ha sido enviado a,验证邮件已发送至,Một email xác minh đã được gửi đến
+19,,We have sent an email to verify your email address. Please check your inbox to complete the sign-up process.,Enviamos um e-mail para confirmar seu endereço. Acesse sua caixa de entrada para concluir o cadastro.,"Hemos enviado un email para verificar tu dirección de email. Por favor, revisa tu bandeja de entrada para completar el proceso de registro.",我们已发送一封验证邮件至您的邮箱，请检查收件箱以完成注册流程。,Chúng tôi đã gửi email để xác minh địa chỉ email của bạn. Vui lòng kiểm tra hộp thư đến để hoàn tất quá trình đăng ký.
+5,,Date of last password change:, Data da última alteração de senha:,Fecha del último cambio de contraseña:,最后密码修改日期：,Ngày thay đổi mật khẩu gần nhất:
+5,,Your discount was successfully applied.,Seu desconto foi aplicado com sucesso.,El descuento se aplicó con éxito.,您的折扣已成功应用。,Ưu đãi của bạn đã được áp dụng thành công.
+13,,"Coupon redemption failed. Your coupon code may be invalid, expired, or already used.","Não foi possível aplicar o cupom. Ele pode estar inválido, expirado ou já utilizado.","La redención de cupones falló. El código de cupón puede ser inválido, caducado o ya utilizado.",优惠券兑换失败。您的优惠券代码可能无效、已过期或已被使用。,"Đổi mã giảm giá không thành công. Mã giảm giá của bạn có thể không hợp lệ, đã hết hạn hoặc đã được sử dụng."
+1,,Tomorrow,Amanhã,Mañana,明天,Ngày mai
+1,,FAQ's,Perguntas Frequentes,FAQs,常见问题,Câu Hỏi Thường Gặp
+4,,Free for 14 days,Grátis por 14 dias,Gratis durante 14 días,免费试用14天,Miễn phí 14 ngày
+19,,"Get priority access to thousands of hours of the best Korean dramas, TV shows, and Webcomics with premium subtitles.","Assista a milhares de horas dos melhores dramas, programas de TV e webcomics coreanos com legendas premium, disponível com acesso prioritário.","Obtén acceso prioritario a miles de horas de los mejores dramas, programas de televisión y webcómics coreanos con subtítulos premium.",通过高品质字幕优先观看数千小时最优质的韩剧、电视节目和网络漫画。,"Nhận quyền truy cập ưu tiên vào hàng ngàn giờ phim Hàn Quốc, chương trình truyền hình và truyện tranh Webcomics với phụ đề chất lượng cao."
+4,,Enjoy the Premium Subtitle!,Com Legendas Premium!,¡Disfruta del subtítulo premium!,尽享高品质字幕！,Thưởng thức Phụ Đề Chất Lượng Cao!
+13,,"Experience an extensive library of K-Dramas, from timeless classics to the latest hits.","Explore um acervo vasto de dramas coreanos, dos clássicos inesquecíveis aos lançamentos do momento.","Disfruta de una extensa biblioteca de K-Dramas, desde clásicos atemporales hasta los últimos éxitos.",体验内容广泛的韩剧库，从永恒经典到最新热门剧集。,"Trải nghiệm kho phim Hàn khổng lồ, từ những tác phẩm kinh điển đến những siêu phẩm mới nhất."
+2,,Unlock Now,Acesse Agora,Desbloquear ahora,立即解锁,Mở Khóa Ngay
+6,,Your next favorite show is waiting.,Sua próxima série favorita está esperando por você.,Tu próxima serie favorita te está esperando.,您下一部心仪剧集正在等待。,Chương trình yêu thích tiếp theo của bạn đang chờ đón.
+1,,Drama,Drama,Drama,电视剧,Phim Truyền Hình
+1,,Variety,Variedades,Variedades,综艺,Chương Trình Tạp Kỹ
+1,,K-POP,K-POP,K-POP,K-POP,Nhạc K-Pop
+1,,Webcomics,Webcomics,Webcómics,网络漫画,Truyện Tranh Webcomics
+2,,TV Shows,Programas de TV,Programas de TV,电视节目,Chương Trình Truyền Hình
+5,,Start My 14-day Free Trial,Começar teste gratuito de 14 dias,Iniciar mi prueba gratis de 14 días,开始我的14天免费试用,Bắt Đầu Dùng Thử Miễn Phí 14 Ngày
+5,,What's included with Your Access?,O que está incluído no seu acesso?,¿Qué incluye tu acceso?,您的通行证包含哪些内容？,Quyền Truy Cập Của Bạn bao gồm những gì?
+2,,No Ads,Sem Anúncios,Sin anuncios,无广告,Không Quảng Cáo
+2,,Four Profiles,Quatro Perfis,Cuatro perfiles,四个个人资料夹,Bốn Hồ Sơ
+3,,Hassle-Free Automatic Renewal,Renovação automática ,Renovación automática,无忧自动续订,Gia Hạn Tự Động Không Rắc Rối
+4,,Download & Offline Playback,Download e reprodução offline,Descarga y reproducción sin conexión,下载和离线播放,Tải & Xem Ngoại Tuyến
+6,,"Unlimited Dramas, TV Shows, and Webcomics","Acesso ilimitado a dramas, programas e webcomics","Dramas, programas de televisión y webcómics ilimitados",无限量观看剧集、电视节目和网络漫画,"Không Giới Hạn Phim, Chương Trình Truyền Hình và Truyện Tranh Webcomics"
+2,,Single Profile,Perfil Único,Perfil único,单个个人资料夹,Tài Khoản Đơn Lẻ
+9,,Select Countries May Experience Brief Ads Before Program Begin,Alguns países podem exibir breves anúncios antes do início do conteúdo,Algunos países pueden experimentar anuncios breves antes de que comience el programa.,部分国家/地区的节目开始前可能会有短暂广告,Một Số Quốc Gia Được Chọn Có Thể Xuất Hiện Quảng Cáo Ngắn Trước Khi Chương Trình Bắt Đầu
+3,,Start Premium Monthly,Assinar plano Premium mensal,Comenzar suscripción Premium mensual,开启高级月付计划,Bắt Đầu Gói Cao Cấp Hàng Tháng
+3,,Start Basic Monthly,Assinar plano Básico mensal,Comenzar suscripción Básico mensual,开启基础月付计划,Bắt Đầu Gói Cơ Bản Hàng Tháng
+2,,Compare Plan,Comparar planos,Comparar plan,比较套餐,So Sánh Gói
+6,,What's included with the Premium subscription?,O que está incluído na assinatura Premium?,¿Qué incluye la suscripción Premium?,高级订阅包含哪些内容？,Gói đăng ký Cao cấp bao gồm những gì?
+5,,Get Started With Premium Access,Comece Seu Acesso Premium,Comenzar con acceso Premium,开启高级通行证,Bắt Đầu Với Quyền Truy Cập Cao Cấp
+14,,"Try it free for 14 days, then just $7.99/month. Available only for first-time users.","Experimente grátis por 14 dias, e depois apenas $7.99 por mês. Disponível apenas para novos usuários.","Pruébalo gratis durante 14 días, luego solo $7.99 al mes. Disponible solo para usuarios nuevos.",免费试用14天，之后仅需 $7.99/月。仅限首次用户。,"Dùng thử miễn phí 14 ngày, sau đó chỉ $7.99/tháng. Áp dụng cho người dùng mới."
+23,,"After your free trial ends, your subscription will automatically renew as a paid plan. Cancel anytime before the trial ends to avoid charges.","Após o término do período de teste grátis, sua assinatura será renovada automaticamente como um plano pago. Cancele a qualquer momento antes do fim do teste para evitar cobranças.","Una vez finalizada la prueba gratis, la suscripción se renovará automáticamente como un plan de pago. Cancela en cualquier momento antes de que finalice la prueba para evitar cargos.",免费试用结束后，您的订阅将自动续订为付费计划。如需避免收费，请务必在试用期结束前取消。,"Sau khi thời gian dùng thử miễn phí kết thúc, gói đăng ký của bạn sẽ tự động gia hạn thành gói trả phí. Hủy bất cứ lúc nào trước khi thời gian dùng thử kết thúc để tránh bị tính phí."
+3,,What is KOCOWA+?,O que é KOCOWA+?,¿Qué es KOCOWA+?,什么是 KOCOWA+？,KOCOWA+ là gì?
+25,,"KOCOWA is an online premium streaming service which delivers Korean drama series, variety shows and K-POP shows from KBS, MBC, SBS and other content partners.","KOCOWA+ é um serviço de streaming premium que oferece dramas coreanos, reality shows e programas de K-POP das emissoras KBS, MBC, SBS e de outros parceiros de conteúdo.","KOCOWA es un servicio de streaming premium en línea que ofrece series dramáticas coreanas, programas de variedades y programas de K-POP de KBS, MBC, SBS y otros socios de contenido.",KOCOWA是一项高级在线流媒体服务，提供来自 KBS、MBC、SBS 及其他内容合作伙伴的韩剧、综艺节目和 K-POP 内容。,"KOCOWA là dịch vụ phát trực tuyến cao cấp, cung cấp các bộ phim Hàn Quốc, chương trình tạp kỹ và chương trình K-POP từ KBS, MBC, SBS cùng các đối tác nội dung khác."
+5,,Where can I watch KOCOWA+?,Onde posso assistir ao KOCOWA+?,¿Dónde puedo ver KOCOWA+?,我可以在哪里观看KOCOWA+？,Tôi có thể xem KOCOWA+ ở đâu?
+8,,How do I start the 14-day free trial?,Como faço para iniciar o teste grátis de 14 dias?,¿Cómo puedo iniciar la prueba gratis de 14 días?,如何开始14天免费试用？,Làm thế nào để bắt đầu dùng thử miễn phí 14 ngày?
+20,,We offer the 14-day free trial with our monthly subscription if you have never had a subscription plan with us.,"Oferecemos o teste grátis de 14 dias na nossa assinatura mensal, caso você nunca tenha tido um plano de assinatura conosco.",Ofrecemos una prueba gratis de 14 días con nuestra suscripción mensual si nunca has tenido un plan de suscripción con nosotros.,如果您从未订阅过我们的套餐，我们为月付订阅用户提供14天免费试用。,Chúng tôi cung cấp bản dùng thử miễn phí 14 ngày với gói đăng ký hàng tháng nếu bạn chưa từng có gói đăng ký nào với chúng tôi.
+7,,How to use a promotional coupon(Promo Code)?,Como usar um cupom promocional (Código Promocional)?,¿Cómo usar un cupón promocional (Código de Promo)?,如何使用促销优惠券（优惠码）？,Cách sử dụng phiếu giảm giá khuyến mãi (Mã Khuyến Mãi)
+22,,"To redeem a promo code, simply enter it during the checkout process. Make sure to select a plan that matches your coupon.","Para resgatar um código promocional, basta inseri-lo durante o processo de pagamento. Certifique-se de selecionar o plano correspondente ao seu cupom.","Para canjear un código promocional, ingrésalo durante el proceso de pago. Asegúrate de seleccionar un plan que coincida con el cupón.",要兑换优惠码，只需在结算过程中输入即可。请确保选择与您的优惠券相匹配的套餐。,"Để đổi mã khuyến mãi, chỉ cần nhập mã trong quá trình thanh toán. Hãy đảm bảo chọn gói dịch vụ phù hợp với phiếu giảm giá của bạn."
+2,,Need help?,Precisa de ajuda?,¿Necesitas ayuda?,需要帮助吗？,Cần hỗ trợ?
+5,,How much does KOCOWA+ cost?,Quanto custa o KOCOWA+?,¿Cuánto cuesta KOCOWA+?,KOCOWA+ 的费用是多少？,KOCOWA+ giá bao nhiêu?
+3,,Get Started Now,Comece Agora,Comenzar ahora,立即开启,Bắt Đầu Ngay
+11,,"Watch anytime, anywhere, with the official app for IOS and Android.","Assista a qualquer hora, em qualquer lugar, com o aplicativo oficial para iOS e Android.","Ver en cualquier momento y en cualquier lugar, con la aplicación oficial para iOS y Android.",通过官方IOS和Android应用，随时随地观看。,"Xem mọi lúc, mọi nơi, với ứng dụng chính thức trên IOS và Android."
+3,,Account Deletion Notice,Aviso de Exclusão de Conta,Aviso de eliminación de cuenta,账户删除通知,Thông Báo Xóa Tài Khoản
+20,,"This ODK account does not support the delete function.\nIf you wish to delete your account, please contact our Help Center.","Esta conta ODK não oferece suporte à função de exclusão. Se deseja excluir sua conta, entre em contato com a nossa Central de Ajuda.","Esta cuenta de ODK no admite la función de eliminación.\nSi deseas eliminar tu cuenta, comunícate con nuestro Centro de ayuda.",此ODK账户不支持删除功能。\n如果您希望删除账户，请联系我们的帮助中心。,"Tài khoản ODK này không hỗ trợ chức năng xóa. \nNếu bạn muốn xóa tài khoản, vui lòng liên hệ Trung Tâm Hỗ Trợ của chúng tôi."
+4,s_freetrialnotincluded,Free trial not included.,Período de teste não incluído.,Prueba gratis no incluida.,不包含免费试用。,Không bao gồm bản dùng thử miễn phí.
+2,w_checkavailability,Check Availability,Verificar disponibilidade,Comprobar disponibilidad,检查可用性,Kiểm Tra Tình Trạng Khả Dụng
+2,s_tryagain,Try Again,Tente novamente,Inténtalo de nuevo,重试,Thử Lại
+33,s_gui_notalllang,"If the selected subtitle language is not available, English subtitles will be displayed by default, and if you change the subtitle language during playback, your selection will be saved as the new default.","Se o idioma de legenda selecionado não estiver disponível, as legendas em inglês serão exibidas automaticamente. Se você alterar o idioma durante a reprodução, sua escolha será salva como padrão.","Si el idioma de los subtítulos seleccionado no está disponible, los subtítulos en inglés se mostrarán por defecto. Si cambias el idioma durante la reproducción, tu selección se guardará como el nuevo idioma predeterminado.",若不支持所选字幕语言，将默认显示英文字幕，若您在播放过程中更改字幕语言，您的选择将被保存为新的默认设置。,"Nếu ngôn ngữ phụ đề bạn chọn không khả dụng, phụ đề tiếng Anh sẽ được hiển thị mặc định. Nếu bạn thay đổi ngôn ngữ phụ đề trong khi xem, lựa chọn của bạn sẽ được lưu làm mặc định mới."
+2,w_dubbinglang,Dubbing Language,Idioma da dublagem,Idioma de doblaje,配音语言,Ngôn Ngữ Lồng Tiếng
+1,w_every,Every,Todos,Cada,每一个,Mỗi
+1,w_updates,Updates,Atualizações,Actualizaciones,更新,Cập nhật
+1,w_frequent,Frequent,Frequentes,Frecuente,频繁,Thường xuyên
+30,s_gui_notdublang,"If the selected dubbing language is unavailable, dubbing audio will not be played. When the dubbing languege is changed during playback, the newly selected language is saved as the default.","Se o idioma de dublagem selecionado não estiver disponível, o áudio dublado não será reproduzido. Ao alterar o idioma de dublagem durante a reprodução, o novo idioma selecionado será salvo como padrão.","Si el idioma de doblaje seleccionado no está disponible, no se reproducirá el audio. Al cambiar el idioma de doblaje durante la reproducción, el nuevo idioma seleccionado se guarda como predeterminado.",如果所选配音语言不可用，将不会播放配音音频。当在播放期间更改配音语言时，新选择的语言将保存为默认设置。,"Nếu ngôn ngữ lồng tiếng đã chọn không khả dụng, âm thanh lồng tiếng sẽ không phát. Khi ngôn ngữ lồng tiếng được thay đổi trong lúc phát, ngôn ngữ mới được chọn sẽ được lưu làm mặc định."
+2,s_lastupdated,Last Updated,Última atualização,Última actualización,最后更新,Cập Nhật Lần Cuối
+3,w_removeitem,Remove for List,Remover da lista,Eliminar de la lista,从列表中移除,Xóa Khỏi Danh Sách
+2,s_viewdetail,View Detail,Ver detalhes,Ver detalle,查看详情,Xem Chi Tiết
+2,s_save_percent,Save [rate]%,Economize [rate]%,Ahorra [tasa]%,保存[进度]%,Lưu [tỉ lệ]%
+2,s_removeepi,Remove Episode?,Remover episódio?,¿Eliminar episodio?,移除剧集？,Xóa Tập?
+1,w_remove,Remove,Remover,Eliminar,移除,Xóa
+14,s_removeepicontinuewatching,Are you sure you want to remove this episode from your Continue Watching list?,Tem certeza de que deseja remover este episódio da sua lista Continuar Assistindo?,¿Estás seguro de que deseas eliminar este episodio de tu lista de Continuar viendo?,您确定要将此剧集从继续观看列表中移除吗？,Bạn có chắc muốn xóa tập này khỏi danh sách Xem Tiếp không?
+4,s_billedyear,Billed once a year,Cobrado anualmente,Facturado anualmente,每年计费一次,Thanh toán hàng năm
+3,s_billedmonth,Billed every month,Cobrado mensalmente,Facturado mensualmente,每月计费,Thanh toán hàng tháng
+4,s_billedNmonths,Billed every [N] months,Cobrado a cada [N] meses,Facturado cada [N] meses,每[N]个月计费,Thanh toán mỗi [N] tháng
+1,w_months,Months,Meses,Meses,月,Tháng
+1,w_best,Best,Melhor,Mejor,最佳,Tốt nhất
+1,w_this,This,"Esta (for days ending in ""a"" segunda, terça, quarta, quinta, sexta) Este ( for days ending in ""o"") sábado, domingo)",Este,本,Tập Này
+3,s_noti_live_title,Live Viewing Reservation,Notificação de transmissão ao vivo,Reserva para ver en vivo,直播观看预约,Đặt Lịch Xem Trực Tiếp
+3,s_openlivechat,Open LIVE Chat,Abrir chat ao vivo,Abrir chat en vivo,打开直播聊天,Mở Trò Chuyện TRỰC TIẾP
+3,s_sendmsg,Send a Message,Enviar mensagem,Enviar mensagem,发送消息,Gửi Tin Nhắn
+5,s_scheduleend,All schedule content has ended.,Toda a programação ao vivo foi encerrada.,Todo el contenido de la programación ha finalizado.,所有预定内容已结束。,Tất cả nội dung theo lịch đã kết thúc.
+1,w_schedule,Schedule,Programação,Programación,节目表,Lịch phát
+7,s_livebegin,The live show in about to begin.,O programa ao vivo está prestes a começar.,El programa en vivo está a punto de comenzar.,直播节目即将开始。,Chương trình trực tiếp sắp bắt đầu.
+3,s_startin,Start in %s,Começa em %s,Comienza en %s,在%s开始,Bắt đầu sau %s
+4,s_livestartingnow,Live Event Starting Now,O evento ao vivo vai começar.,Evento en vivo comenzando ahora,直播活动现在开始,Sự Kiện Trực Tiếp Bắt Đầu Ngay Bây Giờ
+11,s_livestartingnowdesc,"%s' is starting now.
+Click Watch Now to join the live stream.","""%s"" está começando agora.
+Clique em ""Assistir agora"" para entrar na transmissão ao vivo.","%s' está comenzando ahora.
+Haz clic en ""Ver ahora"" para unirte a la transmisión en vivo.","已在%s‘开始。
+点击立即观看加入直播流。",Bắt đầu lúc %s. Nhấn Xem Ngay để tham gia livestream.
+2,w_watchnow,Watch Now,Assistir agora,Ver ahora,立即观看,Xem Ngay
+4,s_nolivecontentavailable,No Live Content Available,Nenhum conteúdo ao vivo disponível,No hay contenido en vivo disponible,无可用直播内容,Không Có Nội Dung Trực Tiếp
+8,s_nolivecontentavailabledesc,There are no live broadcasts at the moment.,Não há transmissões ao vivo no momento.,No hay transmisiones en vivo en este momento.,当前没有直播节目。,Hiện tại không có chương trình trực tiếp.
+2,w_watchparty,Watch Party,Watch Party,Watch Party,观看派对,Xem Chung
+1,w_this,This,"(see explanation line 244) Esta (segunda, terça, quarta, quinta, sexta.). Este (sábado, domingo)",Este,本,Tập Này
+1,w_off_upper,OFF,DESLIGADO,DESACTIVADO,关闭,TẮT
+3,s_playingontv,Playing on TV,Reproduzindo na TV,Reproducción en TV,投屏,Đang phát trên TiVi
+5,s_watchnotificationset,Watch Notification has been set.,Lembrete de exibição ativado.,Notificación para ver activada.,观看通知已设置。,Thông Báo Xem đã được thiết lập
+5,s_watchnotificationcanceled,Watch Notification has been canceled.,Lembrete de exibição cancelado.,Notificación para ver cancelada.,观看通知已取消。,Thông Báo Xem đã hủy
+5,s_leaveviewdetail,Leave Live to View Detail?,Sair da Transmissão ao Vivo para Ver Detalhes?,¿Dejar la transmisión en vivo para ver los detalles?,离开直播以查看详情？,Rời Trang Trực Tiếp Để Xem Chi Tiết
+14,s_redirectcontentdetail,"Your live stream will stop, and you’ll be redirected to the content detail screen.",A transmissão ao vivo será encerrada e você será redirecionado para a página de detalhes do conteúdo.,Tu transmisión en vivo se detendrá y serás redirigido a la pantalla de detalles del contenido.,您的直播流将停止，并将重新定向到内容详情屏幕。,LLivestream sẽ dừng và bạn sẽ được chuyển hướng đến màn hình chi tiết nội dung.
+1,w_go_upper,GO,IR,IR,进入,ĐI
+2,s_subscriptionrequired,Subscription Required,Assinatura necessária,Se requiere suscripción,需要订阅,Yêu Cầu Đăng Ký
+12,s_subscribersonly,"This content is available to subscribers only. To continue watching, please subscribe.","Este conteúdo é exclusivo para assinantes. Para continuar assistindo, por favor, faça sua assinatura.","Este contenido está disponible solo para suscriptores. Para continuar viendo, por favor suscríbete.",此内容仅对订阅者可用。如要继续观看，请订阅。,"Nội dung này chỉ dành cho thành viên đăng ký. Để tiếp tục xem, vui lòng đăng ký."
+2,w_subscribenow,Subscribe Now,Assinar agora,Suscríbete ahora,立即订阅,Đăng Ký Ngay
+3,s_conflictingwatch,Conflicting Watch Reminder,Conflito de lembrete,Recordatorio para ver en conflicto,冲突的观看提醒,Trùng Lịch Nhắc Xem
+23,s_samestartremind,"You already have a watch reminder set for the same start.
+Do you want to delete the existing reminder and add the new one?",Você já tem um lembrete de exibição definido para o mesmo horário. Deseja excluir o lembrete existente e adicionar o novo?,Ya existe un recordatorio para ver para el mismo inicio. ¿Deseas eliminarlo y crear uno nuevo?,"您已为同一开始时间设置了观看提醒。
+是否要删除现有提醒并添加新提醒？",Bạn đã đặt lời nhắc xem cùng thời gian bắt đầu. Bạn có muốn xóa nhắc hiện có và thêm nhắc mới không?
+1,w_replace,Replace,Substituir,Reemplazar,替换,Thay thế
+1,w_dubbing,Dubbing,Dublagem,Doblaje,配音,Lồng tiếng
+1,w_picks,Picks,Recomendados,Selecciones,精选,Nổi Bật
+2,w_weekago,week ago,Há uma semana,Hace una semana,一周前,tuần trước
+3,s_newcontentpremiere,New Content Premiere,Estreia de novo conteúdo,Estreno de nuevo contenido,新内容首播,Ra Mắt Nội Dung Mới
+3,w_nextepisode,Next: Episode {N},Próximo: Episódio {N},Siguiente: Episodio {N},下一集：第{N}集,Tập Tiếp Theo: Tập {N}
+6,s_subtitlegeneratedai,This subtitle was generated by AI,Legenda gerada por IA,Este subtítulo fue generado por IA,本字幕由AI生成,Phụ đề này được tạo bởi AI.
+9,,Each account is eligible for one 14-day free trial,Cada conta pode aproveitar um teste gratuito de 14 dias.,Cada cuenta es elegible para una prueba gratuita de 14 días.,每个账户可享一次14天免费试用,Mỗi tài khoản được một lần dùng thử miễn phí trong 14 ngày.
+7,s_commit6months,Commit for 6 months and save more,Assine por 6 meses e economize mais,Elige seis meses y ahorra más,订阅6个月即可节省更多,Đăng ký 6 tháng để tiết kiệm hơn.
+3,w_contentviewage,Age Restriction Notice,Aviso de Restrição Etária,Aviso de restricción de edad,年龄限制提示,Thông Báo Giới Hạnh Độ Tuổi
+17,s_pro_notallowcontent,"This content is restricted due to age limitations.
+Only viewers above the required age can watch this content.","Conteúdo restrito por classificação indicativa.
+Disponível apenas para usuários acima da idade permitida.","Contenido restringido por clasificación indicativa.
+Disponible solo para usuarios mayores de la edad permitida.","此内容因年龄限制而受限。
+仅达到规定年龄的观众可观看此内容。",Nội dung này bị giới hạn do quy định về độ tuổi. Chỉ những người xem đủ độ tuổi yêu cầu mới có thể xem nội dung này.
+1,w_notified,Notified,Notificado,Notificado,已通知,Đã bật thông báo
+2,w_notifyme,Notify Me,Notificar,Notificar,通知我,Thông báo cho tôi 
+2,s_viewall,View All,Ver tudo,Ver todo,查看全部,Xem Tất Cả
+3,s_chatended,Chat has ended,Chat encerrado,Chat finalizado,聊天已结束,Cuộc Trò Chuyện Đã Kết Thúc
+76,s_web_checkoutterm_entire,"The final price, which may change due to taxes, will be reflected on the button. I understand that I will be charged after the free trial ends and my subscription will automatically renew at the price stated above at the start of each billing period unless I cancel. I can cancel any time prior to the upcoming billing date to avoid being charged. To cancel, go to [Your Account] -> [Payment] and click on 'Cancel Plan’.","O preço final, que pode variar devido aos impostos, será exibido no botão. Entendo que serei cobrado quando o teste gratuito terminar e que minha assinatura será renovada automaticamente pelo valor informado acima no início de cada ciclo, a menos que eu cancele. Posso cancelar a qualquer momento antes da próxima data de cobrança para não ser cobrado. Para cancelar, acesse [Sua Conta] → [Pagamento] e selecione 'Cancelar plano'.","El precio final, que puede cambiar debido a los impuestos, se reflejará en el botón. Entiendo que se me cobrará después de que finalice la prueba gratis y que mi suscripción se renovará automáticamente al precio indicado anteriormente al comienzo de cada periodo de facturación, a menos que la cancele. Puedo cancelar en cualquier momento antes de la próxima fecha de facturación para evitar que se me cobre. Para cancelar, ve a [Mi cuenta] -> [Pago] y haz clic en 'Cancelar plan'.",最终价格可能因税费而变动将在按钮上显示。我已理解并知晓在免费试用期结束后，我将被收费，并且除非我取消订阅，否则我的订阅将在每个账单周期开始时以上述价格自动续订。我可以在下一个账单日期前的任何时间取消，以避免被收费。要取消，请前往[你的账户] -> [付款]并点击“取消订阅”。,"Giá cuối cùng có thể thay đổi tùy theo thuế và sẽ được hiển thị trực tiếp trên nút bấm. Tôi hiểu rằng tôi sẽ bị tính phí sau khi thời gian dùng thử miễn phí kết thúc và gói đăng ký của tôi sẽ tự động gia hạn với mức giá nêu trên vào đầu mỗi kỳ thanh toán trừ khi tôi hủy. Tôi có thể hủy bất kỳ lúc nào trước ngày thanh toán tiếp theo để tránh bị tính phí. Để hủy, vui lòng truy cập [Your Account] -> [Payment] và nhấp vào ‘Hủy Gói Dịch Vụ’."
+19,s_only_for_eu_bystatringyoursubs,"By starting your subscription immediately, you expressly consent to forfeiting your 14-day right of withdrawal from the KOCOWA+ service.","Ao iniciar sua assinatura agora, você concorda expressamente em abrir mão do direito de desistência de 14 dias do serviço KOCOWA+","Al iniciar tu suscripción de inmediato, aceptas expresamente renunciar a tu derecho de desistimiento de 14 días del servicio KOCOWA+.",立即开始订阅即表示您明确同意放弃KOCOWA+服务的14天撤销权。,"Bằng việc bắt đầu gói đăng ký ngay lập tức, bạn đã đồng ý từ bỏ quyền hủy bỏ dịch vụ trong vòng 14 ngày đối với dịch vụ KOCOWA+"
+5,w_koreandramaandtvshows,Korean Drama & TV shows,Dramas e programas de TV coreanos,Series y programas de TV coreanos,韩剧&电视节目,Phim & Chương Trình Truyền Hình Hàn Quốc
+9,s_watchtoprated,"Watch top-rated K-dramas and TV shows, only available here!","Assista aos K-dramas e programas de TV mais bem avaliados, disponíveis apenas aqui!","¡Disfruta de los mejores K-dramas y series de TV, disponibles solo aquí!",观看顶级韩剧和电视节目，仅享于此！,"Xem ngay những bộ phim và chương trình truyền hình Hàn Quốc ăn khách nhất, chỉ có tại đây!"
+4,s_gui_minimumrequired,Minimum 2 characters required.,Mínimo de 2 caracteres.,Se requieren al menos 2 caracteres.,至少需要2个字符。,Yêu cầu tối thiểu 2 ký tự.
+24,s_only_for_eu_bystatringyoursubs,"After starting your subscription, you consent to forfeit your 14-day right of withdrawal from the KOCOWA+ service once you access and use KOCOWA+ materials.","Ao iniciar sua assinatura agora, você autoriza o acesso imediato ao conteúdo e concorda em renunciar ao seu direito de arrependimento de 14 dias após acessar e utilizar o conteúdo do KOCOWA+.","Al iniciar tu suscripción, aceptas renunciar a tu derecho de desistimiento de 14 días del servicio KOCOWA+ una vez que accedas y utilices los materiales de KOCOWA+.",订阅后，一旦您访问并使用KOCOWA+服务中的内容，即视为您同意放弃KOCOWA+服务的14天撤销权。,"Bằng cách bắt đầu đăng ký, bạn đồng ý từ bỏ quyền được hủy đăng ký dịch vụ KOCOWA+ trong vòng 14 ngày kể từ khi bạn truy cập và sử dụng các nội dung của KOCOWA+.
+"
+4,,You Might Also Like,Você também pode gostar,También te puede interesar,,
+5,s_searchshowandmore,"Search shows, stars, and more…","Pesquisar séries, atores e muito mais","Buscar programas, estrellas y más...",,
+2,w_episode_format,Episode {n},Episódio {n},Episodio {n},,
+10,s_waitleave,Wait! Are you sure you want to leave them behind?,Espere! Tem certeza de que deseja perder acesso aos seus programas favoritos?,,,
+21,s_finalstepcancellation,"This is the final step of your cancellation. Before you go, we’ve highlighted some popular shows you might miss out on.","Último passo para cancelar! Antes de ir, confira alguns títulos de sucesso que você vai perder.","Este es el último paso para cancelar. Antes de irte, echa un vistazo a los éxitos que te vas a perder.",,
+6,s_muchdiscover,There’s still so much to discover.,Ainda há muito mais para explorar!,Aún hay mucho por descubrir.,,
+2,s_keepwatching,Keep Watching,Continuar assistindo,Seguir viendo,,
+2,s_keepwatchingex,Keep Watching!,Continue assistindo!,¡Seguir viendo!,,
+7,s_surewantcancel,Are You Sure You Want to Cancel?,Tem certeza de que quer cancelar?,¿Estás seguro de que quieres cancelar?,,
+11,s_cancelfinishbelow,"If you’re sure you’d like to cancel your plan, finish below.","Se tem certeza de que deseja cancelar sua assinatura, finalize o cancelamento abaixo.","Si estás seguro de que quieres cancelar tu plan, sigue con el proceso a continuación.",,
+3,s_subcancelsuccess,Subscription Canceled Successfully,Assinatura cancelada com sucesso,Suscripción cancelada con éxito,,
+7,s_subplansuccess,You have canceled a subscribed plan successfully.,Sua assinatura foi cancelada com sucesso.,Has cancelado con éxito un plan suscrito.,,
+2,w_trendingsearches,Trending Searches,Pesquisas em Alta,Búsquedas de tendencias,,
+1,w_title,Title,Título,Título,,
+1,w_titles,Titles,Títulos,Títulos,,
+7,s_discoverfavstory,Ready to Discover Your Next Favorite Story,Pronto para descobrir sua próxima história favorita?,Descubre tu próxima historia favorita,,
+2,w_episodefeaturing,Episode Featuring,Episódio com  ,Episodio con,,
+4,s_noresultsfor,"Sorry, no results for",Nenhum resultado para,"Lo sentimos, no hay resultados para",,
+3,s_tryanotherkeyword,Try another keyword.,Tente outra palavra‑chave.,Probar otra palabra clave.,,

@@ -1,0 +1,72 @@
+{
+  "permissions": {
+    "allow": [
+      "Read(/**/*.md)",
+      "Write(/**/*.md)",
+      "Edit(/**/*.md)",
+      "Bash(ls **)",
+      "Bash(find **)"
+    ]
+  },
+  "env": {
+    "CLAUDE_AUTOCOMPACT_PCT_OVERRIDE": "70"
+  },
+  "hooks": {
+    "Stop": [
+      {
+        "matcher": "",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "mkdir -p .claude && echo \"结束: $(date '+%m/%d %H:%M')\" > .claude/session-state.md && echo \"Wiki: $(ls 05-resources/llm-wiki/wiki/ 2>/dev/null | wc -l | tr -d ' ')篇 | Outputs: $(ls 05-resources/llm-wiki/outputs/ 2>/dev/null | wc -l | tr -d ' ')篇\" >> .claude/session-state.md && echo \"---\" >> .claude/session-state.md && echo \"Outputs:\" >> .claude/session-state.md && ls 05-resources/llm-wiki/outputs/ 2>/dev/null >> .claude/session-state.md && echo \"\" >> .claude/session-state.md && echo \"Log:\" >> .claude/session-state.md && tail -5 05-resources/llm-wiki/log.md 2>/dev/null >> .claude/session-state.md && echo \"\" >> .claude/session-state.md && echo \"提醒: 有新知识产出？运行 /summary\" >> .claude/session-state.md"
+          },
+          {
+            "type": "command",
+            "command": "osascript -e 'display notification \"本次对话有新知识产出吗？若有请运行 /summary\" with title \"Claude 会话结束\" sound name \"Glass\"'"
+          }
+        ]
+      }
+    ],
+    "PreCompact": [
+      {
+        "matcher": "",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "mkdir -p .claude && echo \"压缩: $(date '+%m/%d %H:%M')\" > .claude/session-state.md && echo \"Wiki: $(ls 05-resources/llm-wiki/wiki/ 2>/dev/null | wc -l | tr -d ' ')篇 | Outputs: $(ls 05-resources/llm-wiki/outputs/ 2>/dev/null | wc -l | tr -d ' ')篇\" >> .claude/session-state.md && echo \"---\" >> .claude/session-state.md && echo \"Outputs:\" >> .claude/session-state.md && ls 05-resources/llm-wiki/outputs/ 2>/dev/null >> .claude/session-state.md && echo \"\" >> .claude/session-state.md && echo \"Log:\" >> .claude/session-state.md && tail -3 05-resources/llm-wiki/log.md 2>/dev/null >> .claude/session-state.md"
+          }
+        ]
+      }
+    ],
+    "PermissionRequest": [
+      {
+        "matcher": "",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "afplay /System/Library/Sounds/Submarine.aiff && afplay /System/Library/Sounds/Submarine.aiff &"
+          },
+          {
+            "type": "command",
+            "command": "osascript -e 'display notification \"Claude 需要你的操作权限\" with title \"Claude 权限请求\"'"
+          }
+        ]
+      }
+    ],
+    "SessionStart": [
+      {
+        "matcher": "",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "if [ -f .claude/session-state.md ]; then echo '[SessionStart] 上次会话记录:'; cat .claude/session-state.md; else echo '[SessionStart] 首次会话'; fi"
+          },
+          {
+            "type": "command",
+            "command": "if [ -f .claude/session-state.md ]; then MSG=$(head -1 .claude/session-state.md); osascript -e \"display notification \\\"$MSG\\\" with title \\\"Claude Code 上次会话\\\" sound name \\\"Glass\\\"\"; fi"
+          }
+        ]
+      }
+    ]
+  }
+}
