@@ -247,6 +247,10 @@ html,body{height:100%;background:var(--c-bg);color:var(--c-text);font-family:var
 <input type="text" id="shadow-audio-file" class="shadow-input" placeholder="audio/video_id.m4a">
 </div>
 <div class="shadow-form-row">
+<label class="shadow-label">Or upload audio file (MP3/M4A, works everywhere)</label>
+<input type="file" id="shadow-audio-upload" accept="audio/*" class="shadow-input">
+</div>
+<div class="shadow-form-row">
 <label class="shadow-label">Subtitles (VTT format)</label>
 <textarea id="shadow-subtitle-input" class="shadow-textarea" rows="6" placeholder="Paste VTT content here...&#10;WEBVTT&#10;00:00:01.000 --> 00:00:05.000&#10;안녕하세요."></textarea>
 </div>
@@ -315,7 +319,7 @@ var STR = {
     vocab_desc:'Enter 查看释义 · 再按 Enter 跳下一个 · ← → 翻页',
     grammar_desc:'点击卡片展开详情 · 学习模式 ｜ 测验模式',
     shadow_desc:'粘贴 YouTube 链接和 VTT 字幕 · Reveal 显示字幕 · ← → 翻句',
-    yt_label:'YouTube 链接',audio_label:'音频文件 (输入URL后自动填充)',subtitle_label:'字幕 (VTT格式)',subtitle_placeholder:'在此粘贴 VTT 字幕内容...',
+    yt_label:'YouTube 链接',audio_label:'音频文件 (输入URL后自动填充)',audio_upload_label:'或上传音频文件 (MP3/M4A，全平台可用)',subtitle_label:'字幕 (VTT格式)',subtitle_placeholder:'在此粘贴 VTT 字幕内容...',
     load_start:'加载并开始',reveal:'显示',conceal:'隐藏',
     prev_btn:'← 上一句',next_btn:'下一句 →',
     mark_learned:'标记已学',learned_done:'✓ 已学',load_new:'加载新内容',
@@ -342,7 +346,7 @@ var STR = {
     vocab_desc:'Enter to reveal · Enter again to skip · ← → arrows',
     grammar_desc:'Click to expand · Study to learn ｜ Quiz to test',
     shadow_desc:'Paste YouTube link & VTT subtitles · Reveal to see text · ← → arrows',
-    yt_label:'YouTube URL',audio_label:'Audio file (auto-filled after URL)',subtitle_label:'Subtitles (VTT format)',subtitle_placeholder:'Paste VTT content here...\nWEBVTT\n00:00:01.000 --> 00:00:05.000\n안녕하세요.',
+    yt_label:'YouTube URL',audio_label:'Audio file (auto-filled after URL)',audio_upload_label:'Or upload audio file (MP3/M4A, works everywhere)',subtitle_label:'Subtitles (VTT format)',subtitle_placeholder:'Paste VTT content here...\nWEBVTT\n00:00:01.000 --> 00:00:05.000\n안녕하세요.',
     load_start:'Load & Start',reveal:'Reveal',conceal:'Conceal',
     prev_btn:'← Prev',next_btn:'Next →',
     mark_learned:'Mark Learned',learned_done:'✓ Learned',load_new:'Load New',
@@ -1212,10 +1216,15 @@ function updateLearnedButton(){
 }
 
 document.getElementById('shadow-load-btn').addEventListener('click', function(){
-  var audioFile = document.getElementById('shadow-audio-file').value.trim();
+  var uploadedFile = document.getElementById('shadow-audio-upload').files[0];
+  var audioPath = document.getElementById('shadow-audio-file').value.trim();
   var subtitleRaw = document.getElementById('shadow-subtitle-input').value.trim();
-  if (!audioFile || !subtitleRaw) {
-    document.getElementById('shadow-msg').textContent = 'Please enter both audio filename and subtitles.';
+  if (!subtitleRaw) {
+    document.getElementById('shadow-msg').textContent = 'Please enter subtitles.';
+    return;
+  }
+  if (!uploadedFile && !audioPath) {
+    document.getElementById('shadow-msg').textContent = 'Please provide audio (upload file or enter path).';
     return;
   }
   shadowData = parseVTT(subtitleRaw);
@@ -1227,19 +1236,27 @@ document.getElementById('shadow-load-btn').addEventListener('click', function(){
   var vidMatch = ytUrl.match(/[?&]v=([\w-]+)/);
   shadowLearnedVideoId = vidMatch ? vidMatch[1] : null;
   var dup = checkShadowDuplicate(shadowLearnedVideoId, subtitleRaw);
-  if (dup) {
-    var warnEl = document.getElementById('shadow-warn');
-    var msg = dup.type === 'video'
-      ? '<strong>' + t('duplicate_video') + '</strong> (' + dup.entry.learnedAt.split('T')[0] + ')'
-      : '<strong>' + t('duplicate_content') + '</strong> — ' + dup.entry.firstLine;
-    warnEl.innerHTML = msg + ' · <a href="#" id="shadow-force-load" style="color:#7d6608;text-decoration:underline">' + t('force_load') + '</a>';
-    warnEl.style.display = 'block';
-    document.getElementById('shadow-msg').textContent = '';
-    document.getElementById('shadow-force-load').addEventListener('click', function(e){ e.preventDefault(); warnEl.style.display = 'none'; startShadowSession(audioFile); });
-    return;
+  var doStart = function(audioSrc) {
+    if (dup) {
+      var warnEl = document.getElementById('shadow-warn');
+      var msg = dup.type === 'video'
+        ? '<strong>' + t('duplicate_video') + '</strong> (' + dup.entry.learnedAt.split('T')[0] + ')'
+        : '<strong>' + t('duplicate_content') + '</strong> — ' + dup.entry.firstLine;
+      warnEl.innerHTML = msg + ' · <a href="#" id="shadow-force-load" style="color:#7d6608;text-decoration:underline">' + t('force_load') + '</a>';
+      warnEl.style.display = 'block';
+      document.getElementById('shadow-msg').textContent = '';
+      document.getElementById('shadow-force-load').addEventListener('click', function(e){ e.preventDefault(); warnEl.style.display = 'none'; startShadowSession(audioSrc); });
+      return;
+    }
+    document.getElementById('shadow-warn').style.display = 'none';
+    startShadowSession(audioSrc);
+  };
+  if (uploadedFile) {
+    var blobUrl = URL.createObjectURL(uploadedFile);
+    doStart(blobUrl);
+  } else {
+    doStart(audioPath);
   }
-  document.getElementById('shadow-warn').style.display = 'none';
-  startShadowSession(audioFile);
 });
 function startShadowSession(audioFile){
   shadowAudioReady = false;
@@ -1352,7 +1369,9 @@ document.getElementById('shadow-audio').addEventListener('play', function(){ sha
 document.getElementById('shadow-audio').addEventListener('pause', function(){ shadowAudioTracking = false; });
 document.getElementById('shadow-reload-btn').addEventListener('click', function(){
   var audio = document.getElementById('shadow-audio');
+  if (audio.src && audio.src.startsWith('blob:')) URL.revokeObjectURL(audio.src);
   audio.pause(); audio.src = '';
+  document.getElementById('shadow-audio-upload').value = '';
   document.getElementById('shadow-practice').style.display = 'none';
   document.getElementById('shadow-setup').style.display = '';
   document.getElementById('shadow-msg').textContent = '';
