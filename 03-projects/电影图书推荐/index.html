@@ -209,7 +209,7 @@ function debug(msg) {
 }
 
 // ===== CONFIG =====
-var VERSION = 'v6';
+var VERSION = 'v7';
 (function checkVersion(){
   var v = localStorage.getItem('mbr_version');
   if (v !== VERSION) {
@@ -449,35 +449,46 @@ function mergeFilms(items) {
   var groups = {};
   for (var i = 0; i < items.length; i++) {
     var it = items[i];
-    var key = normTitle(it.title) + '|' + (it.year||'');
+    var key = normTitle(it.title); // title only, cross-year dedup
+    if (!key) continue;
     if (!groups[key]) {
       groups[key] = {
-        title: it.title, creator: it.creator, year: it.year,
+        title: it.title, creator: it.creator,
+        year: it.year, // display year (latest)
+        years: {},
         wikiUrl: it.wikiUrl, wikiTitle: it.wikiTitle,
         thumbnail: it.thumbnail, originalimage: it.originalimage, extract: it.extract,
         _type: it._type,
         awards: []
       };
     }
-    // Merge better data from later items
+    // Merge better data
     if (!groups[key].thumbnail && it.thumbnail) groups[key].thumbnail = it.thumbnail;
     if (!groups[key].originalimage && it.originalimage) groups[key].originalimage = it.originalimage;
     if (!groups[key].extract && it.extract) groups[key].extract = it.extract;
     if (!groups[key].wikiTitle && it.wikiTitle) groups[key].wikiTitle = it.wikiTitle;
     if (!groups[key].wikiUrl && it.wikiUrl) groups[key].wikiUrl = it.wikiUrl;
-    if (it.title && groups[key].title !== it.title && it.title.length > groups[key].title.length) groups[key].title = it.title;
-    // Collect awards
+    if (it.title && groups[key].title.length < it.title.length) groups[key].title = it.title;
+    // Track years
+    if (it.year) groups[key].years[it.year] = 1;
+    // Keep latest year for display
+    if (it.year && (!groups[key].year || it.year > groups[key].year)) groups[key].year = it.year;
+    // Collect awards with year
     if (it.award) {
       var dup = false;
       for (var j = 0; j < groups[key].awards.length; j++) {
         if (groups[key].awards[j].source === it.source && groups[key].awards[j].award === it.award) { dup = true; break; }
       }
-      if (!dup) groups[key].awards.push({source: it.source, award: it.award});
+      if (!dup) groups[key].awards.push({source: it.source, award: it.award, year: it.year});
     }
   }
   var merged = [];
-  var keys = Object.keys(groups);
-  for (var k = 0; k < keys.length; k++) { merged.push(groups[keys[k]]); }
+  var gkeys = Object.keys(groups);
+  for (var k = 0; k < gkeys.length; k++) {
+    var g = groups[gkeys[k]];
+    g.yearList = Object.keys(g.years).sort(function(a,b){ return b.localeCompare(a); });
+    merged.push(g);
+  }
   merged.sort(function(a,b){ return (b.year||'').localeCompare(a.year||''); });
   return merged;
 }
@@ -532,7 +543,13 @@ function render() {
 
 function getYears(items) {
   var years = {};
-  for (var i = 0; i < items.length; i++) { if (items[i].year) years[items[i].year] = 1; }
+  for (var i = 0; i < items.length; i++) {
+    if (items[i].yearList) {
+      for (var y = 0; y < items[i].yearList.length; y++) { years[items[i].yearList[y]] = 1; }
+    } else if (items[i].year) {
+      years[items[i].year] = 1;
+    }
+  }
   return Object.keys(years).sort(function(a,b){ return b.localeCompare(a); });
 }
 
@@ -590,8 +607,13 @@ function renderCards() {
       return i.source === state.sourceFilter;
     });
   }
-  // Year filter
-  if (state.yearFilter !== 'all') filtered = filtered.filter(function(i){ return i.year === state.yearFilter; });
+  // Year filter (check yearList for merged items, year for unmerged)
+  if (state.yearFilter !== 'all') {
+    filtered = filtered.filter(function(i){
+      if (i.yearList) return i.yearList.indexOf(state.yearFilter) >= 0;
+      return i.year === state.yearFilter;
+    });
+  }
   // Search
   if (state.search) {
     var q = state.search.toLowerCase();
@@ -658,7 +680,7 @@ function showModal(item) {
     imgHtml +
     '<div class="modal-body">' +
       '<h2>' + (item.title||item.creator||'') + '</h2>' +
-      '<div class="meta">' + (item.title && item.creator && item.title !== item.creator ? item.creator + ' · ' : '') + (item.year||'') + '</div>' +
+      '<div class="meta">' + (item.title && item.creator && item.title !== item.creator ? item.creator + ' · ' : '') + (item.yearList ? item.yearList.join(', ') : (item.year||'')) + '</div>' +
       (item.awards ? '<div class="card-badges" style="margin-bottom:12px">' + item.awards.map(function(a){ return '<span class="badge">' + a.source + ' · ' + a.award + '</span>'; }).join(' ') + '</div>' : (item.source ? '<div class="card-badges" style="margin-bottom:12px"><span class="badge">' + item.source + ' · ' + item.award + '</span></div>' : '')) +
       (item.extract ? '<div class="summary">' + item.extract.substring(0, 600) + '...</div>' : '') +
       '<div class="modal-actions">' +
