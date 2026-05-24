@@ -209,7 +209,7 @@ function debug(msg) {
 }
 
 // ===== CONFIG =====
-var VERSION = 'v7';
+var VERSION = 'v8';
 (function checkVersion(){
   var v = localStorage.getItem('mbr_version');
   if (v !== VERSION) {
@@ -224,22 +224,24 @@ var VERSION = 'v7';
 })();
 
 const MOVIE_AWARDS = [
+  // Film awards (award → film)
   {src:'Cannes',award:'Palme d\'Or',qid:'Q179808',p:'work'},
   {src:'Cannes',award:'Grand Prix',qid:'Q28455848',p:'work'},
-  {src:'Cannes',award:'Best Director',qid:'Q839486',p:'work'},
-  {src:'Cannes',award:'Best Actor',qid:'Q830113',p:'work'},
-  {src:'Cannes',award:'Best Actress',qid:'Q830115',p:'work'},
   {src:'Cannes',award:'Jury Prize',qid:'Q1342432',p:'work'},
   {src:'Venice',award:'Golden Lion',qid:'Q209459',p:'work'},
-  {src:'Venice',award:'Silver Lion',qid:'Q1337827',p:'work'},
-  {src:'Venice',award:'Volpi Cup',qid:'Q49025',p:'person'},
   {src:'Berlin',award:'Golden Bear',qid:'Q154590',p:'work'},
-  {src:'Berlin',award:'Silver Bear Director',qid:'Q706031',p:'work'},
-  {src:'Berlin',award:'Silver Bear Actor',qid:'Q819973',p:'person'},
-  {src:'Berlin',award:'Silver Bear Actress',qid:'Q376834',p:'person'},
   {src:'Berlin',award:'Silver Bear Jury',qid:'Q664212',p:'work'},
   {src:'Oscars',award:'Best Picture',qid:'Q102427',p:'work'},
-  {src:'Oscars',award:'Best Director',qid:'Q103360',p:'work'},
+  // Person awards (award → person → film via pq:P1686)
+  {src:'Cannes',award:'Best Director',qid:'Q839486',p:'person'},
+  {src:'Cannes',award:'Best Actor',qid:'Q830113',p:'person'},
+  {src:'Cannes',award:'Best Actress',qid:'Q830115',p:'person'},
+  {src:'Venice',award:'Silver Lion',qid:'Q1337827',p:'person'},
+  {src:'Venice',award:'Volpi Cup',qid:'Q49025',p:'person'},
+  {src:'Berlin',award:'Silver Bear Director',qid:'Q706031',p:'person'},
+  {src:'Berlin',award:'Silver Bear Actor',qid:'Q819973',p:'person'},
+  {src:'Berlin',award:'Silver Bear Actress',qid:'Q376834',p:'person'},
+  {src:'Oscars',award:'Best Director',qid:'Q103360',p:'person'},
   {src:'Oscars',award:'Best Actor',qid:'Q103916',p:'person'},
   {src:'Oscars',award:'Best Actress',qid:'Q103618',p:'person'}
 ];
