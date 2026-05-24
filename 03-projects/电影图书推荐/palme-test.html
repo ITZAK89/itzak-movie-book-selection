@@ -43,6 +43,13 @@ async function fetchPage(pageName) {
 }
 
 function clean(s) { return s.replace(/\[.*?\]/g,'').replace(/[§*]/g,'').trim(); }
+function cleanFilm(s) {
+  // Remove citation brackets, section symbols, and anything after patterns like " · 1979" or extra columns
+  s = s.replace(/\[.*?\]/g,'').replace(/[§*]/g,'').trim();
+  // Split on common separators that indicate extra info (other awards, years)
+  var parts = s.split(/  +|\t| · \d{4}/);
+  return parts[0].trim();
+}
 
 function parseWinners(html, layout) {
   var doc = new DOMParser().parseFromString(html, 'text/html');
@@ -66,12 +73,12 @@ function parseWinners(html, layout) {
 
       var film, winner;
       if (layout === 'film_dir') {
-        film = (fi < cells.length) ? clean(cells[fi].textContent).split(/  |\t/)[0] : '';
+        film = (fi < cells.length) ? cleanFilm(cells[fi].textContent) : '';
         winner = (wi < cells.length) ? clean(cells[wi].textContent) : '';
       } else {
         // dir_film or actor_film: col 1 is person, col 2 is film
         winner = (fi < cells.length) ? clean(cells[fi].textContent) : '';
-        film = (wi < cells.length) ? clean(cells[wi].textContent) : '';
+        film = (wi < cells.length) ? cleanFilm(cells[wi].textContent) : '';
       }
       if (!film) continue;
       all.push({year: parseInt(year), film: film, winner: winner, thumb: null});
