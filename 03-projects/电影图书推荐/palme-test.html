@@ -1,0 +1,104 @@
+<!DOCTYPE html><html lang="zh"><head><meta charset="UTF-8"><title>Palme d'Or 测试</title>
+<style>
+body{font:14px -apple-system,sans-serif;background:#111;color:#eee;padding:20px}
+h2{color:#6c8cff}.grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(200px,1fr));gap:12px}
+.card{background:#222;border-radius:8px;overflow:hidden}
+.card img{width:100%;height:280px;object-fit:cover;background:#333}
+.card-body{padding:10px}.card-body h3{margin:0 0 4px;font-size:.9rem}
+.card-body p{margin:0;font-size:.75rem;color:#aaa}.err{color:#f44336}
+</style></head><body>
+<h2>Palme d'Or 1990-2026 — 海报加载测试</h2>
+<div id="out"></div>
+<script>
+async function fetchPage(pageName) {
+  var url = 'https://en.wikipedia.org/w/api.php?origin=*&action=parse&page=' + pageName + '&prop=text&format=json';
+  var r = await fetch(url); var d = await r.json();
+  return d.parse.text['*'];
+}
+
+function getFilmTitle(cellText) {
+  // cell may contain "English Title  Original Title" - take first part
+  return cellText.replace(/\[.*?\]/g,'').trim().split(/  |\t/)[0].trim();
+}
+
+function parseWinners(html) {
+  var doc = new DOMParser().parseFromString(html, 'text/html');
+  var tables = doc.querySelectorAll('table.wikitable');
+  var all = [];
+  for (var t = 0; t < tables.length; t++) {
+    var rows = tables[t].querySelectorAll('tr');
+    if (rows.length < 3) continue;
+    var prevYear = '';
+    for (var r = 1; r < rows.length; r++) {
+      var cells = rows[r].querySelectorAll('td,th');
+      if (cells.length < 2) continue;
+      var first = cells[0].textContent.replace(/\[.*?\]/g,'').trim();
+      var shift = 0, year;
+      if (/^\d{4}$/.test(first) && parseInt(first) >= 1990) { year = first; prevYear = year; }
+      else if (prevYear) { year = prevYear; shift = 1; }
+      else continue;
+      var fi = 1 - shift, di = 2 - shift;
+      if (fi < 0) fi = 0; if (di < 0) di = 0;
+      var film = (fi < cells.length) ? getFilmTitle(cells[fi].textContent) : '';
+      if (!film) continue;
+      var dir = (di < cells.length) ? cells[di].textContent.replace(/\[.*?\]/g,'').trim() : '';
+      all.push({year: parseInt(year), film: film, director: dir, thumb: null, wpTitle: null});
+    }
+  }
+  return all;
+}
+
+async function getPoster(film, year) {
+  try {
+    // Search for the correct Wikipedia page
+    var searchUrl = 'https://en.wikipedia.org/w/api.php?origin=*&action=query&list=search&srsearch=' + encodeURIComponent(film + ' ' + year + ' film') + '&format=json&srlimit=3';
+    var sr = await fetch(searchUrl);
+    if (!sr.ok) return null;
+    var sd = await sr.json();
+    var pages = sd.query.search;
+    if (!pages || pages.length === 0) return null;
+
+    // Try each search result
+    for (var p = 0; p < pages.length; p++) {
+      var title = pages[p].title;
+      if (title.toLowerCase().indexOf('cannes') >= 0) continue; // Skip festival pages
+      var r = await fetch('https://en.wikipedia.org/api/rest_v1/page/summary/' + encodeURIComponent(title));
+      if (r.ok) {
+        var d = await r.json();
+        if (d.thumbnail) return {thumb: d.thumbnail.source, title: title};
+      }
+    }
+    return null;
+  } catch(e) { return null; }
+}
+
+async function run() {
+  var out = document.getElementById('out');
+  out.innerHTML = '<p>Fetching Palme d\'Or page...</p>';
+  var html = await fetchPage('Palme_d%27Or');
+  var rows = parseWinners(html);
+  out.innerHTML += '<p>Got ' + rows.length + ' films. Loading posters...</p>';
+
+  // Load posters in batches of 6
+  for (var i = 0; i < rows.length; i += 6) {
+    var batch = rows.slice(i, i + 6);
+    await Promise.all(batch.map(async function(row) {
+      var result = await getPoster(row.film, row.year);
+      if (result) { row.thumb = result.thumb; row.wpTitle = result.title; }
+    }));
+    out.innerHTML += '<p>' + Math.min(i + 6, rows.length) + '/' + rows.length + ' posters loaded</p>';
+  }
+
+  var ok = rows.filter(function(r){ return r.thumb; }).length;
+  out.innerHTML += '<p class="ok">Posters found: ' + ok + '/' + rows.length + '</p>';
+  out.innerHTML += '<div class="grid">';
+  for (var j = 0; j < rows.length; j++) {
+    var r = rows[j];
+    out.innerHTML += '<div class="card">' +
+      (r.thumb ? '<img src="' + r.thumb + '" onerror="this.style.display=\'none\'">' : '<div style="height:280px;display:flex;align-items:center;justify-content:center;background:#333;color:#666">' + r.film + '</div>') +
+      '<div class="card-body"><h3>' + r.film + '</h3><p>' + r.year + ' · ' + r.director + '</p></div></div>';
+  }
+  out.innerHTML += '</div>';
+}
+run();
+</script></body></html>
