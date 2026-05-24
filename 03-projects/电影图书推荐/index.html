@@ -189,6 +189,7 @@ footer {
 
 <main>
   <div id="banner"></div>
+  <div id="debug" style="font-size:.75rem;color:var(--muted);margin-bottom:12px;font-family:monospace;max-height:300px;overflow-y:auto;background:var(--surface);border-radius:8px;padding:8px 12px;display:none"></div>
   <div class="filter-bar" id="filter-bar"></div>
   <input type="text" class="search-box" id="search" placeholder="搜索...">
   <div id="content"></div>
@@ -198,6 +199,15 @@ footer {
 <footer>数据来源: Wikipedia · Wikidata · TSPDT</footer>
 
 <script>
+// ===== DEBUG =====
+var debugEl, debugLines = [];
+function debug(msg) {
+  debugLines.push(new Date().toLocaleTimeString() + ' ' + msg);
+  if (debugLines.length > 50) debugLines.shift();
+  if (debugEl) debugEl.textContent = debugLines.join('\n');
+  console.log(msg);
+}
+
 // ===== CONFIG =====
 var VERSION = 'v2';
 (function checkVersion(){
@@ -433,10 +443,12 @@ async function fetchAll(type) {
   var awards = type === 'movies' ? MOVIE_AWARDS : BOOK_AWARDS;
   var allItems = [];
   var failures = 0;
+  debug(type + ': fetching ' + awards.length + ' awards');
 
   for (var i = 0; i < awards.length; i++) {
     try {
       var items = await fetchAward(awards[i]);
+      debug(type + ': [' + (i+1) + '/' + awards.length + '] ' + awards[i].src + ' ' + awards[i].award + ' = ' + items.length + ' items');
       for (var j = 0; j < items.length; j++) { items[j]._type = type; }
       allItems = allItems.concat(items);
     } catch(e) {
@@ -563,10 +575,12 @@ var dataStore = { movies: null, books: null };
 async function loadData(type, forceRefresh) {
   var cacheKey = 'full_' + type;
   var cacheTTL = 3600000; // 1h
+  debug('loadData: ' + type + ' force=' + (forceRefresh||false));
 
   if (!forceRefresh) {
     var cached = cacheGet(cacheKey);
     if (cached) {
+      debug(type + ': cache hit, ' + (cached.items ? cached.items.length : 0) + ' items');
       dataStore[type] = cached;
       if (type === state.tab) {
         state.items = cached.items;
@@ -584,9 +598,11 @@ async function loadData(type, forceRefresh) {
 
   state.loading = true;
   render();
+  debug(type + ': fetching fresh data...');
 
   try {
     dataStore[type] = await fetchAll(type);
+    debug(type + ': got ' + (dataStore[type].items ? dataStore[type].items.length : 0) + ' items');
     dataStore[type]._ts = Date.now();
     cacheSet(cacheKey, dataStore[type], cacheTTL);
     if (type === state.tab) {
@@ -597,6 +613,7 @@ async function loadData(type, forceRefresh) {
       render();
     }
   } catch(e) {
+    debug(type + ': fetch failed - ' + e.message);
     if (dataStore[type]) {
       if (type === state.tab) document.getElementById('banner').innerHTML = '<div class="banner warn">实时更新失败，显示缓存</div>';
     } else if (type === state.tab) {
@@ -629,8 +646,18 @@ async function refreshCurrent() {
 
 // ===== INIT =====
 async function init() {
+  debugEl = document.getElementById('debug');
+  debugEl.style.display = 'block';
+  debug('Init started');
   render();
-  await Promise.all([loadData('movies'), loadData('books')]);
+  debug('Loading movies and books in parallel...');
+  try {
+    await Promise.all([loadData('movies'), loadData('books')]);
+    debug('All data loaded. Hiding debug panel.');
+    setTimeout(function(){ debugEl.style.display = 'none'; }, 2000);
+  } catch(e) {
+    debug('FATAL: ' + e.message + ' ' + (e.stack||''));
+  }
 }
 
 // ===== EVENT HANDLERS =====
