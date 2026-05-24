@@ -65,8 +65,20 @@ function parseWinners(html, name) {
         continue;
       }
 
-      var fi = filmCol - shift, di = directorCol - shift;
-      var film = (fi >= 0 && fi < cells.length) ? cells[fi].textContent.replace(/\[.*?\]/g,'').replace(/\s+/g,' ').trim() : '';
+      // Column indices depend on how many cells this row actually has
+      // Full rows: 6 cells = year|english|original|director|country|ref
+      // Missing original title: 5 cells = year|english|director|country|ref
+      var fi, di;
+      if (cells.length >= 6) { fi = 1; di = 3; }
+      else if (cells.length === 5) { fi = 1; di = 2; }
+      else if (cells.length === 4) { fi = 1; di = 2; }
+      else if (cells.length === 3) { fi = 1; di = 2; }
+      else continue;
+
+      fi -= shift; di -= shift;
+      if (fi < 0) fi = 0;
+
+      var film = (fi < cells.length) ? cells[fi].textContent.replace(/\[.*?\]/g,'').replace(/\s+/g,' ').trim() : '';
       if (!film) continue;
 
       var director = (di >= 0 && di < cells.length) ? cells[di].textContent.replace(/\[.*?\]/g,'').trim() : '';
