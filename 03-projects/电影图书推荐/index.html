@@ -209,7 +209,7 @@ function debug(msg) {
 }
 
 // ===== CONFIG =====
-var VERSION = 'v4';
+var VERSION = 'v5';
 (function checkVersion(){
   var v = localStorage.getItem('mbr_version');
   if (v !== VERSION) {
@@ -299,25 +299,28 @@ async function runSparql(query, timeout) {
 
 function buildQuery(cfg) {
   var qid = cfg.qid;
+  var wiki = 'OPTIONAL { ?article schema:about ?item; schema:inLanguage "en"; schema:isPartOf <https://en.wikipedia.org/>. }';
+  var wikiPerson = 'OPTIONAL { ?article schema:about ?person; schema:inLanguage "en"; schema:isPartOf <https://en.wikipedia.org/>. }';
+  var wikiWork = 'OPTIONAL { ?article schema:about ?work; schema:inLanguage "en"; schema:isPartOf <https://en.wikipedia.org/>. }';
   if (cfg.p === 'work') {
-    return 'SELECT ?item ?itemLabel ?creator ?creatorLabel ?year WHERE { ?item wdt:P166 wd:' + qid + '. OPTIONAL { ?item wdt:P57 ?creator. } OPTIONAL { ?item wdt:P50 ?creator. } OPTIONAL { ?item p:P166 ?s. ?s ps:P166 wd:' + qid + '. ?s pq:P585 ?d. BIND(YEAR(?d) AS ?year) } SERVICE wikibase:label { bd:serviceParam wikibase:language "en,zh". } } ORDER BY DESC(?year) LIMIT 20';
+    return 'SELECT ?item ?itemLabel ?creator ?creatorLabel ?year ?article WHERE { ?item wdt:P166 wd:' + qid + '. OPTIONAL { ?item wdt:P57 ?creator. } OPTIONAL { ?item wdt:P50 ?creator. } OPTIONAL { ?item p:P166 ?s. ?s ps:P166 wd:' + qid + '. ?s pq:P585 ?d. BIND(YEAR(?d) AS ?year) } ' + wiki + ' SERVICE wikibase:label { bd:serviceParam wikibase:language "en,zh". } } ORDER BY DESC(?year) LIMIT 20';
   }
   if (cfg.p === 'person') {
-    return 'SELECT ?person ?personLabel ?work ?workLabel ?year WHERE { ?person wdt:P166 wd:' + qid + '; wdt:P31 wd:Q5. OPTIONAL { ?person p:P166 ?s. ?s ps:P166 wd:' + qid + '. ?s pq:P585 ?d. BIND(YEAR(?d) AS ?year) } OPTIONAL { ?s pq:P1686 ?work. } SERVICE wikibase:label { bd:serviceParam wikibase:language "en,zh". } } ORDER BY DESC(?year) LIMIT 20';
+    return 'SELECT ?person ?personLabel ?work ?workLabel ?year ?article WHERE { ?person wdt:P166 wd:' + qid + '; wdt:P31 wd:Q5. OPTIONAL { ?person p:P166 ?s. ?s ps:P166 wd:' + qid + '. ?s pq:P585 ?d. BIND(YEAR(?d) AS ?year) } OPTIONAL { ?s pq:P1686 ?work. } ' + wikiWork + ' SERVICE wikibase:label { bd:serviceParam wikibase:language "en,zh". } } ORDER BY DESC(?year) LIMIT 20';
   }
   // person_simple
-  return 'SELECT ?person ?personLabel ?year WHERE { ?person wdt:P166 wd:' + qid + '; wdt:P31 wd:Q5. OPTIONAL { ?person p:P166 ?s. ?s ps:P166 wd:' + qid + '. ?s pq:P585 ?d. BIND(YEAR(?d) AS ?year) } SERVICE wikibase:label { bd:serviceParam wikibase:language "en,zh". } } ORDER BY DESC(?year) LIMIT 20';
+  return 'SELECT ?person ?personLabel ?year ?article WHERE { ?person wdt:P166 wd:' + qid + '; wdt:P31 wd:Q5. OPTIONAL { ?person p:P166 ?s. ?s ps:P166 wd:' + qid + '. ?s pq:P585 ?d. BIND(YEAR(?d) AS ?year) } ' + wikiPerson + ' SERVICE wikibase:label { bd:serviceParam wikibase:language "en,zh". } } ORDER BY DESC(?year) LIMIT 20';
 }
 
-function getWikiEnUrl(r) {
-  if (r.item && r.item.value) return 'https://en.wikipedia.org/wiki/' + encodeURIComponent(r.item.value.split('/').pop().replace(/ /g,'_'));
-  if (r.person && r.person.value) return 'https://en.wikipedia.org/wiki/' + encodeURIComponent(r.person.value.split('/').pop().replace(/ /g,'_'));
-  return null;
+function wikiTitleFromUrl(url) {
+  if (!url) return null;
+  // Extract page title from https://en.wikipedia.org/wiki/Page_Title
+  var parts = url.split('/wiki/');
+  return parts.length > 1 ? decodeURIComponent(parts[parts.length - 1]) : null;
 }
 
 function getWikiSummary(title) {
   if (!title) return Promise.resolve(null);
-  title = title.split('/').pop();
   return fetch('https://en.wikipedia.org/api/rest_v1/page/summary/' + encodeURIComponent(title))
     .then(function(r){ return r.ok ? r.json() : null; })
     .catch(function(){ return null; });
@@ -349,6 +352,8 @@ async function fetchAward(cfg) {
   for (var i = 0; i < rows.length; i++) {
     var r = rows[i];
     var isWork = cfg.p === 'work';
+    var articleUrl = r.article ? r.article.value : null;
+    var wpTitle = wikiTitleFromUrl(articleUrl);
     if (cfg.p === 'person' || cfg.p === 'person_simple') {
       items.push({
         title: r.workLabel ? r.workLabel.value : null,
@@ -356,8 +361,8 @@ async function fetchAward(cfg) {
         year: r.year ? r.year.value : '',
         source: cfg.src,
         award: cfg.award,
-        wikiUrl: r.work ? getWikiEnUrl({item: r.work}) : getWikiEnUrl(r),
-        wikiTitle: r.work ? r.work.value.split('/').pop() : null,
+        wikiUrl: articleUrl,
+        wikiTitle: wpTitle,
         isWork: !!r.workLabel
       });
     } else {
@@ -367,8 +372,8 @@ async function fetchAward(cfg) {
         year: r.year ? r.year.value : '',
         source: cfg.src,
         award: cfg.award,
-        wikiUrl: getWikiEnUrl(r),
-        wikiTitle: r.item ? r.item.value.split('/').pop() : null,
+        wikiUrl: articleUrl,
+        wikiTitle: wpTitle,
         isWork: true
       });
     }
