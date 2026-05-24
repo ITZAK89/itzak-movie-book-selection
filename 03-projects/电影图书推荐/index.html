@@ -211,7 +211,7 @@ function debug(msg) {
 }
 
 // ===== CONFIG =====
-var VERSION = 'v12';
+var VERSION = 'v14';
 (function checkVersion(){
   var v = localStorage.getItem('mbr_version');
   if (v !== VERSION) {
@@ -228,8 +228,8 @@ var VERSION = 'v12';
 // pattern: 'work' = award→film, 'person' = award→person→film (pq:P1686)
 const MOVIE_AWARDS = [
   {src:'Cannes',award:'Palme d\'Or',qid:'Q179808',p:'work'},
-  {src:'Cannes',award:'Grand Prix',qid:'Q28455848',p:'work'},
-  {src:'Cannes',award:'Jury Prize',qid:'Q1342432',p:'work'},
+  {src:'Cannes',award:'Grand Prix',qid:'Q844804',p:'work'},
+  {src:'Cannes',award:'Jury Prize',qid:'Q164200',p:'work'},
   {src:'Cannes',award:'Best Director',qid:'Q510175',p:'person'},
   {src:'Cannes',award:'Best Actor',qid:'Q586140',p:'person'},
   {src:'Cannes',award:'Best Actress',qid:'Q840286',p:'person'},
