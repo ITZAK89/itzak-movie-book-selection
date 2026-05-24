@@ -101,17 +101,29 @@ function parseWinners(html) {
       var fi = filmCol - shift, wi = winnerCol - shift;
       if (fi < 0) fi = 0; if (wi < 0) wi = 0;
 
-      var film = (fi < cells.length) ? cleanFilm(cells[fi].textContent) : '';
+      var filmCell = (fi < cells.length) ? cells[fi] : null;
+      var film = filmCell ? cleanFilm(filmCell.textContent) : '';
       var winner = (wi < cells.length) ? clean(cells[wi].textContent) : '';
       if (!film) continue;
-      all.push({year: parseInt(year), film: film, winner: winner, thumb: null});
+      // Extract direct Wikipedia link from the cell
+      var wpTitle = null;
+      if (filmCell) {
+        var link = filmCell.querySelector('a[href^="/wiki/"]');
+        if (link) wpTitle = decodeURIComponent(link.getAttribute('href').replace('/wiki/',''));
+      }
+      all.push({year: parseInt(year), film: film, winner: winner, thumb: null, wpTitle: wpTitle});
     }
   }
   return all;
 }
 
-async function getPoster(film, year, winner) {
+async function getPoster(film, year, winner, wpTitle) {
   try {
+    // If we have a direct Wikipedia link from the table, use it
+    if (wpTitle) {
+      var r = await fetch('https://en.wikipedia.org/api/rest_v1/page/summary/' + encodeURIComponent(wpTitle));
+      if (r.ok) { var d = await r.json(); if (d.thumbnail) return d.thumbnail.source; }
+    }
     var q = encodeURIComponent('"' + film + '" (' + year + ' film)');
     var sr = await fetch('https://en.wikipedia.org/w/api.php?origin=*&action=query&list=search&srwhat=text&srsearch=' + q + '&format=json&srlimit=5');
     if (!sr.ok) return null;
@@ -156,7 +168,7 @@ async function runOne(idx) {
   for (var i = 0; i < rows.length; i += 6) {
     var batch = rows.slice(i, i + 6);
     await Promise.all(batch.map(async function(r) {
-      r.thumb = await getPoster(r.film, r.year, r.winner);
+      r.thumb = await getPoster(r.film, r.year, r.winner, r.wpTitle);
     }));
   }
   var ok = rows.filter(function(r){ return r.thumb; }).length;
