@@ -495,7 +495,7 @@ function renderCards() {
       imgHtml +
       '<div class="card-body">' +
         '<div class="card-title">' + (item.title||item.creator||'') + '</div>' +
-        '<div class="card-sub">' + (item.creator||'') + '</div>' +
+        (item.title && item.creator && item.title !== item.creator ? '<div class="card-sub">' + item.creator + '</div>' : '') +
         '<div class="card-badges">' +
           '<span class="badge">' + item.source + '</span>' +
           '<span class="badge">' + item.award + '</span>' +
@@ -518,7 +518,7 @@ function showModal(item) {
     imgHtml +
     '<div class="modal-body">' +
       '<h2>' + (item.title||item.creator||'') + '</h2>' +
-      '<div class="meta">' + (item.creator||'') + ' · ' + item.source + ' · ' + item.award + ' · ' + (item.year||'') + '</div>' +
+      '<div class="meta">' + (item.title && item.creator && item.title !== item.creator ? item.creator + ' · ' : '') + item.source + ' · ' + item.award + ' · ' + (item.year||'') + '</div>' +
       (item.extract ? '<div class="summary">' + item.extract.substring(0, 600) + '...</div>' : '') +
       '<div class="modal-actions">' +
         '<button class="btn primary" id="modal-fav">' + (isFav ? '★ 已收藏' : '☆ 收藏') + '</button>' +
