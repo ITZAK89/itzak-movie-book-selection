@@ -269,7 +269,6 @@ function cacheGet(k) {
   try {
     var e = JSON.parse(localStorage.getItem('mbr_' + k));
     if (!e || !e.data) return null;
-    if (Date.now() - e.ts > e.ttl) return null;
     return e.data;
   } catch(x) { return null; }
 }
@@ -847,10 +846,6 @@ async function loadData(type, forceRefresh) {
         state.loading = false;
         state.cacheAge = '缓存';
         render();
-      }
-      // Background refresh if cache older than half TTL
-      if (Date.now() - cached._ts > cacheTTL / 2) {
-        refreshInBackground(type, cacheKey, cacheTTL);
       }
       return;
     }
