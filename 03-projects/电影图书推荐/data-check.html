@@ -22,9 +22,11 @@ function parseWinners(html, pageCfg) {
   var doc = new DOMParser().parseFromString(html, 'text/html');
   var tables = doc.querySelectorAll('table.wikitable');
   var allRows = [];
+  console.log('Found ' + tables.length + ' wikitables');
 
   for (var t = 0; t < tables.length; t++) {
     var rows = tables[t].querySelectorAll('tr');
+    console.log('  Table ' + t + ': ' + rows.length + ' rows');
     if (rows.length < 3) continue;
     var headers = [];
     var ths = rows[0].querySelectorAll('th');
@@ -63,8 +65,10 @@ function parseWinners(html, pageCfg) {
       var director = dirCell ? dirCell.textContent.replace(/\[.*?\]/g,'').trim() : '';
 
       allRows.push({year: parseInt(year), film: film, director: director});
+      if (allRows.length <= 3) console.log('  -> ' + year + ' | ' + film + ' | ' + director);
     }
   }
+  console.log('  Total rows: ' + allRows.length);
   return allRows;
 }
 
