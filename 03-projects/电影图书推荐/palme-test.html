@@ -146,6 +146,7 @@ function parseWinners(html) {
         if (link) wpTitle = decodeURIComponent(link.getAttribute('href').replace('/wiki/',''));
       }
       all.push({year: parseInt(year), film: film, winner: winner, thumb: null, wpTitle: wpTitle});
+      if (debugShown <= 3) console.log('  wpTitle=' + wpTitle);
     }
   }
   return all;
