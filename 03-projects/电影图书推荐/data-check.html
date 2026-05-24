@@ -6,8 +6,7 @@ th{color:#aaa}.ok{color:#4caf50}.err{color:#f44336}</style></head><body>
 <div id="out"></div>
 <script>
 var pages = [
-  // Palme d'Or: Year(0) | English Title(1) | Original Title(2) | Director(3) | Country(4) | Ref(5)
-  {name:'Palme d\'Or', page:'Palme_d%27Or', src:'Cannes', cols:[0,1,3]},
+  {name:'Palme d\'Or', page:'Palme_d%27Or', src:'Cannes'},
 ];
 
 async function fetchTable(pageName) {
@@ -18,57 +17,62 @@ async function fetchTable(pageName) {
   return d.parse.text['*'];
 }
 
-function parseWinners(html, pageCfg) {
+function parseWinners(html, name) {
   var doc = new DOMParser().parseFromString(html, 'text/html');
   var tables = doc.querySelectorAll('table.wikitable');
   var allRows = [];
-  console.log('Found ' + tables.length + ' wikitables');
 
   for (var t = 0; t < tables.length; t++) {
     var rows = tables[t].querySelectorAll('tr');
-    console.log('  Table ' + t + ': ' + rows.length + ' rows');
     if (rows.length < 3) continue;
+
+    // Auto-detect columns from header row
     var headers = [];
     var ths = rows[0].querySelectorAll('th');
     for (var h = 0; h < ths.length; h++) headers.push(ths[h].textContent.trim().toLowerCase());
 
-    var yearCol = pageCfg.cols[0], filmCol = pageCfg.cols[1], directorCol = pageCfg.cols[2];
+    var yearCol = 0, filmCol = 1, directorCol = -1;
+    for (var c = 0; c < headers.length; c++) {
+      var ht = headers[c];
+      if (ht.indexOf('year') >= 0 || ht.indexOf('année') >= 0) yearCol = c;
+      if (ht.indexOf('english') >= 0 || ht.indexOf('film') >= 0) filmCol = c;
+      if (ht.indexOf('director') >= 0 || ht.indexOf('réalisateur') >= 0) directorCol = c;
+      if (ht.indexOf('recipient') >= 0 || ht.indexOf('winner') >= 0) { directorCol = c; if (filmCol === 1) filmCol = -1; } // For actor awards
+    }
+    if (filmCol < 0) filmCol = (headers.length >= 2 ? 1 : 0);
+    if (directorCol < 0) directorCol = (headers.length >= 3 ? 2 : 1);
+    // For acting awards without director: use column 1 as actor, column 2 as film
+    if (name.indexOf('Actor') >= 0 || name.indexOf('Actress') >= 0) {
+      filmCol = headers.length >= 3 ? 2 : 1;
+      directorCol = 1; // This becomes "actor/actress name"
+    }
+
     var prevYear = '';
 
     for (var r = 1; r < rows.length; r++) {
       var cells = rows[r].querySelectorAll('td,th');
-      if (cells.length < 1) continue;
+      if (cells.length < 2) continue;
 
       var firstCell = cells[0].textContent.replace(/\[.*?\]/g,'').trim();
-      var shift = 0;
-      var year;
+      var shift = 0, year;
 
       if (/^\d{4}$/.test(firstCell) && parseInt(firstCell) >= 1990) {
-        year = firstCell;
-        prevYear = year;
-        shift = 0;
+        year = firstCell; prevYear = year;
       } else if (prevYear) {
-        year = prevYear;
-        shift = 1; // cells are one column left (missing year)
+        year = prevYear; shift = 1;
       } else {
         continue;
       }
 
-      var filmIdx = filmCol - shift;
-      var dirIdx = directorCol - shift;
-
-      var filmCell = filmIdx >= 0 && filmIdx < cells.length ? cells[filmIdx] : null;
-      var film = filmCell ? filmCell.textContent.replace(/\[.*?\]/g,'').replace(/\s+/g,' ').trim() : '';
+      var fi = filmCol - shift, di = directorCol - shift;
+      var film = (fi >= 0 && fi < cells.length) ? cells[fi].textContent.replace(/\[.*?\]/g,'').replace(/\s+/g,' ').trim() : '';
       if (!film) continue;
 
-      var dirCell = dirIdx >= 0 && dirIdx < cells.length ? cells[dirIdx] : null;
-      var director = dirCell ? dirCell.textContent.replace(/\[.*?\]/g,'').trim() : '';
+      var director = (di >= 0 && di < cells.length) ? cells[di].textContent.replace(/\[.*?\]/g,'').trim() : '';
 
       allRows.push({year: parseInt(year), film: film, director: director});
-      if (allRows.length <= 3) console.log('  -> ' + year + ' | ' + film + ' | ' + director);
     }
   }
-  console.log('  Total rows: ' + allRows.length);
   return allRows;
 }
 
@@ -80,7 +84,7 @@ async function run() {
     out.innerHTML += '<p>Fetching ' + p.name + '...</p>';
     try {
       var html = await fetchTable(p.page);
-      var rows = parseWinners(html, p);
+      var rows = parseWinners(html, p.name);
       out.innerHTML += '<p class="ok">Got ' + rows.length + ' rows (1990+)</p>';
       out.innerHTML += '<h2>' + p.name + ' (' + rows.length + ' winners 1990-)</h2>';
       out.innerHTML += '<table><tr><th>Year</th><th>Film</th><th>Director</th></tr>';
