@@ -152,7 +152,5 @@ var sel = document.getElementById('sel');
 for (var i = 0; i < AWARDS.length; i++) {
   sel.innerHTML += '<option value="' + i + '">' + AWARDS[i].src + ' — ' + AWARDS[i].name + '</option>';
 }
-sel.onchange = function() { runOne(parseInt(sel.value)); };
 document.getElementById('go').onclick = function() { runOne(parseInt(sel.value)); };
-runOne(0);
 </script></body></html>
