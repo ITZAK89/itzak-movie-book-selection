@@ -780,10 +780,41 @@ async function refreshCurrent() {
   await loadData(state.tab, true);
 }
 
+// ===== QUICK DIAGNOSTIC =====
+window.runDiag = async function() {
+  if (!debugEl) { debugEl = document.getElementById('debug'); debugEl.style.display = 'block'; }
+  debug('=== Quick Diagnostic ===');
+  // Test the 11 person-pattern awards one by one
+  var personAwards = MOVIE_AWARDS.filter(function(a){ return a.p === 'person'; });
+  for (var i = 0; i < personAwards.length; i++) {
+    var a = personAwards[i];
+    var q = buildQuery(a);
+    debug('Testing ' + a.src + ' ' + a.award + ' (' + a.qid + ')...');
+    try {
+      var rows = await runSparql(q, 90000);
+      if (!rows || rows.length === 0) {
+        debug('  -> 0 ROWS - FAIL');
+      } else {
+        var hasWork = 0;
+        for (var j = 0; j < Math.min(3, rows.length); j++) {
+          if (rows[j].workLabel) hasWork++;
+          debug('  row ' + j + ': ' + (rows[j].personLabel ? rows[j].personLabel.value : '?') + ' -> work: ' + (rows[j].workLabel ? rows[j].workLabel.value : 'NONE') + ' year: ' + (rows[j].year ? rows[j].year.value : '?'));
+        }
+        debug('  -> ' + rows.length + ' rows, ' + hasWork + '/3 have workLabel');
+      }
+    } catch(e) {
+      debug('  -> ERROR: ' + e.message);
+    }
+  }
+  debug('=== Diagnostic Complete ===');
+  debug('Run copy(debugLines.join("\n")) to copy all');
+};
+
 // ===== TEST DATA MODE =====
 if (window.__TEST_DATA__) {
   // Offline mode: use embedded test data, skip API calls
   var init = function() {
+    debugEl = document.getElementById('debug');
     dataStore.movies = window.__TEST_DATA__.movies;
     dataStore.books = window.__TEST_DATA__.books;
     state.items = dataStore[state.tab].items;
