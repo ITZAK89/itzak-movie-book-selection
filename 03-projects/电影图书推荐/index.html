@@ -3,15 +3,9 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>电影图书推荐</title>
+<title>Itzak's selection</title>
 <style>
 :root {
-  --bg: #0f0f1a; --surface: #1a1a2e; --card: #222244;
-  --text: #e0e0e0; --muted: #888; --accent: #6c8cff;
-  --badge: #2a2a4a; --border: #333; --hover: #2a2a50;
-  --shadow: 0 2px 8px rgba(0,0,0,.4);
-}
-.light {
   --bg: #f0f2f5; --surface: #fff; --card: #fff;
   --text: #222; --muted: #666; --accent: #4a6cf7;
   --badge: #e8ecf4; --border: #ddd; --hover: #f0f2f8;
@@ -76,7 +70,6 @@ main { max-width: 1400px; margin: 0 auto; padding: 20px 24px; }
   display: flex; align-items: center; gap: 8px;
 }
 .banner.warn { background: #3a2e1b; color: #ffb74d; border: 1px solid #5a4a2a; }
-.light .banner.warn { background: #fff8e1; color: #e65100; border: 1px solid #ffe0b2; }
 
 .card-grid {
   display: grid; grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));
@@ -173,19 +166,19 @@ footer {
 <body>
 
 <header>
-  <h1>电影图书推荐</h1>
+  <h1>Itzak's selection</h1>
   <div class="header-right">
     <span class="status-dot loading" id="status-dot" title="加载中"></span>
     <span class="status-text" id="status-text">加载中...</span>
     <button class="theme-btn" id="export-btn" title="导出测试数据" style="font-size:.65rem;width:auto;padding:0 10px;border-radius:6px">Export</button>
     <button class="theme-btn" id="refresh-btn" title="刷新数据">&#8635;</button>
-    <button class="theme-btn" id="theme-btn" title="切换主题">&#9788;</button>
+    
   </div>
 </header>
 
 <div class="tabs">
-  <button class="tab active" data-tab="movies">电影</button>
-  <button class="tab" data-tab="books">图书</button>
+  <button class="tab active" data-tab="movies">Movies</button>
+  <button class="tab" data-tab="books">Books</button>
 </div>
 
 <main>
@@ -205,7 +198,7 @@ footer {
 var debugEl, debugLines = [];
 function debug(msg) {
   debugLines.push(new Date().toLocaleTimeString() + ' ' + msg);
-  if (debugLines.length > 50) debugLines.shift();
+  if (debugLines.length > 200) debugLines.shift();
   if (debugEl) debugEl.textContent = debugLines.join('\n');
   console.log(msg);
   var prog = document.getElementById('load-progress');
@@ -213,9 +206,7 @@ function debug(msg) {
 }
 
 // ===== CONFIG =====
-var VERSION = 'v22';
-var SKIP_BOOKS = false;
-var TEST_ONLY_CANNES = false;
+var VERSION = 'v24';
 (function checkVersion(){
   var v = localStorage.getItem('mbr_version');
   if (v !== VERSION) {
@@ -254,15 +245,15 @@ const MOVIE_PAGES = [
   {src:'Oscars',award:'Best Actress', page:'Academy_Award_for_Best_Actress'}
 ];
 
-const BOOK_AWARDS = [
-  {src:'Booker Prize',award:'Winner',qid:'Q160082',p:'person'},
-  {src:'Nobel Literature',award:'Laureate',qid:'Q37922',p:'person_simple'},
-  {src:'Pulitzer Fiction',award:'Winner',qid:'Q833633',p:'work'},
-  {src:'Intl Booker',award:'Winner',qid:'Q2052291',p:'person_simple'},
-  {src:'National Book Award',award:'Winner',qid:'Q572316',p:'work'},
-  {src:'Women\'s Prize',award:'Winner',qid:'Q18884',p:'work'},
-  {src:'PEN/Faulkner',award:'Winner',qid:'Q1188661',p:'work'},
-  {src:'Costa Book Award',award:'Winner',qid:'Q1136336',p:'work'}
+const BOOK_PAGES = [
+  {src:'Booker Prize',award:'Winner',page:'Booker_Prize',type:'work', yearCol:0, authorCol:1, titleCol:2},
+  {src:'Nobel Literature',award:'Laureate',page:'List_of_Nobel_laureates_in_Literature',type:'person', yearCol:0, authorCol:1, titleCol:-1, subAuthor:true},
+  {src:'Pulitzer Fiction',award:'Winner',page:'Pulitzer_Prize_for_Fiction',type:'work', yearCol:0, authorCol:1, titleCol:2},
+  {src:'Intl Booker',award:'Winner',page:'International_Booker_Prize',type:'work', yearCol:0, authorCol:1, titleCol:-1},
+  {src:'National Book Award',award:'Winner',page:'National_Book_Award_for_Fiction',type:'work', yearCol:0, authorCol:1, titleCol:2, rowspanYear:true, winnerBg:true},
+  {src:'Women\'s Prize',award:'Winner',page:'List_of_Women%27s_Prize_for_Fiction_winners',type:'work', yearCol:0, authorCol:1, titleCol:2},
+  {src:'PEN/Faulkner',award:'Winner',page:'PEN/Faulkner_Award_for_Fiction',type:'work', yearCol:0, authorCol:1, titleCol:2},
+  {src:'Costa Book Award',award:'Winner',page:'Costa_Book_Awards',type:'work', yearCol:0, authorCol:1, titleCol:2}
 ];
 
 // ===== CACHE =====
@@ -295,7 +286,7 @@ function cleanFilmText(s) {
 
 function parseAwardsTable(html) {
   var doc = new DOMParser().parseFromString(html, "text/html");
-  var tables = doc.querySelectorAll("table.wikitable");
+  var tables = doc.querySelectorAll("table.wikitable, table.sortable, table");
   var all = [];
   for (var t = 0; t < tables.length; t++) {
     var rows = tables[t].querySelectorAll("tr");
@@ -378,6 +369,113 @@ function parseAwardsTable(html) {
   return all;
 }
 
+function parseBookTable(html, cfg) {
+  var doc = new DOMParser().parseFromString(html, "text/html");
+  var tables = doc.querySelectorAll("table.wikitable, table.sortable, table");
+  var all = [];
+  debug('parseBookTable: found ' + tables.length + ' wikitables');
+  for (var t = 0; t < tables.length; t++) {
+    var rows = tables[t].querySelectorAll("tr");
+    if (rows.length < 2) continue;
+    var headerCells = rows[0].querySelectorAll("th");
+    var headers = [], headerImgs = [], colSpans = [];
+    for (var h = 0; h < headerCells.length; h++) {
+      headers.push(headerCells[h].textContent.trim().toLowerCase());
+      headerImgs.push(headerCells[h].querySelector("img") !== null);
+      colSpans.push(parseInt(headerCells[h].getAttribute("colspan") || "1"));
+    }
+    // Check for sub-header row (multi-level headers like Nobel)
+    var subHeaders = [];
+    if (rows.length > 1) {
+      var row1Cells = rows[1].querySelectorAll("th");
+      if (row1Cells.length > 0) {
+        for (var sh = 0; sh < row1Cells.length; sh++) {
+          subHeaders.push(row1Cells[sh].textContent.trim().toLowerCase());
+        }
+      }
+    }
+    var yearCol = cfg.yearCol, authorCol = cfg.authorCol, titleCol = cfg.titleCol;
+    if (cfg.subAuthor && subHeaders.length > 0) {
+      for (var sc = 0; sc < subHeaders.length; sc++) {
+        if (subHeaders[sc] === "name") { authorCol = yearCol + 1 + sc; break; }
+      }
+    }
+    if (titleCol < 0) {
+      for (var c = 0; c < headers.length; c++) {
+        var ht = headers[c];
+        if (!headerImgs[c] && c !== authorCol && (ht === "title" || ht === "work" || ht === "novel" || ht === "book")) { titleCol = c; break; }
+      }
+    }
+    if (headers.length > 0 && yearCol < headers.length && headers[yearCol].indexOf("year") < 0) continue;
+    debug('  table[' + t + ']: headers=' + headers.join('|') + ' yearCol=' + yearCol + ' authorCol=' + authorCol + ' titleCol=' + titleCol);
+    var rowCount = 0, skippedYear = 0, skippedEmpty = 0;
+    var pendingYear = '', pendingRowspan = 0;
+    for (var r = 1; r < rows.length; r++) {
+      var cells = rows[r].querySelectorAll("td,th");
+      if (cfg.rowspanYear && cells.length === 1 && cells[0].tagName === 'TH') {
+        var thText = cells[0].textContent.replace(/\[.*?\]/g,"").trim();
+        var thYm = thText.match(/^(\d{4})/);
+        if (thYm && parseInt(thYm[1]) >= 1990) {
+          pendingYear = thYm[1];
+          pendingRowspan = parseInt(cells[0].getAttribute("rowspan") || "1");
+        }
+        continue;
+      }
+      if (cells.length < 2) continue;
+      var yearText;
+      if (pendingYear && pendingRowspan > 0) {
+        yearText = pendingYear;
+        pendingRowspan--;
+        if (pendingRowspan <= 0) pendingYear = '';
+      } else {
+        yearText = (cells[yearCol] || cells[0]).textContent.replace(/\[.*?\]/g,"").trim();
+      }
+      var ym = yearText.match(/^(\d{4})/);
+      if (!ym || parseInt(ym[1]) < 1990) { skippedYear++; continue; }
+      var year = ym[1];
+      // When year comes from rowspan, columns are shifted left by 1
+      var effAuthorCol = (pendingYear && pendingRowspan > 0) ? authorCol - 1 : authorCol;
+      var effTitleCol = (pendingYear && pendingRowspan > 0) ? titleCol - 1 : titleCol;
+      var author = effAuthorCol >= 0 && cells[effAuthorCol] ? cleanText(cells[effAuthorCol].textContent) : "";
+      var title = "";
+      if (effTitleCol >= 0 && cells[effTitleCol] && effTitleCol !== effAuthorCol) {
+        if (!cells[effTitleCol].querySelector("img")) {
+          title = cleanText(cells[effTitleCol].textContent);
+        }
+      }
+      // If titleCol has images (flags), search other columns for title/work
+      // If titleCol has images (flags), don't search alternatives — treat as person below
+      // Winner background detection (NBA-style)
+      if (cfg.winnerBg) {
+        var rowIsWinner = (rows[r].getAttribute("style")||"").indexOf("background") >= 0;
+        if (!rowIsWinner) {
+          for (var wc = 0; wc < cells.length; wc++) {
+            if ((cells[wc].getAttribute("style")||"").indexOf("background") >= 0) { rowIsWinner = true; break; }
+          }
+        }
+        if (!rowIsWinner) { skippedEmpty++; continue; }
+      }
+      if (!author && !title) { skippedEmpty++; continue; }
+      // If no title found but author exists, treat as person entry
+      var linkFromAuthor = false;
+      if (!title && author) { title = author; author = ''; linkFromAuthor = true; }
+      var wpTitle = null;
+      var linkCell;
+      if (linkFromAuthor) { linkCell = effAuthorCol >= 0 && cells[effAuthorCol] ? cells[effAuthorCol] : null; }
+      else { linkCell = title && effTitleCol >= 0 && cells[effTitleCol] ? cells[effTitleCol] : (effAuthorCol >= 0 ? cells[effAuthorCol] : null); }
+      if (linkCell) {
+        var link = linkCell.querySelector("a[href^=\"/wiki/\"]");
+        if (link) wpTitle = decodeURIComponent(link.getAttribute("href").replace("/wiki/",""));
+      }
+      all.push({title: title, creator: author, year: year, source: "", award: "", wikiTitle: wpTitle, thumb: null});
+      rowCount++;
+    }
+    debug('  table[' + t + ']: rows=' + rowCount + ' (skipped: year=' + skippedYear + ' empty=' + skippedEmpty + ')');
+  }
+  debug('parseBookTable: total=' + all.length + ' items');
+  return all;
+}
+
 async function getWikiPoster(wpTitle) {
   if (!wpTitle) return null;
   try {
@@ -407,63 +505,26 @@ async function fetchMovieAwards() {
   return allItems;
 }
 
-// ===== BOOK SPARQL (kept for book awards) =====
-async function runSparql(query, timeout) {
-  var url = "https://query.wikidata.org/sparql?format=json&query=" + encodeURIComponent(query);
-  var r = await fetch(url, {headers:{"Accept":"application/sparql-results+json","User-Agent":"MovieBookRec/1.0"}});
-  if (!r.ok) throw new Error("HTTP "+r.status);
-  return (await r.json()).results.bindings;
-}
-
-function buildBookQuery(cfg) {
-  var qid = cfg.qid;
-  if (cfg.p === "work") {
-    return "SELECT ?item ?itemLabel ?creator ?creatorLabel ?year WHERE { ?item wdt:P166 wd:" + qid + ". OPTIONAL { ?item wdt:P50 ?creator. } OPTIONAL { ?item p:P166 ?s. ?s ps:P166 wd:" + qid + ". ?s pq:P585 ?d. BIND(YEAR(?d) AS ?year) } SERVICE wikibase:label { bd:serviceParam wikibase:language \"en,zh\". } } ORDER BY DESC(?year) LIMIT 20";
+// ===== BOOK WIKIPEDIA PARSER =====
+async function fetchBookAwards() {
+  var allItems = [];
+  for (var i = 0; i < BOOK_PAGES.length; i++) {
+    var p = BOOK_PAGES[i];
+    debug("Wiki fetch book: " + p.src + " " + p.award);
+    try {
+      var html = await fetchWikiPage(p.page);
+      var rows = parseBookTable(html, p);
+      for (var j = 0; j < rows.length; j++) {
+        rows[j].source = p.src;
+        rows[j].award = p.award;
+        rows[j]._type = "books";
+        if (p.type === 'person') { rows[j].title = rows[j].creator; rows[j].creator = ''; }
+      }
+      debug("  -> " + rows.length + " items");
+      allItems = allItems.concat(rows);
+    } catch(e) { debug("  -> ERROR: " + e.message); }
   }
-  if (cfg.p === "person") {
-    return "SELECT ?person ?personLabel ?work ?workLabel ?year WHERE { ?person wdt:P166 wd:" + qid + "; wdt:P31 wd:Q5. OPTIONAL { ?person p:P166 ?s. ?s ps:P166 wd:" + qid + ". ?s pq:P585 ?d. BIND(YEAR(?d) AS ?year) } OPTIONAL { ?s pq:P1686 ?work. } SERVICE wikibase:label { bd:serviceParam wikibase:language \"en,zh\". } } ORDER BY DESC(?year) LIMIT 20";
-  }
-  return "SELECT ?person ?personLabel ?year WHERE { ?person wdt:P166 wd:" + qid + "; wdt:P31 wd:Q5. OPTIONAL { ?person p:P166 ?s. ?s ps:P166 wd:" + qid + ". ?s pq:P585 ?d. BIND(YEAR(?d) AS ?year) } SERVICE wikibase:label { bd:serviceParam wikibase:language \"en,zh\". } } ORDER BY DESC(?year) LIMIT 20";
-}
-
-async function fetchAward(cfg, isBook) {
-  var cacheKey = "award_" + cfg.qid;
-  var cached = cacheGet(cacheKey);
-  if (cached) return cached;
-  var q = buildBookQuery(cfg);
-  var rows = await runSparql(q, 30000);
-  var items = [];
-  for (var i = 0; i < rows.length; i++) {
-    var r = rows[i];
-    if (cfg.p === "person" || cfg.p === "person_simple") {
-      var workLabel = r.workLabel ? r.workLabel.value : null;
-      var personLabel = r.personLabel ? r.personLabel.value : "";
-      if (cfg.p === "person" && !workLabel) continue;
-      items.push({title: workLabel, creator: personLabel, year: r.year ? r.year.value : "", source: cfg.src, award: cfg.award, wikiTitle: null, wikiUrl: null});
-    } else {
-      items.push({title: r.itemLabel ? r.itemLabel.value : "", creator: r.creatorLabel ? r.creatorLabel.value : "", year: r.year ? r.year.value : "", source: cfg.src, award: cfg.award, wikiTitle: null, wikiUrl: null});
-    }
-  }
-  var deduped = dedup(items);
-  if (deduped.length > 0) cacheSet(cacheKey, deduped, 86400000);
-  return deduped;
-}
-
-// ===== DEDUP =====
-function dedup(items) {
-  var seen = {};
-  for (var i = 0; i < items.length; i++) {
-    var key = (items[i].title || items[i].creator || '') + '_' + (items[i].year || '');
-    if (!key) continue;
-    if (!seen[key]) { seen[key] = items[i]; }
-    // Prefer entries with a title
-    else if (items[i].title && !seen[key].title) { seen[key] = items[i]; }
-  }
-  var out = [];
-  var keys = Object.keys(seen);
-  for (var j = 0; j < keys.length; j++) { out.push(seen[keys[j]]); }
-  out.sort(function(a,b){ return (b.year||'').localeCompare(a.year||''); });
-  return out;
+  return allItems;
 }
 
 function getWikiSummary(title) {
@@ -573,7 +634,24 @@ async function fetchAll(type) {
   if (type === 'movies') {
     allItems = await fetchMovieAwards();
     // Load posters for items with wikiTitle
-    var posterOk = 0;
+    var posterOk = 0, totalWithTitle = 0;
+    for (var i = 0; i < allItems.length; i++) { if (allItems[i].wikiTitle) totalWithTitle++; }
+    for (var i = 0; i < allItems.length; i += 6) {
+      var batch = allItems.slice(i, i + 6);
+      await Promise.all(batch.map(async function(item) {
+        if (item.wikiTitle) {
+          item.thumbnail = await getWikiPoster(item.wikiTitle);
+          if (item.thumbnail) posterOk++;
+        }
+      }));
+      if (i % 60 === 0 || i + 6 >= allItems.length) debug(type + ': posters ' + Math.min(i + 6, allItems.length) + '/' + allItems.length);
+    }
+    debug(type + ': posters found ' + posterOk + '/' + allItems.length);
+  } else {
+    allItems = await fetchBookAwards();
+    // Load posters for book items with wikiTitle
+    var posterOk = 0, totalWithTitle = 0;
+    for (var i = 0; i < allItems.length; i++) { if (allItems[i].wikiTitle) totalWithTitle++; }
     for (var i = 0; i < allItems.length; i += 6) {
       var batch = allItems.slice(i, i + 6);
       await Promise.all(batch.map(async function(item) {
@@ -584,17 +662,6 @@ async function fetchAll(type) {
       }));
     }
     debug(type + ': posters found ' + posterOk + '/' + allItems.length);
-  } else {
-    var awards = BOOK_AWARDS;
-    debug(type + ': fetching ' + awards.length + ' SPARQL awards');
-    for (var i = 0; i < awards.length; i++) {
-      try {
-        var items = await fetchAward(awards[i], true);
-        debug(type + ': [' + (i+1) + '/' + awards.length + '] ' + awards[i].src + ' ' + awards[i].award + ' = ' + items.length + ' items');
-        for (var j = 0; j < items.length; j++) { items[j]._type = type; }
-        allItems = allItems.concat(items);
-      } catch(e) { failures++; }
-    }
   }
 
   // Merge/dedup films by title
@@ -927,8 +994,7 @@ async function init() {
   render();
   debug('Loading movies and books in parallel...');
   try {
-    if (SKIP_BOOKS) { await loadData('movies'); }
-    else { await Promise.all([loadData('movies'), loadData('books')]); }
+    await Promise.all([loadData('movies'), loadData('books')]);
     runAudit();
   } catch(e) {
     debug('FATAL: ' + e.message + ' ' + (e.stack||''));
@@ -971,10 +1037,6 @@ document.getElementById('content').addEventListener('click', function(e){
   }
 });
 
-document.getElementById('theme-btn').addEventListener('click', function(){
-  document.body.classList.toggle('light');
-  this.textContent = document.body.classList.contains('light') ? '☽' : '☀';
-});
 document.getElementById('refresh-btn').addEventListener('click', function(){
   refreshCurrent();
 });
