@@ -211,8 +211,9 @@ function debug(msg) {
 }
 
 // ===== CONFIG =====
-var VERSION = 'v14';
-var SKIP_BOOKS = true; // Skip book queries during movie testing
+var VERSION = 'v15';
+var SKIP_BOOKS = true;
+var TEST_ONLY_CANNES = true;
 (function checkVersion(){
   var v = localStorage.getItem('mbr_version');
   if (v !== VERSION) {
@@ -231,9 +232,9 @@ const MOVIE_AWARDS = [
   {src:'Cannes',award:'Palme d\'Or',qid:'Q179808',p:'work'},
   {src:'Cannes',award:'Grand Prix',qid:'Q844804',p:'work'},
   {src:'Cannes',award:'Jury Prize',qid:'Q164200',p:'work'},
-  {src:'Cannes',award:'Best Director',qid:'Q510175',p:'person'},
-  {src:'Cannes',award:'Best Actor',qid:'Q586140',p:'person'},
-  {src:'Cannes',award:'Best Actress',qid:'Q840286',p:'person'},
+  {src:'Cannes',award:'Best Director',qid:'Q510175',p:'work'},
+  {src:'Cannes',award:'Best Actor',qid:'Q586140',p:'work'},
+  {src:'Cannes',award:'Best Actress',qid:'Q840286',p:'work'},
   {src:'Venice',award:'Golden Lion',qid:'Q209459',p:'work'},
   {src:'Venice',award:'Silver Lion',qid:'Q1337827',p:'person'},
   {src:'Venice',award:'Volpi Cup',qid:'Q49025',p:'person'},
@@ -520,6 +521,7 @@ function mergeFilms(items) {
 // ===== FETCH ALL =====
 async function fetchAll(type) {
   var awards = type === 'movies' ? MOVIE_AWARDS : BOOK_AWARDS;
+  if (type === 'movies' && TEST_ONLY_CANNES) awards = awards.filter(function(a){ return a.src === 'Cannes'; });
   var allItems = [];
   var failures = 0;
 
