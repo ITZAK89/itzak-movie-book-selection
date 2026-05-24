@@ -132,19 +132,15 @@ async function getPoster(film, year, winner) {
       if (hitStop) continue;
       var r = await fetch('https://en.wikipedia.org/api/rest_v1/page/summary/' + encodeURIComponent(title));
       if (r.ok) {
-        var d = await r.json();
-        // Skip person pages (they have birth dates in extract)
-        var ext = (d.extract||'').toLowerCase();
-        if (ext.indexOf('actor') >= 0 && ext.indexOf('film') < 0 && ext.indexOf('directed') < 0) continue;
-        if (ext.indexOf('actress') >= 0 && ext.indexOf('film') < 0) continue;
-        if (/born |was a |is a /.test(ext) && ext.indexOf('film') < 0) continue;
-        if (d.thumbnail) return d.thumbnail.source;
-      }
-    }
-    return null;
-  } catch(e) { return null; }
-}
-
+	        var d = await r.json();
+	        var desc = (d.description||"").toLowerCase();
+	        var tl = title.toLowerCase();
+	        var isFilm = desc.indexOf("film") >= 0 || tl.indexOf("(film)") >= 0;
+	        var isPerson = desc.indexOf("actor") >= 0 || desc.indexOf("actress") >= 0 || desc.indexOf("director") >= 0;
+	        if (isPerson && !isFilm) continue;
+	        var ext = (d.extract||"").toLowerCase();
+	        if (/^(is|was|born)/.test(ext) && !isFilm) continue;
+	        if (d.thumbnail) return d.thumbnail.source;
 async function runOne(idx) {
   var out = document.getElementById('out');
   var award = AWARDS[idx];
