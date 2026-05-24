@@ -209,7 +209,7 @@ function debug(msg) {
 }
 
 // ===== CONFIG =====
-var VERSION = 'v3';
+var VERSION = 'v4';
 (function checkVersion(){
   var v = localStorage.getItem('mbr_version');
   if (v !== VERSION) {
@@ -327,9 +327,13 @@ function getWikiSummary(title) {
 async function fetchAward(cfg) {
   var cacheKey = 'award_' + cfg.qid;
   var cached = cacheGet(cacheKey);
-  if (cached) return cached;
+  if (cached) {
+    debug('  award cache HIT ' + cfg.qid + ' len=' + cached.length);
+    return cached;
+  }
 
   var q = buildQuery(cfg);
+  debug('  calling runSparql for ' + cfg.qid);
 
   var rows;
   try { rows = await runSparql(q, 25000); } catch(e) {
@@ -646,14 +650,13 @@ async function refreshCurrent() {
 // ===== INIT =====
 async function init() {
   debugEl = document.getElementById('debug');
-  debugEl.style.display = 'block';
   debug('Init started');
   render();
   debug('Loading movies and books in parallel...');
   try {
     await Promise.all([loadData('movies'), loadData('books')]);
-    debug('All data loaded. Debug panel stays visible for review.');
-    // Keep debug panel visible so user can copy text
+    // Data loaded, hide debug panel
+    debugEl.style.display = 'none';
   } catch(e) {
     debug('FATAL: ' + e.message + ' ' + (e.stack||''));
   }
