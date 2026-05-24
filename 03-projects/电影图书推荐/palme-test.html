@@ -7,6 +7,7 @@ h2{color:#6c8cff;margin-top:24px}.grid{display:grid;grid-template-columns:repeat
 .card-body{padding:10px}.card-body h3{margin:0 0 4px;font-size:.9rem}
 .card-body p{margin:0;font-size:.75rem;color:#aaa}.err{color:#f44336}.stat{color:#4caf50}
 </style></head><body>
+<select id="sel" style="font-size:16px;padding:8px;margin-bottom:12px;background:#333;color:#fff;border:1px solid #555"></select>
 <div id="out"></div>
 <script>
 var AWARDS = [
@@ -97,39 +98,47 @@ async function getPoster(film, year) {
   } catch(e) { return null; }
 }
 
-async function run() {
+async function runOne(idx) {
   var out = document.getElementById('out');
-  out.innerHTML = '<p>Fetching ' + AWARDS.length + ' award pages...</p>';
+  var award = AWARDS[idx];
+  out.innerHTML = '<p>Fetching ' + award.src + ' ' + award.name + '...</p>';
+  var html = await fetchPage(award.page);
+  var rows = parseWinners(html, award.layout);
+  out.innerHTML += '<p class="stat">' + rows.length + ' films (1990-). Loading posters...</p>';
 
-  for (var a = 0; a < AWARDS.length; a++) {
-    var award = AWARDS[a];
-    out.innerHTML += '<p>Fetching ' + award.name + '...</p>';
-    var html = await fetchPage(award.page);
-    var rows = parseWinners(html, award.layout);
-    out.innerHTML += '<p class="stat">' + award.src + ' ' + award.name + ': ' + rows.length + ' films (1990-). Loading posters...</p>';
-
-    // Load posters in batches of 6
-    for (var i = 0; i < rows.length; i += 6) {
-      var batch = rows.slice(i, i + 6);
-      await Promise.all(batch.map(async function(r) {
-        r.thumb = await getPoster(r.film, r.year);
-      }));
-    }
-    var ok = rows.filter(function(r){ return r.thumb; }).length;
-    out.innerHTML += '<p class="stat">Posters: ' + ok + '/' + rows.length + '</p>';
-
-    out.innerHTML += '<h2>' + award.src + ' — ' + award.name + ' (' + rows.length + ' films)</h2>';
-    out.innerHTML += '<div class="grid">';
-    for (var j = 0; j < rows.length; j++) {
-      var r = rows[j];
-      out.innerHTML += '<div class="card">' +
-        (r.thumb ? '<img src="' + r.thumb + '" loading="lazy" onerror="this.style.display=\'none\'">' :
-         '<div style="height:280px;display:flex;align-items:center;justify-content:center;background:#333;color:#666;font-size:.8rem;text-align:center;padding:10px">' + r.film + '</div>') +
-        '<div class="card-body"><h3>' + r.film + '</h3><p>' + r.year + ' · ' + r.winner + '</p></div></div>';
-    }
-    out.innerHTML += '</div>';
+  for (var i = 0; i < rows.length; i += 6) {
+    var batch = rows.slice(i, i + 6);
+    await Promise.all(batch.map(async function(r) {
+      r.thumb = await getPoster(r.film, r.year);
+    }));
   }
-  out.innerHTML += '<p class="stat">Done.</p>';
+  var ok = rows.filter(function(r){ return r.thumb; }).length;
+  out.innerHTML += '<p class="stat">Posters: ' + ok + '/' + rows.length + '</p>';
+
+  // Dump data table
+  out.innerHTML += '<h2>' + award.src + ' — ' + award.name + '</h2>';
+  out.innerHTML += '<table style="border-collapse:collapse;width:100%"><tr><th style="border:1px solid #555;padding:4px">Year</th><th style="border:1px solid #555;padding:4px">Film</th><th style="border:1px solid #555;padding:4px">Winner</th></tr>';
+  for (var j = 0; j < rows.length; j++) {
+    out.innerHTML += '<tr><td style="border:1px solid #333;padding:4px">' + rows[j].year + '</td><td style="border:1px solid #333;padding:4px">' + rows[j].film + '</td><td style="border:1px solid #333;padding:4px">' + rows[j].winner + '</td></tr>';
+  }
+  out.innerHTML += '</table>';
+
+  out.innerHTML += '<h2>Cards</h2><div class="grid">';
+  for (var k = 0; k < rows.length; k++) {
+    var r = rows[k];
+    out.innerHTML += '<div class="card">' +
+      (r.thumb ? '<img src="' + r.thumb + '" loading="lazy" onerror="this.style.display=\'none\'">' :
+       '<div style="height:280px;display:flex;align-items:center;justify-content:center;background:#333;color:#666;font-size:.8rem;text-align:center;padding:10px">' + r.film + '</div>') +
+      '<div class="card-body"><h3>' + r.film + '</h3><p>' + r.year + ' · ' + r.winner + '</p></div></div>';
+  }
+  out.innerHTML += '</div>';
 }
-run();
+
+// Build dropdown
+var sel = document.getElementById('sel');
+for (var i = 0; i < AWARDS.length; i++) {
+  sel.innerHTML += '<option value="' + i + '">' + AWARDS[i].src + ' — ' + AWARDS[i].name + '</option>';
+}
+sel.onchange = function() { runOne(parseInt(sel.value)); };
+runOne(0);
 </script></body></html>
