@@ -13,12 +13,12 @@
             "state": {
               "type": "markdown",
               "state": {
-                "file": "05-resources/llm-wiki/outputs/韩语学习网站-2026-05-21.md",
+                "file": "03-projects/电影图书推荐/开发笔记.md",
                 "mode": "source",
                 "source": false
               },
               "icon": "lucide-file",
-              "title": "韩语学习网站-2026-05-21"
+              "title": "开发笔记"
             }
           }
         ]
@@ -199,13 +199,22 @@
   },
   "active": "c323b74ea28afe17",
   "lastOpenFiles": [
-    "03-projects/韩语学习网站/audio/t9MivnjhTeY.m4a",
-    "03-projects/韩语学习网站/audio/t9MivnjhTeY.m4a.part",
-    "03-projects/韩语学习网站/audio",
-    "03-projects/韩语学习网站/index.html.tmp.12569.f97d5f8528b3",
+    "03-projects/电影图书推荐/data-check.html.tmp.27206.6e2c40bd2da9",
+    "03-projects/电影图书推荐/data-check.html.tmp.27206.acd95bfe4764",
+    "03-projects/电影图书推荐/data-check.html",
+    "03-projects/电影图书推荐/抓取测试.js",
+    "03-projects/电影图书推荐/index.html.tmp.27206.df5210771d0b",
+    "03-projects/电影图书推荐/qid-verify.html",
+    "03-projects/电影图书推荐/spec.md",
+    "03-projects/电影图书推荐/开发笔记.md",
+    "03-projects/电影图书推荐/index.html.tmp.27206.b8147f8294bb",
+    "03-projects/电影图书推荐/test-data.js",
+    "03-projects/电影图书推荐/index.html.tmp.27206.4282ef9c9a3c",
+    "03-projects/电影图书推荐/index.html.tmp.27206.baaf85910905",
+    "03-projects/电影图书推荐/index.html.tmp.27206.c5a9bfe9b229",
     "03-projects/韩语学习网站/项目笔记.md",
+    "03-projects/韩语学习网站/spec.md",
     "05-resources/llm-wiki/outputs/韩语学习网站-2026-05-21.md",
-    "05-resources/llm-wiki/outputs/韩语学习网站-2026-05-21.md.tmp.12569.cf5d819ab64d",
     "05-resources/llm-wiki/outputs/Hook配置-2026-05-20.md",
     "05-resources/llm-wiki/outputs/中剧出口-2026-05-22.md",
     "03-projects/kocowa/中剧美国出口.md",
@@ -213,7 +222,6 @@
     "04-areas/finance/TIA-2026-05-21-BTC能反彈嗎？資金費悄悄漲起來了…….md",
     "04-areas/finance/TIA-2026-05-20-BTC無力緩跌！毫無反彈跡象？會有回抽嗎？.md",
     "04-areas/finance/btc-holdings.md",
-    "03-projects/韩语学习网站/项目笔记.md.tmp.12569.a8f5be20b172",
     "05-resources/llm-wiki/wiki/prompt-as-code.md",
     "2026-05-20.md",
     "05-resources/llm-wiki/raw/资本是如何引爆全球金融危机的？.md",
@@ -232,16 +240,8 @@
     "05-resources/llm-wiki/index.md",
     "04-areas/finance/investment-plan.md",
     "04-areas/finance/cash-flow.md",
-    "CLAUDE.md.tmp.12569.7c0cea985b8e",
     "02-daily/todo/2026-05-15.md",
-    "CLAUDE.md.tmp.12569.491374a55539",
     "03-projects/kocowa/给진명이형的回复-韩语版.md",
-    "03-projects/kocowa/FE string set-2026-05-21.md",
-    "05-resources/llm-wiki/outputs/韩语学习网站-2026-05-22.md",
-    "03-projects/韩语学习网站/index.html.tmp.96620.f787343821c4",
-    "03-projects/韩语学习网站/index.html.tmp.96620.e5cb2573e856",
-    "03-projects/韩语学习网站/index.html.tmp.96620.73065bce1ba7",
-    "kocowa/FE string set-2026-05-21.md",
     "临时/assets/slide-10.png",
     "临时/assets/slide-09.png",
     "临时/assets/slide-08.png"

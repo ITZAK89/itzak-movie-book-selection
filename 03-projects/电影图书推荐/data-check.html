@@ -36,7 +36,7 @@ function parseWinners(html, pageCfg) {
     var prevYear = '';
 
     for (var r = 1; r < rows.length; r++) {
-      var cells = rows[r].querySelectorAll('td');
+      var cells = rows[r].querySelectorAll('td,th');
       if (cells.length < 1) continue;
 
       var firstCell = cells[0].textContent.replace(/\[.*?\]/g,'').trim();
