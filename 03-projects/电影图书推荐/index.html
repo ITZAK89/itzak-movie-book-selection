@@ -733,6 +733,54 @@ function showModal(item) {
   document.getElementById('modal-fav').onclick = function(){ toggleFav(id); showModal(item); };
 }
 
+// ===== AUDIT =====
+window.runAudit = function() {
+  if (!debugEl) { debugEl = document.getElementById('debug'); debugEl.style.display = 'block'; }
+  var items = dataStore.movies ? dataStore.movies.items : state.items;
+  if (!items || items.length === 0) { debug('No data to audit'); return; }
+
+  var awards = MOVIE_AWARDS.map(function(a){ return a.src + ' ' + a.award; });
+  debug('=== AUDIT: ' + awards.length + ' awards ===');
+
+  // Group by year
+  var byYear = {};
+  for (var i = 0; i < items.length; i++) {
+    var it = items[i];
+    var yrs = it.yearList || [it.year];
+    for (var y = 0; y < yrs.length; y++) {
+      var year = yrs[y];
+      if (!year) continue;
+      if (!byYear[year]) byYear[year] = {};
+      var aws = it.awards || [{source: it.source, award: it.award}];
+      for (var a = 0; a < aws.length; a++) {
+        var key = aws[a].source + ' ' + aws[a].award;
+        byYear[year][key] = (byYear[year][key] || 0) + 1;
+      }
+    }
+  }
+
+  // Print table
+  var header = 'YEAR'.padEnd(6);
+  for (var h = 0; h < awards.length; h++) {
+    header += awards[h].substring(0, 20).padEnd(22);
+  }
+  debug(header);
+
+  var years = Object.keys(byYear).sort(function(a,b){ return b.localeCompare(a); });
+  for (var yi = 0; yi < years.length; yi++) {
+    var yr = years[yi];
+    var row = yr.padEnd(6);
+    var missing = 0;
+    for (var ai = 0; ai < awards.length; ai++) {
+      var count = byYear[yr][awards[ai]] || 0;
+      row += (count > 0 ? '  OK' : '  --').padEnd(22);
+      if (count === 0) missing++;
+    }
+    debug(row + (missing > 0 ? ' (' + missing + ' missing)' : ''));
+  }
+  debug('=== AUDIT DONE ===');
+};
+
 // ===== DATA STORE =====
 var dataStore = { movies: null, books: null };
 
@@ -837,7 +885,7 @@ async function init() {
   try {
     if (SKIP_BOOKS) { await loadData('movies'); }
     else { await Promise.all([loadData('movies'), loadData('books')]); }
-    // Keep debug panel visible for review
+    // runAudit()
   } catch(e) {
     debug('FATAL: ' + e.message + ' ' + (e.stack||''));
   }
