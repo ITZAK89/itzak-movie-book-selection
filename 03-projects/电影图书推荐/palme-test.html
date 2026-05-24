@@ -105,7 +105,7 @@ function parseWinners(html) {
     }
     console.log('  hasWinnerMarking=' + hasWinnerMarking);
 
-    var prevYear = '', debugShown = 0;
+    var prevYear = '', prevRowspan = 0, debugShown = 0;
     for (var r = 1; r < rows.length; r++) {
       var rowEl = rows[r];
       var cells = rowEl.querySelectorAll('td,th');
@@ -123,9 +123,13 @@ function parseWinners(html) {
       }
       var first = cells[0].textContent.replace(/\[.*?\]/g,'').trim();
       var shift = 0, year;
+      var thisRowspan = parseInt(cells[0].getAttribute('rowspan') || '0');
       var ym = first.match(/^(\d{4})/);
-      if (ym && parseInt(ym[1]) >= 1990) { year = ym[1]; prevYear = year; }
-      else if (prevYear) { year = prevYear; shift = 1; }
+      if (ym && parseInt(ym[1]) >= 1990) { year = ym[1]; prevYear = year; prevRowspan = thisRowspan; }
+      else if (prevYear) {
+        if (prevRowspan >= 3) continue; // Oscar nominee row, skip
+        year = prevYear; shift = 1;
+      }
       else continue;
 
       var fi = filmCol - shift, wi = winnerCol - shift;
