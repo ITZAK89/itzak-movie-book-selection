@@ -89,8 +89,18 @@ function parseWinners(html) {
     var hasWinnerMarking = false;
     for (var scan = 1; scan < Math.min(10, rows.length); scan++) {
       var scanRow = rows[scan];
-      if (scanRow && scanRow.getAttribute('style') && scanRow.getAttribute('style').indexOf('background') >= 0) { hasWinnerMarking = true; break; }
+      if (scanRow) {
+        var s = scanRow.getAttribute('style') || '';
+        if (s.indexOf('background') >= 0) { hasWinnerMarking = true; console.log('  found winner bg on tr:', s); break; }
+        // Check cells too
+        var scanCells = scanRow.querySelectorAll('td,th');
+        for (var sc = 0; sc < scanCells.length; sc++) {
+          var cs = scanCells[sc].getAttribute('style') || '';
+          if (cs.indexOf('background') >= 0) { hasWinnerMarking = true; console.log('  found winner bg on cell:', cs); break; }
+        }
+      }
     }
+    console.log('  hasWinnerMarking=' + hasWinnerMarking);
 
     var prevYear = '', debugShown = 0;
     for (var r = 1; r < rows.length; r++) {
