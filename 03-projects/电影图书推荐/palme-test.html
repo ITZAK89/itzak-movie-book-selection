@@ -45,10 +45,11 @@ async function fetchPage(pageName) {
 
 function clean(s) { return s.replace(/\[.*?\]/g,'').replace(/[§*]/g,'').trim(); }
 function cleanFilm(s) {
-  // Remove citation brackets, section symbols, and anything after patterns like " · 1979" or extra columns
   s = s.replace(/\[.*?\]/g,'').replace(/[§*]/g,'').trim();
-  // Split on common separators that indicate extra info (other awards, years)
-  var parts = s.split(/  +|\t| · \d{4}/);
+  // Remove parenthetical years like "(1959)" or "(1979, 1982)"
+  s = s.replace(/\s*\(\d{4}[^)]*\)/g,'');
+  // Split on separators that indicate extra info
+  var parts = s.split(/  +|\t|, ·| · \d{4}|,\s*\d{4}/);
   return parts[0].trim();
 }
 
