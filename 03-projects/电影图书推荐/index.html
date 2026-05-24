@@ -211,7 +211,7 @@ function debug(msg) {
 }
 
 // ===== CONFIG =====
-var VERSION = 'v21';
+var VERSION = 'v22';
 var SKIP_BOOKS = false;
 var TEST_ONLY_CANNES = false;
 (function checkVersion(){
@@ -834,7 +834,7 @@ var dataStore = { movies: null, books: null };
 
 async function loadData(type, forceRefresh) {
   var cacheKey = 'full_' + type;
-  var cacheTTL = 3600000; // 1h
+  var cacheTTL = 86400000; // 24h
   debug('loadData: ' + type + ' force=' + (forceRefresh||false));
 
   if (!forceRefresh) {
