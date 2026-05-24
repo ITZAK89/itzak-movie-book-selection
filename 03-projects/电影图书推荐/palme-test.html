@@ -116,6 +116,11 @@ function parseWinners(html) {
       // Only filter winner rows if table uses background marking
       if (hasWinnerMarking) {
         var isWinner = (rowEl.getAttribute('style')||'').indexOf('background') >= 0;
+        if (!isWinner) {
+          for (var ci = 0; ci < cells.length; ci++) {
+            if ((cells[ci].getAttribute('style')||'').indexOf('background') >= 0) { isWinner = true; break; }
+          }
+        }
         if (!isWinner) continue;
       }
       if (debugShown < 3) {
