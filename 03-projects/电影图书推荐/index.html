@@ -563,8 +563,8 @@ async function loadData(type, forceRefresh) {
 
   try {
     dataStore[type] = await fetchAll(type);
-    cacheSet(cacheKey, dataStore[type], cacheTTL);
     dataStore[type]._ts = Date.now();
+    cacheSet(cacheKey, dataStore[type], cacheTTL);
     if (type === state.tab) {
       state.items = dataStore[type].items;
       state.loading = false;
