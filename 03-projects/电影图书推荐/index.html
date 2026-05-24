@@ -269,9 +269,11 @@ function cacheSet(k, data, ttl) {
 }
 
 // ===== SPARQL =====
-async function sparql(query, timeout) {
+async function runSparql(query, timeout) {
+  debug('runSparql ENTER');
   timeout = timeout || 20000;
   var url = 'https://query.wikidata.org/sparql?format=json&query=' + encodeURIComponent(query);
+  debug('runSparql url built, len=' + url.length);
   try {
     var r = await fetch(url, {
       headers: {'Accept':'application/sparql-results+json','User-Agent':'MovieBookRec/1.0'}
@@ -283,7 +285,9 @@ async function sparql(query, timeout) {
     var j = await r.json();
     var bindings = j.results.bindings;
     if (!bindings || bindings.length === 0) {
-      debug('  SPARQL 0 rows, sample url: ' + url.substring(0, 200));
+      debug('  SPARQL 0 rows, qid in url: ' + url.indexOf('wd:Q'));
+    } else {
+      debug('  SPARQL ok, first row keys: ' + Object.keys(bindings[0]).join(','));
     }
     return bindings;
   } catch(e) {
@@ -293,31 +297,16 @@ async function sparql(query, timeout) {
   }
 }
 
-function buildWorkQuery(qid) {
-  return 'SELECT ?item ?itemLabel ?creator ?creatorLabel ?year WHERE {' +
-    '?item wdt:P166 wd:' + qid + '.' +
-    'OPTIONAL { ?item wdt:P57 ?creator. }' +
-    'OPTIONAL { ?item wdt:P50 ?creator. }' +
-    'OPTIONAL { ?item p:P166 ?s. ?s ps:P166 wd:' + qid + '. ?s pq:P585 ?d. BIND(YEAR(?d) AS ?year) }' +
-    'SERVICE wikibase:label { bd:serviceParam wikibase:language "en,zh". }' +
-    '} ORDER BY DESC(?year) LIMIT 20';
-}
-
-function buildPersonQuery(qid) {
-  return 'SELECT ?person ?personLabel ?work ?workLabel ?year WHERE {' +
-    '?person wdt:P166 wd:' + qid + '; wdt:P31 wd:Q5.' +
-    'OPTIONAL { ?person p:P166 ?s. ?s ps:P166 wd:' + qid + '. ?s pq:P585 ?d. BIND(YEAR(?d) AS ?year) }' +
-    'OPTIONAL { ?s pq:P1686 ?work. }' +
-    'SERVICE wikibase:label { bd:serviceParam wikibase:language "en,zh". }' +
-    '} ORDER BY DESC(?year) LIMIT 20';
-}
-
-function buildPersonSimpleQuery(qid) {
-  return 'SELECT ?person ?personLabel ?year WHERE {' +
-    '?person wdt:P166 wd:' + qid + '; wdt:P31 wd:Q5.' +
-    'OPTIONAL { ?person p:P166 ?s. ?s ps:P166 wd:' + qid + '. ?s pq:P585 ?d. BIND(YEAR(?d) AS ?year) }' +
-    'SERVICE wikibase:label { bd:serviceParam wikibase:language "en,zh". }' +
-    '} ORDER BY DESC(?year) LIMIT 20';
+function buildQuery(cfg) {
+  var qid = cfg.qid;
+  if (cfg.p === 'work') {
+    return 'SELECT ?item ?itemLabel ?creator ?creatorLabel ?year WHERE { ?item wdt:P166 wd:' + qid + '. OPTIONAL { ?item wdt:P57 ?creator. } OPTIONAL { ?item wdt:P50 ?creator. } OPTIONAL { ?item p:P166 ?s. ?s ps:P166 wd:' + qid + '. ?s pq:P585 ?d. BIND(YEAR(?d) AS ?year) } SERVICE wikibase:label { bd:serviceParam wikibase:language "en,zh". } } ORDER BY DESC(?year) LIMIT 20';
+  }
+  if (cfg.p === 'person') {
+    return 'SELECT ?person ?personLabel ?work ?workLabel ?year WHERE { ?person wdt:P166 wd:' + qid + '; wdt:P31 wd:Q5. OPTIONAL { ?person p:P166 ?s. ?s ps:P166 wd:' + qid + '. ?s pq:P585 ?d. BIND(YEAR(?d) AS ?year) } OPTIONAL { ?s pq:P1686 ?work. } SERVICE wikibase:label { bd:serviceParam wikibase:language "en,zh". } } ORDER BY DESC(?year) LIMIT 20';
+  }
+  // person_simple
+  return 'SELECT ?person ?personLabel ?year WHERE { ?person wdt:P166 wd:' + qid + '; wdt:P31 wd:Q5. OPTIONAL { ?person p:P166 ?s. ?s ps:P166 wd:' + qid + '. ?s pq:P585 ?d. BIND(YEAR(?d) AS ?year) } SERVICE wikibase:label { bd:serviceParam wikibase:language "en,zh". } } ORDER BY DESC(?year) LIMIT 20';
 }
 
 function getWikiEnUrl(r) {
@@ -340,13 +329,10 @@ async function fetchAward(cfg) {
   var cached = cacheGet(cacheKey);
   if (cached) return cached;
 
-  var q;
-  if (cfg.p === 'work') q = buildWorkQuery(cfg.qid);
-  else if (cfg.p === 'person') q = buildPersonQuery(cfg.qid);
-  else q = buildPersonSimpleQuery(cfg.qid);
+  var q = buildQuery(cfg);
 
   var rows;
-  try { rows = await sparql(q, 25000); } catch(e) {
+  try { rows = await runSparql(q, 25000); } catch(e) {
     console.warn('SPARQL failed:', cfg.qid, e.message);
     throw e; // Don't cache failures
   }
