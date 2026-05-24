@@ -211,7 +211,7 @@ function debug(msg) {
 }
 
 // ===== CONFIG =====
-var VERSION = 'v10';
+var VERSION = 'v11';
 (function checkVersion(){
   var v = localStorage.getItem('mbr_version');
   if (v !== VERSION) {
@@ -227,8 +227,6 @@ var VERSION = 'v10';
 
 const MOVIE_AWARDS = [
   {src:'Cannes',award:'Palme d\'Or',qid:'Q179808'},
-  {src:'Cannes',award:'Grand Prix',qid:'Q28455848'},
-  {src:'Cannes',award:'Jury Prize',qid:'Q1342432'},
   {src:'Venice',award:'Golden Lion',qid:'Q209459'},
   {src:'Berlin',award:'Golden Bear',qid:'Q154590'},
   {src:'Berlin',award:'Silver Bear Jury',qid:'Q664212'},
@@ -238,13 +236,9 @@ const MOVIE_AWARDS = [
 // Festival pages to scrape for full award lists (replaces person SPARQL)
 const FESTIVAL_PAGES = [
   {src:'Cannes', years:['2026','2025','2024'], page:function(y){ return y+'_Cannes_Film_Festival'; }},
-  {src:'Venice', years:['2025','2024','2023'], page:function(y){ return y+'_Venice_Film_Festival'; }},
-  {src:'Berlin', years:['2025','2024','2023'], page:function(y){ return y+'_Berlin_International_Film_Festival'; }},
-  {src:'Oscars', years:['2026','2025','2024'], page:function(y){
-    // 2026 ceremony = 98th, 2025 = 97th, 2024 = 96th
-    var m = {'2026':'98th','2025':'97th','2024':'96th'};
-    return (m[y]||'')+'_Academy_Awards';
-  }}
+  {src:'Venice', years:['2025','2024','2023'], page:function(y){ var m={'2025':'82nd','2024':'81st','2023':'80th'}; return m[y]+'_Venice_International_Film_Festival'; }},
+  {src:'Berlin', years:['2025','2024','2023'], page:function(y){ var m={'2025':'75th','2024':'74th','2023':'73rd'}; return m[y]+'_Berlin_International_Film_Festival'; }},
+  {src:'Oscars', years:['2026','2025','2024'], page:function(y){ var m={'2026':'98th','2025':'97th','2024':'96th'}; return m[y]+'_Academy_Awards'; }}
 ];
 
 const BOOK_AWARDS = [
@@ -361,13 +355,18 @@ function parseAwards(html, src, year) {
     for (var c = 0; c < headerTexts.length; c++) {
       var ht = headerTexts[c];
       if (ht.indexOf('award') >= 0 || ht.indexOf('category') >= 0 || ht.indexOf('prize') >= 0) awardCol = c;
-      if (ht.indexOf('winner') >= 0 || ht.indexOf('recipient') >= 0 || ht.indexOf('nominee') >= 0) winnerCol = c;
+      if (ht.indexOf('winner') >= 0 || ht.indexOf('recipient') >= 0 || ht.indexOf('nominee') >= 0 || ht.indexOf('name') >= 0) winnerCol = c;
       if (ht.indexOf('film') >= 0 || ht.indexOf('work') >= 0 || ht.indexOf('title') >= 0 || ht.indexOf('motion picture') >= 0) filmCol = c;
     }
-    // If no clear columns found, try common patterns: col 0 = award, col 1 = winner, col 2 = film
-    if (awardCol < 0 && headerTexts.length >= 2) awardCol = 0;
+    // Heuristic: 2 columns with 'award' and 'film' but no winner => col0=award, col1=film
+    if (headerTexts.length === 2 && awardCol >= 0 && filmCol >= 0 && winnerCol < 0) { winnerCol = -2; /* flag: no winner column */ }
+    // Heuristic: 2 columns, first is 'nominee/film', second unclear
+    if (headerTexts.length === 2 && filmCol >= 0 && awardCol < 0) { filmCol = filmCol; awardCol = filmCol === 0 ? 1 : 0; }
+    // Default fallback
+    if (awardCol < 0 && headerTexts.length >= 1) awardCol = 0;
     if (winnerCol < 0 && headerTexts.length >= 2) winnerCol = 1;
     if (filmCol < 0 && headerTexts.length >= 3) filmCol = 2;
+    if (filmCol < 0 && headerTexts.length >= 2) filmCol = 1;
 
     for (var r = 1; r < rows.length; r++) {
       var cells = rows[r].querySelectorAll('td');
