@@ -1,0 +1,633 @@
+<!DOCTYPE html>
+<html lang="zh">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>电影图书推荐</title>
+<style>
+:root {
+  --bg: #0f0f1a; --surface: #1a1a2e; --card: #222244;
+  --text: #e0e0e0; --muted: #888; --accent: #6c8cff;
+  --badge: #2a2a4a; --border: #333; --hover: #2a2a50;
+  --shadow: 0 2px 8px rgba(0,0,0,.4);
+}
+.light {
+  --bg: #f0f2f5; --surface: #fff; --card: #fff;
+  --text: #222; --muted: #666; --accent: #4a6cf7;
+  --badge: #e8ecf4; --border: #ddd; --hover: #f0f2f8;
+  --shadow: 0 2px 8px rgba(0,0,0,.08);
+}
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+body {
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+  background: var(--bg); color: var(--text); min-height: 100vh;
+  transition: background .3s, color .3s;
+}
+header {
+  display: flex; align-items: center; justify-content: space-between;
+  padding: 16px 24px; background: var(--surface); border-bottom: 1px solid var(--border);
+  position: sticky; top: 0; z-index: 100;
+}
+header h1 { font-size: 1.2rem; font-weight: 700; }
+.header-right { display: flex; align-items: center; gap: 12px; }
+.theme-btn {
+  width: 36px; height: 36px; border-radius: 50%; border: 1px solid var(--border);
+  background: var(--surface); color: var(--text); cursor: pointer; font-size: 1rem;
+  display: flex; align-items: center; justify-content: center;
+}
+.status-dot { width: 8px; height: 8px; border-radius: 50%; display: inline-block; }
+.status-dot.ok { background: #4caf50; }
+.status-dot.loading { background: #ff9800; animation: pulse 1s infinite; }
+.status-dot.error { background: #f44336; }
+@keyframes pulse { 0%,100%{opacity:1} 50%{opacity:.3} }
+.status-text { font-size: .75rem; color: var(--muted); }
+
+.tabs { display: flex; gap: 0; border-bottom: 1px solid var(--border); background: var(--surface); padding: 0 24px; }
+.tab {
+  padding: 12px 24px; cursor: pointer; border: none; background: none;
+  color: var(--muted); font-size: .9rem; font-weight: 500;
+  border-bottom: 2px solid transparent; transition: all .2s;
+}
+.tab.active { color: var(--accent); border-bottom-color: var(--accent); }
+.tab:hover { color: var(--text); }
+
+main { max-width: 1400px; margin: 0 auto; padding: 20px 24px; }
+
+.filter-bar {
+  display: flex; flex-wrap: wrap; gap: 8px; margin-bottom: 16px; align-items: center;
+}
+.filter-chip {
+  padding: 6px 14px; border-radius: 20px; border: 1px solid var(--border);
+  background: var(--badge); color: var(--muted); cursor: pointer;
+  font-size: .8rem; white-space: nowrap; transition: all .2s;
+}
+.filter-chip:hover { border-color: var(--accent); color: var(--text); }
+.filter-chip.active { background: var(--accent); color: #fff; border-color: var(--accent); }
+.search-box {
+  margin-left: auto; padding: 8px 14px; border-radius: 20px; border: 1px solid var(--border);
+  background: var(--surface); color: var(--text); font-size: .85rem; width: 220px;
+  outline: none; transition: border-color .2s;
+}
+.search-box:focus { border-color: var(--accent); }
+.search-box::placeholder { color: var(--muted); }
+
+.banner {
+  padding: 10px 16px; border-radius: 8px; margin-bottom: 16px; font-size: .82rem;
+  display: flex; align-items: center; gap: 8px;
+}
+.banner.warn { background: #3a2e1b; color: #ffb74d; border: 1px solid #5a4a2a; }
+.light .banner.warn { background: #fff8e1; color: #e65100; border: 1px solid #ffe0b2; }
+
+.card-grid {
+  display: grid; grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));
+  gap: 16px;
+}
+.card {
+  background: var(--card); border-radius: 12px; overflow: hidden;
+  box-shadow: var(--shadow); cursor: pointer; transition: transform .2s, box-shadow .2s;
+  border: 1px solid var(--border);
+}
+.card:hover { transform: translateY(-2px); box-shadow: 0 6px 20px rgba(0,0,0,.3); }
+.card-img {
+  width: 100%; height: 320px; object-fit: cover; background: var(--badge);
+  display: flex; align-items: center; justify-content: center;
+}
+.card-img.placeholder {
+  background: linear-gradient(135deg, var(--badge), var(--surface));
+  color: var(--muted); font-size: .85rem; text-align: center; padding: 16px;
+}
+.card-body { padding: 14px; }
+.card-title { font-weight: 600; font-size: .95rem; margin-bottom: 4px; line-height: 1.3; }
+.card-sub { font-size: .8rem; color: var(--muted); margin-bottom: 8px; }
+.card-badges { display: flex; flex-wrap: wrap; gap: 4px; }
+.badge {
+  padding: 3px 8px; border-radius: 4px; font-size: .7rem; font-weight: 500;
+  background: var(--badge); color: var(--accent);
+}
+.card-fav {
+  position: absolute; top: 8px; right: 8px; width: 28px; height: 28px;
+  border-radius: 50%; background: rgba(0,0,0,.5); border: none; color: #fff;
+  cursor: pointer; font-size: .85rem; display: flex; align-items: center; justify-content: center;
+  opacity: 0; transition: opacity .2s;
+}
+.card:hover .card-fav { opacity: 1; }
+.card-fav.saved { opacity: 1; color: #ffd700; }
+
+.empty-state {
+  text-align: center; padding: 60px 20px; color: var(--muted);
+}
+.empty-state .icon { font-size: 3rem; margin-bottom: 12px; }
+.empty-state p { margin-bottom: 4px; }
+
+.modal-overlay {
+  position: fixed; inset: 0; background: rgba(0,0,0,.7); z-index: 200;
+  display: flex; align-items: center; justify-content: center; padding: 20px;
+}
+.modal {
+  background: var(--surface); border-radius: 16px; max-width: 640px; width: 100%;
+  max-height: 90vh; overflow-y: auto; box-shadow: 0 10px 40px rgba(0,0,0,.5);
+}
+.modal-close {
+  float: right; margin: 12px; width: 32px; height: 32px; border-radius: 50%;
+  border: none; background: var(--badge); color: var(--text); cursor: pointer;
+  font-size: 1.1rem;
+}
+.modal-img { width: 100%; max-height: 400px; object-fit: cover; }
+.modal-body { padding: 24px; }
+.modal-body h2 { font-size: 1.3rem; margin-bottom: 6px; }
+.modal-body .meta { color: var(--muted); font-size: .85rem; margin-bottom: 12px; }
+.modal-body .summary { font-size: .9rem; line-height: 1.6; margin-bottom: 16px; }
+.modal-actions { display: flex; gap: 8px; }
+.btn {
+  padding: 8px 18px; border-radius: 8px; border: 1px solid var(--border);
+  background: var(--badge); color: var(--text); cursor: pointer; font-size: .85rem;
+  transition: all .2s;
+}
+.btn:hover { border-color: var(--accent); }
+.btn.primary { background: var(--accent); color: #fff; border-color: var(--accent); }
+.btn.external { background: transparent; color: var(--accent); border-color: var(--accent); }
+
+.spinner { display: inline-block; width: 20px; height: 20px; border: 2px solid var(--border); border-top-color: var(--accent); border-radius: 50%; animation: spin .8s linear infinite; }
+@keyframes spin { to { transform: rotate(360deg); } }
+.loading-overlay {
+  display: flex; align-items: center; justify-content: center; gap: 12px;
+  padding: 60px 20px; color: var(--muted); font-size: .9rem;
+}
+
+footer {
+  text-align: center; padding: 24px; color: var(--muted); font-size: .75rem;
+}
+
+@media (max-width: 768px) {
+  .card-grid { grid-template-columns: repeat(auto-fill, minmax(160px, 1fr)); gap: 10px; }
+  .card-img { height: 220px; }
+  .card-body { padding: 10px; }
+  .card-title { font-size: .85rem; }
+  .filter-bar { gap: 6px; }
+  header { padding: 12px 16px; }
+  main { padding: 12px 16px; }
+  .search-box { width: 150px; }
+}
+</style>
+</head>
+<body>
+
+<header>
+  <h1>电影图书推荐</h1>
+  <div class="header-right">
+    <span class="status-dot loading" id="status-dot" title="加载中"></span>
+    <span class="status-text" id="status-text">加载中...</span>
+    <button class="theme-btn" id="theme-btn" title="切换主题">&#9788;</button>
+  </div>
+</header>
+
+<div class="tabs">
+  <button class="tab active" data-tab="movies">电影</button>
+  <button class="tab" data-tab="books">图书</button>
+</div>
+
+<main>
+  <div id="banner"></div>
+  <div class="filter-bar" id="filter-bar"></div>
+  <input type="text" class="search-box" id="search" placeholder="搜索...">
+  <div id="content"></div>
+</main>
+
+<div id="modal-container"></div>
+<footer>数据来源: Wikipedia · Wikidata · TSPDT</footer>
+
+<script>
+// ===== CONFIG =====
+const MOVIE_AWARDS = [
+  {src:'Cannes',award:'Palme d\'Or',qid:'Q179808',p:'work'},
+  {src:'Cannes',award:'Grand Prix',qid:'Q28455848',p:'work'},
+  {src:'Cannes',award:'Best Director',qid:'Q839486',p:'work'},
+  {src:'Cannes',award:'Best Actor',qid:'Q830113',p:'work'},
+  {src:'Cannes',award:'Best Actress',qid:'Q830115',p:'work'},
+  {src:'Cannes',award:'Jury Prize',qid:'Q1342432',p:'work'},
+  {src:'Venice',award:'Golden Lion',qid:'Q209459',p:'work'},
+  {src:'Venice',award:'Silver Lion',qid:'Q1337827',p:'work'},
+  {src:'Venice',award:'Volpi Cup',qid:'Q49025',p:'person_simple'},
+  {src:'Berlin',award:'Golden Bear',qid:'Q154590',p:'work'},
+  {src:'Berlin',award:'Silver Bear Director',qid:'Q706031',p:'work'},
+  {src:'Berlin',award:'Silver Bear Actor',qid:'Q819973',p:'person_simple'},
+  {src:'Berlin',award:'Silver Bear Actress',qid:'Q376834',p:'person_simple'},
+  {src:'Berlin',award:'Silver Bear Jury',qid:'Q664212',p:'work'},
+  {src:'Oscars',award:'Best Picture',qid:'Q102427',p:'work'},
+  {src:'Oscars',award:'Best Director',qid:'Q103360',p:'work'},
+  {src:'Oscars',award:'Best Actor',qid:'Q103916',p:'person'},
+  {src:'Oscars',award:'Best Actress',qid:'Q103618',p:'person_simple'}
+];
+
+const BOOK_AWARDS = [
+  {src:'Booker Prize',award:'Winner',qid:'Q160082',p:'person'},
+  {src:'Nobel Literature',award:'Laureate',qid:'Q37922',p:'person_simple'},
+  {src:'Pulitzer Fiction',award:'Winner',qid:'Q833633',p:'work'},
+  {src:'Intl Booker',award:'Winner',qid:'Q2052291',p:'person_simple'},
+  {src:'National Book Award',award:'Winner',qid:'Q572316',p:'work'},
+  {src:'Women\'s Prize',award:'Winner',qid:'Q18884',p:'work'},
+  {src:'PEN/Faulkner',award:'Winner',qid:'Q1188661',p:'work'},
+  {src:'Costa Book Award',award:'Winner',qid:'Q1136336',p:'work'}
+];
+
+// ===== CACHE =====
+function cacheGet(k) {
+  try {
+    var e = JSON.parse(localStorage.getItem('mbr_' + k));
+    if (!e || !e.data) return null;
+    if (Date.now() - e.ts > e.ttl) return null;
+    return e.data;
+  } catch(x) { return null; }
+}
+function cacheSet(k, data, ttl) {
+  try { localStorage.setItem('mbr_' + k, JSON.stringify({data:data, ts:Date.now(), ttl:ttl})); } catch(x) {}
+}
+
+// ===== SPARQL =====
+async function sparql(query, timeout) {
+  timeout = timeout || 20000;
+  var url = 'https://query.wikidata.org/sparql?format=json&query=' + encodeURIComponent(query);
+  var ctrl = new AbortController();
+  var t = setTimeout(function(){ ctrl.abort(); }, timeout);
+  try {
+    var r = await fetch(url, {
+      headers: {'Accept':'application/sparql-results+json','User-Agent':'MovieBookRec/1.0'},
+      signal: ctrl.signal
+    });
+    if (!r.ok) throw new Error('HTTP '+r.status);
+    return (await r.json()).results.bindings;
+  } finally { clearTimeout(t); }
+}
+
+function buildWorkQuery(qid) {
+  return 'SELECT ?item ?itemLabel ?creator ?creatorLabel ?year WHERE {' +
+    '?item wdt:P166 wd:' + qid + '.' +
+    'OPTIONAL { ?item wdt:P57 ?creator. }' +
+    'OPTIONAL { ?item wdt:P50 ?creator. }' +
+    'OPTIONAL { ?item wdt:P161 ?creator. }' +
+    'OPTIONAL { ?item p:P166 ?s. ?s ps:P166 wd:' + qid + '. ?s pq:P585 ?d. BIND(YEAR(?d) AS ?year) }' +
+    'SERVICE wikibase:label { bd:serviceParam wikibase:language "en,zh". }' +
+    '} ORDER BY DESC(?year) LIMIT 20';
+}
+
+function buildPersonQuery(qid) {
+  return 'SELECT ?person ?personLabel ?work ?workLabel ?year WHERE {' +
+    '?person wdt:P166 wd:' + qid + '; wdt:P31 wd:Q5.' +
+    'OPTIONAL { ?person p:P166 ?s. ?s ps:P166 wd:' + qid + '. ?s pq:P585 ?d. BIND(YEAR(?d) AS ?year) }' +
+    'OPTIONAL { ?s pq:P1686 ?work. }' +
+    'SERVICE wikibase:label { bd:serviceParam wikibase:language "en,zh". }' +
+    '} ORDER BY DESC(?year) LIMIT 20';
+}
+
+function buildPersonSimpleQuery(qid) {
+  return 'SELECT ?person ?personLabel ?year WHERE {' +
+    '?person wdt:P166 wd:' + qid + '; wdt:P31 wd:Q5.' +
+    'OPTIONAL { ?person p:P166 ?s. ?s ps:P166 wd:' + qid + '. ?s pq:P585 ?d. BIND(YEAR(?d) AS ?year) }' +
+    'SERVICE wikibase:label { bd:serviceParam wikibase:language "en,zh". }' +
+    '} ORDER BY DESC(?year) LIMIT 20';
+}
+
+function getWikiEnUrl(r) {
+  if (r.item && r.item.value) return 'https://en.wikipedia.org/wiki/' + encodeURIComponent(r.item.value.split('/').pop().replace(/ /g,'_'));
+  if (r.person && r.person.value) return 'https://en.wikipedia.org/wiki/' + encodeURIComponent(r.person.value.split('/').pop().replace(/ /g,'_'));
+  return null;
+}
+
+function getWikiSummary(title) {
+  if (!title) return Promise.resolve(null);
+  title = title.split('/').pop();
+  return fetch('https://en.wikipedia.org/api/rest_v1/page/summary/' + encodeURIComponent(title))
+    .then(function(r){ return r.ok ? r.json() : null; })
+    .catch(function(){ return null; });
+}
+
+// ===== FETCH AWARD =====
+async function fetchAward(cfg) {
+  var cacheKey = 'award_' + cfg.qid;
+  var cached = cacheGet(cacheKey);
+  if (cached) return cached;
+
+  var q;
+  if (cfg.p === 'work') q = buildWorkQuery(cfg.qid);
+  else if (cfg.p === 'person') q = buildPersonQuery(cfg.qid);
+  else q = buildPersonSimpleQuery(cfg.qid);
+
+  var rows;
+  try { rows = await sparql(q, 25000); } catch(e) { return []; }
+
+  var items = [];
+  for (var i = 0; i < rows.length; i++) {
+    var r = rows[i];
+    var isWork = cfg.p === 'work';
+    if (cfg.p === 'person' || cfg.p === 'person_simple') {
+      items.push({
+        title: r.workLabel ? r.workLabel.value : null,
+        creator: r.personLabel ? r.personLabel.value : '',
+        year: r.year ? r.year.value : '',
+        source: cfg.src,
+        award: cfg.award,
+        wikiUrl: r.work ? getWikiEnUrl({item: r.work}) : getWikiEnUrl(r),
+        wikiTitle: r.work ? r.work.value.split('/').pop() : null,
+        isWork: !!r.workLabel
+      });
+    } else {
+      items.push({
+        title: r.itemLabel ? r.itemLabel.value : '',
+        creator: r.creatorLabel ? r.creatorLabel.value : '',
+        year: r.year ? r.year.value : '',
+        source: cfg.src,
+        award: cfg.award,
+        wikiUrl: getWikiEnUrl(r),
+        wikiTitle: r.item ? r.item.value.split('/').pop() : null,
+        isWork: true
+      });
+    }
+  }
+
+  var deduped = dedup(items, cfg.p);
+  cacheSet(cacheKey, deduped, 86400000); // 24h TTL
+  return deduped;
+}
+
+function dedup(items, pattern) {
+  var seen = {};
+  var out = [];
+  var prefer = (pattern === 'work' || pattern === 'person_simple') ? function(b){ return b.isWork !== false; } : function(b){ return b.isWork === true; };
+  for (var i = 0; i < items.length; i++) {
+    var key = items[i].title || items[i].creator;
+    if (!key) { out.push(items[i]); continue; }
+    key = key + '_' + items[i].year;
+    if (!seen[key]) { seen[key] = items[i]; }
+    else if (prefer(items[i])) { seen[key] = items[i]; }
+  }
+  var keys = Object.keys(seen);
+  for (var j = 0; j < keys.length; j++) { out.push(seen[keys[j]]); }
+  out.sort(function(a,b){ return (b.year||'').localeCompare(a.year||''); });
+  return out;
+}
+
+// ===== WIKIPEDIA ENRICH =====
+async function enrich(items) {
+  var cacheKey = 'wiki_enrich';
+  var cached = cacheGet(cacheKey);
+  var enrichMap = cached || {};
+
+  // Get titles needing enrichment
+  var toEnrich = [];
+  for (var i = 0; i < items.length; i++) {
+    var title = items[i].wikiTitle;
+    if (title && !enrichMap[title]) toEnrich.push(title);
+  }
+
+  // Fetch in batches
+  var batchSize = 6;
+  for (var j = 0; j < toEnrich.length; j += batchSize) {
+    var batch = toEnrich.slice(j, j + batchSize);
+    var results = await Promise.all(batch.map(function(t){
+      return getWikiSummary(t).then(function(d){
+        if (d && d.extract) {
+          enrichMap[t] = { extract: d.extract, thumb: d.thumbnail ? d.thumbnail.source : null, orig: d.originalimage ? d.originalimage.source : null };
+        } else {
+          enrichMap[t] = null;
+        }
+      }).catch(function(){ enrichMap[t] = null; });
+    }));
+  }
+
+  cacheSet(cacheKey, enrichMap, 604800000); // 7d TTL
+
+  for (var k = 0; k < items.length; k++) {
+    var t = items[k].wikiTitle;
+    if (t && enrichMap[t]) {
+      items[k].extract = enrichMap[t].extract;
+      items[k].thumbnail = enrichMap[t].thumb;
+      items[k].originalimage = enrichMap[t].orig;
+    }
+  }
+  return items;
+}
+
+// ===== FETCH ALL =====
+async function fetchAll(type) {
+  var awards = type === 'movies' ? MOVIE_AWARDS : BOOK_AWARDS;
+  var allItems = [];
+  var failures = 0;
+
+  for (var i = 0; i < awards.length; i++) {
+    try {
+      var items = await fetchAward(awards[i]);
+      for (var j = 0; j < items.length; j++) { items[j]._type = type; }
+      allItems = allItems.concat(items);
+    } catch(e) { failures++; }
+  }
+
+  // Try enrich from Wikipedia (non-blocking)
+  try { await enrich(allItems); } catch(e) {}
+
+  return { items: allItems, failures: failures };
+}
+
+// ===== UI STATE =====
+var state = { tab: 'movies', items: [], filter: 'all', search: '', loading: true, error: false, cacheAge: '' };
+var favorites = {};
+try { favorites = JSON.parse(localStorage.getItem('mbr_favorites') || '{}'); } catch(e) {}
+
+function saveFavs() { localStorage.setItem('mbr_favorites', JSON.stringify(favorites)); }
+function toggleFav(id) { favorites[id] = !favorites[id]; saveFavs(); renderCards(); }
+
+function getItemId(item) { return (item._type||'') + '_' + (item.title||item.creator||'') + '_' + item.year; }
+
+// ===== RENDER =====
+function render() {
+  document.getElementById('status-dot').className = state.loading ? 'status-dot loading' : (state.error ? 'status-dot error' : 'status-dot ok');
+  document.getElementById('status-text').textContent = state.loading ? '加载中...' : (state.error ? '部分失败' : '已就绪' + (state.cacheAge ? ' · ' + state.cacheAge : ''));
+  renderFilters();
+  renderCards();
+}
+
+function renderFilters() {
+  var sources = {};
+  for (var i = 0; i < state.items.length; i++) { sources[state.items[i].source] = 1; }
+  var keys = Object.keys(sources);
+  if (state.tab === 'books') keys.sort();
+  var html = '<button class="filter-chip' + (state.filter === 'all' ? ' active' : '') + '" data-src="all">All</button>';
+  for (var j = 0; j < keys.length; j++) {
+    html += '<button class="filter-chip' + (state.filter === keys[j] ? ' active' : '') + '" data-src="' + keys[j] + '">' + keys[j] + '</button>';
+  }
+  document.getElementById('filter-bar').innerHTML = html;
+}
+
+function renderCards() {
+  var filtered = state.items;
+  if (state.filter !== 'all') filtered = filtered.filter(function(i){ return i.source === state.filter; });
+  if (state.search) {
+    var q = state.search.toLowerCase();
+    filtered = filtered.filter(function(i){
+      return (i.title||'').toLowerCase().indexOf(q) >= 0 || (i.creator||'').toLowerCase().indexOf(q) >= 0;
+    });
+  }
+
+  var container = document.getElementById('content');
+
+  if (state.loading) {
+    container.innerHTML = '<div class="loading-overlay"><div class="spinner"></div>Loading...</div>';
+    return;
+  }
+
+  if (filtered.length === 0) {
+    container.innerHTML = '<div class="empty-state"><div class="icon">&#128218;</div><p>无结果</p><p class="muted">尝试调整筛选或搜索条件</p></div>';
+    return;
+  }
+
+  var html = '<div class="card-grid">';
+  for (var i = 0; i < filtered.length; i++) {
+    var item = filtered[i];
+    var id = getItemId(item);
+    var isFav = favorites[id];
+    var imgHtml;
+    if (item.thumbnail) {
+      imgHtml = '<img class="card-img" src="' + item.thumbnail + '" alt="" loading="lazy" onerror="this.className=\'card-img placeholder\';this.textContent=\'' + (item.title||item.creator||'') + '\'">';
+    } else {
+      imgHtml = '<div class="card-img placeholder">' + (item.title||item.creator||'') + '</div>';
+    }
+    html += '<div class="card" data-id="' + id + '" style="position:relative">' +
+      '<button class="card-fav' + (isFav ? ' saved' : '') + '" data-fav="' + id + '" title="收藏">&#9733;</button>' +
+      imgHtml +
+      '<div class="card-body">' +
+        '<div class="card-title">' + (item.title||item.creator||'') + '</div>' +
+        '<div class="card-sub">' + (item.creator||'') + '</div>' +
+        '<div class="card-badges">' +
+          '<span class="badge">' + item.source + '</span>' +
+          '<span class="badge">' + item.award + '</span>' +
+          (item.year ? '<span class="badge">' + item.year + '</span>' : '') +
+        '</div>' +
+      '</div>' +
+    '</div>';
+  }
+  html += '</div>';
+  container.innerHTML = html;
+}
+
+function showModal(item) {
+  var id = getItemId(item);
+  var isFav = favorites[id];
+  var imgHtml = item.originalimage ? '<img class="modal-img" src="' + item.originalimage + '" alt="">' : (item.thumbnail ? '<img class="modal-img" src="' + item.thumbnail + '" alt="">' : '');
+  var wikiLink = item.wikiUrl ? '<a class="btn external" href="' + item.wikiUrl + '" target="_blank">Wikipedia →</a>' : '';
+  var html = '<div class="modal-overlay" id="modal-overlay"><div class="modal">' +
+    '<button class="modal-close" id="modal-close">&times;</button>' +
+    imgHtml +
+    '<div class="modal-body">' +
+      '<h2>' + (item.title||item.creator||'') + '</h2>' +
+      '<div class="meta">' + (item.creator||'') + ' · ' + item.source + ' · ' + item.award + ' · ' + (item.year||'') + '</div>' +
+      (item.extract ? '<div class="summary">' + item.extract.substring(0, 600) + '...</div>' : '') +
+      '<div class="modal-actions">' +
+        '<button class="btn primary" id="modal-fav">' + (isFav ? '★ 已收藏' : '☆ 收藏') + '</button>' +
+        wikiLink +
+      '</div>' +
+    '</div>' +
+  '</div></div>';
+  document.getElementById('modal-container').innerHTML = html;
+
+  document.getElementById('modal-close').onclick = function(){ document.getElementById('modal-container').innerHTML = ''; };
+  document.getElementById('modal-overlay').onclick = function(e){ if (e.target === this) document.getElementById('modal-container').innerHTML = ''; };
+  document.getElementById('modal-fav').onclick = function(){ toggleFav(id); showModal(item); };
+}
+
+// ===== INIT =====
+async function init() {
+  render();
+
+  for (var t = 0; t < 2; t++) {
+    var type = t === 0 ? 'movies' : 'books';
+    var cacheKey = 'full_' + type;
+    var cached = cacheGet(cacheKey);
+    var result;
+
+    if (cached) {
+      result = cached;
+      state.cacheAge = '缓存数据';
+      if (type === state.tab) {
+        state.items = result.items;
+        state.loading = false;
+        render();
+      }
+    }
+
+    // Fetch fresh in background
+    try {
+      var fresh = await fetchAll(type);
+      cacheSet(cacheKey, fresh, 3600000); // 1h TTL for current year data freshness
+      if (type === state.tab) {
+        state.items = fresh.items;
+        state.loading = false;
+        state.error = fresh.failures > 0;
+        state.cacheAge = '实时';
+        render();
+      }
+    } catch(e) {
+      if (!cached && type === state.tab) {
+        state.loading = false;
+        state.error = true;
+        render();
+        document.getElementById('banner').innerHTML = '<div class="banner warn">&#9888; 无法加载数据，请检查网络后刷新页面</div>';
+      } else if (cached && type === state.tab) {
+        document.getElementById('banner').innerHTML = '<div class="banner warn">&#9888; 实时数据更新失败，显示缓存数据</div>';
+      }
+    }
+  }
+}
+
+// ===== EVENT HANDLERS =====
+document.getElementById('filter-bar').addEventListener('click', function(e){
+  if (e.target.classList.contains('filter-chip')) {
+    state.filter = e.target.dataset.src;
+    renderFilters();
+    renderCards();
+  }
+});
+
+document.getElementById('search').addEventListener('input', function(){
+  state.search = this.value;
+  renderCards();
+});
+
+document.getElementById('content').addEventListener('click', function(e){
+  var card = e.target.closest('.card');
+  var favBtn = e.target.closest('.card-fav');
+  if (favBtn) {
+    e.stopPropagation();
+    toggleFav(favBtn.dataset.fav);
+    return;
+  }
+  if (card) {
+    var id = card.dataset.id;
+    var item = state.items.find(function(i){ return getItemId(i) === id; });
+    if (item) showModal(item);
+  }
+});
+
+document.getElementById('theme-btn').addEventListener('click', function(){
+  document.body.classList.toggle('light');
+  this.textContent = document.body.classList.contains('light') ? '☽' : '☀';
+});
+
+document.querySelector('.tabs').addEventListener('click', function(e){
+  if (e.target.classList.contains('tab')) {
+    document.querySelectorAll('.tab').forEach(function(t){ t.classList.remove('active'); });
+    e.target.classList.add('active');
+    state.tab = e.target.dataset.tab;
+    state.filter = 'all';
+    state.search = '';
+    document.getElementById('search').value = '';
+
+    var cacheKey = 'full_' + state.tab;
+    var cached = cacheGet(cacheKey);
+    if (cached) { state.items = cached.items; state.loading = false; state.cacheAge = '缓存'; }
+    render();
+  }
+});
+
+init();
+</script>
+</body>
+</html>
