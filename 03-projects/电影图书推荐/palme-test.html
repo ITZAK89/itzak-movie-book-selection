@@ -54,15 +54,17 @@ function cleanFilm(s) {
 function parseWinners(html) {
   var doc = new DOMParser().parseFromString(html, 'text/html');
   var tables = doc.querySelectorAll('table.wikitable');
+  console.log('parseWinners: found ' + tables.length + ' wikitables');
   var all = [];
   for (var t = 0; t < tables.length; t++) {
     var rows = tables[t].querySelectorAll('tr');
-    if (rows.length < 2) continue;
+    if (rows.length < 2) { console.log('  Table ' + t + ': skipped, only ' + rows.length + ' rows'); continue; }
     // Only parse tables where first data row has a 4-digit year
     var firstDataCells = rows[1] ? rows[1].querySelectorAll('td,th') : null;
-    if (!firstDataCells || firstDataCells.length < 1) continue;
+    if (!firstDataCells || firstDataCells.length < 1) { console.log('  Table ' + t + ': skipped, no data cells'); continue; }
     var testYear = firstDataCells[0].textContent.replace(/\[.*?\]/g,'').trim();
-    if (!/^\d{4}$/.test(testYear) || parseInt(testYear) < 1990) continue;
+    console.log('  Table ' + t + ': testYear=' + testYear);
+    if (!/^\d{4}$/.test(testYear) || parseInt(testYear) < 1990) { console.log('  Table ' + t + ': skipped, testYear not a valid >=1990 year'); continue; }
 
     // Auto-detect columns from header row
     var headerCells = rows[0].querySelectorAll('th');
@@ -186,7 +188,10 @@ async function runOne(idx) {
   var out = document.getElementById('out');
   var award = AWARDS[idx];
   out.innerHTML = '<p>Fetching ' + award.src + ' ' + award.name + '...</p>';
-  var html = await fetchPage(award.page);
+  var html;
+  try { html = await fetchPage(award.page); } catch(e) { out.innerHTML += '<p class="err">FETCH ERROR: ' + e.message + '</p>'; return; }
+  if (!html) { out.innerHTML += '<p class="err">No HTML returned</p>'; return; }
+  out.innerHTML += '<p>HTML received: ' + html.length + ' bytes, ' + (html.match(/<table/g)||[]).length + ' tables in raw HTML</p>';
   var rows = parseWinners(html);
   out.innerHTML += '<p class="stat">' + rows.length + ' films (1990-). Loading posters...</p>';
 
