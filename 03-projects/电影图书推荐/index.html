@@ -212,6 +212,7 @@ function debug(msg) {
 
 // ===== CONFIG =====
 var VERSION = 'v14';
+var SKIP_BOOKS = true; // Skip book queries during movie testing
 (function checkVersion(){
   var v = localStorage.getItem('mbr_version');
   if (v !== VERSION) {
@@ -822,7 +823,8 @@ async function init() {
   render();
   debug('Loading movies and books in parallel...');
   try {
-    await Promise.all([loadData('movies'), loadData('books')]);
+    if (SKIP_BOOKS) { await loadData('movies'); }
+    else { await Promise.all([loadData('movies'), loadData('books')]); }
     // Keep debug panel visible for review
   } catch(e) {
     debug('FATAL: ' + e.message + ' ' + (e.stack||''));
