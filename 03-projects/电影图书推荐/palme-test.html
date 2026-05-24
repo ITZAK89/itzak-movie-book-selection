@@ -85,10 +85,23 @@ function parseWinners(html) {
     if (winnerCol < 0) winnerCol = 1;
     console.log('  Table ' + t + ' headers: ' + headers.join(' | ') + ' => filmCol=' + filmCol + ' winnerCol=' + winnerCol);
 
+    // Detect if this table uses background color to mark winners (Oscar-style)
+    var hasWinnerMarking = false;
+    for (var scan = 1; scan < Math.min(10, rows.length); scan++) {
+      var scanRow = rows[scan];
+      if (scanRow && scanRow.getAttribute('style') && scanRow.getAttribute('style').indexOf('background') >= 0) { hasWinnerMarking = true; break; }
+    }
+
     var prevYear = '', debugShown = 0;
     for (var r = 1; r < rows.length; r++) {
-      var cells = rows[r].querySelectorAll('td,th');
+      var rowEl = rows[r];
+      var cells = rowEl.querySelectorAll('td,th');
       if (cells.length < 2) continue;
+      // Only filter winner rows if table uses background marking
+      if (hasWinnerMarking) {
+        var isWinner = (rowEl.getAttribute('style')||'').indexOf('background') >= 0;
+        if (!isWinner) continue;
+      }
       if (debugShown < 3) {
         var raw = []; for (var ci = 0; ci < Math.min(8, cells.length); ci++) raw.push('['+ci+']'+cells[ci].textContent.substring(0,40));
         console.log('  Row'+r+' ('+cells.length+'c): ' + raw.join(' | '));
