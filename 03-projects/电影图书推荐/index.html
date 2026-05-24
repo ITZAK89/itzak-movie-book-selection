@@ -232,16 +232,16 @@ const MOVIE_AWARDS = [
   {src:'Cannes',award:'Jury Prize',qid:'Q1342432',p:'work'},
   {src:'Venice',award:'Golden Lion',qid:'Q209459',p:'work'},
   {src:'Venice',award:'Silver Lion',qid:'Q1337827',p:'work'},
-  {src:'Venice',award:'Volpi Cup',qid:'Q49025',p:'person_simple'},
+  {src:'Venice',award:'Volpi Cup',qid:'Q49025',p:'person'},
   {src:'Berlin',award:'Golden Bear',qid:'Q154590',p:'work'},
   {src:'Berlin',award:'Silver Bear Director',qid:'Q706031',p:'work'},
-  {src:'Berlin',award:'Silver Bear Actor',qid:'Q819973',p:'person_simple'},
-  {src:'Berlin',award:'Silver Bear Actress',qid:'Q376834',p:'person_simple'},
+  {src:'Berlin',award:'Silver Bear Actor',qid:'Q819973',p:'person'},
+  {src:'Berlin',award:'Silver Bear Actress',qid:'Q376834',p:'person'},
   {src:'Berlin',award:'Silver Bear Jury',qid:'Q664212',p:'work'},
   {src:'Oscars',award:'Best Picture',qid:'Q102427',p:'work'},
   {src:'Oscars',award:'Best Director',qid:'Q103360',p:'work'},
   {src:'Oscars',award:'Best Actor',qid:'Q103916',p:'person'},
-  {src:'Oscars',award:'Best Actress',qid:'Q103618',p:'person_simple'}
+  {src:'Oscars',award:'Best Actress',qid:'Q103618',p:'person'}
 ];
 
 const BOOK_AWARDS = [
@@ -442,6 +442,46 @@ async function enrich(items) {
   return items;
 }
 
+// ===== MERGE/DEDUP =====
+function normTitle(t) { return (t||'').toLowerCase().replace(/\([^)]*\)/g,'').replace(/[^a-z0-9一-鿿]/g,'').trim(); }
+
+function mergeFilms(items) {
+  var groups = {};
+  for (var i = 0; i < items.length; i++) {
+    var it = items[i];
+    var key = normTitle(it.title) + '|' + (it.year||'');
+    if (!groups[key]) {
+      groups[key] = {
+        title: it.title, creator: it.creator, year: it.year,
+        wikiUrl: it.wikiUrl, wikiTitle: it.wikiTitle,
+        thumbnail: it.thumbnail, originalimage: it.originalimage, extract: it.extract,
+        _type: it._type,
+        awards: []
+      };
+    }
+    // Merge better data from later items
+    if (!groups[key].thumbnail && it.thumbnail) groups[key].thumbnail = it.thumbnail;
+    if (!groups[key].originalimage && it.originalimage) groups[key].originalimage = it.originalimage;
+    if (!groups[key].extract && it.extract) groups[key].extract = it.extract;
+    if (!groups[key].wikiTitle && it.wikiTitle) groups[key].wikiTitle = it.wikiTitle;
+    if (!groups[key].wikiUrl && it.wikiUrl) groups[key].wikiUrl = it.wikiUrl;
+    if (it.title && groups[key].title !== it.title && it.title.length > groups[key].title.length) groups[key].title = it.title;
+    // Collect awards
+    if (it.award) {
+      var dup = false;
+      for (var j = 0; j < groups[key].awards.length; j++) {
+        if (groups[key].awards[j].source === it.source && groups[key].awards[j].award === it.award) { dup = true; break; }
+      }
+      if (!dup) groups[key].awards.push({source: it.source, award: it.award});
+    }
+  }
+  var merged = [];
+  var keys = Object.keys(groups);
+  for (var k = 0; k < keys.length; k++) { merged.push(groups[keys[k]]); }
+  merged.sort(function(a,b){ return (b.year||'').localeCompare(a.year||''); });
+  return merged;
+}
+
 // ===== FETCH ALL =====
 async function fetchAll(type) {
   var awards = type === 'movies' ? MOVIE_AWARDS : BOOK_AWARDS;
@@ -461,6 +501,11 @@ async function fetchAll(type) {
     }
   }
 
+  // Merge/dedup films by title
+  if (type === 'movies') {
+    allItems = mergeFilms(allItems);
+  }
+
   // Try enrich from Wikipedia (non-blocking)
   if (allItems.length > 0) { try { await enrich(allItems); } catch(e) {} }
 
@@ -468,7 +513,7 @@ async function fetchAll(type) {
 }
 
 // ===== UI STATE =====
-var state = { tab: 'movies', items: [], filter: 'all', search: '', loading: true, error: false, cacheAge: '' };
+var state = { tab: 'movies', items: [], sourceFilter: 'all', yearFilter: 'all', search: '', loading: true, error: false, cacheAge: '', defaultLimit: 10 };
 var favorites = {};
 try { favorites = JSON.parse(localStorage.getItem('mbr_favorites') || '{}'); } catch(e) {}
 
@@ -485,27 +530,79 @@ function render() {
   renderCards();
 }
 
+function getYears(items) {
+  var years = {};
+  for (var i = 0; i < items.length; i++) { if (items[i].year) years[items[i].year] = 1; }
+  return Object.keys(years).sort(function(a,b){ return b.localeCompare(a); });
+}
+
 function renderFilters() {
   var sources = {};
-  for (var i = 0; i < state.items.length; i++) { sources[state.items[i].source] = 1; }
-  var keys = Object.keys(sources);
-  if (state.tab === 'books') keys.sort();
-  var html = '<button class="filter-chip' + (state.filter === 'all' ? ' active' : '') + '" data-src="all">All</button>';
-  for (var j = 0; j < keys.length; j++) {
-    html += '<button class="filter-chip' + (state.filter === keys[j] ? ' active' : '') + '" data-src="' + keys[j] + '">' + keys[j] + '</button>';
+  for (var i = 0; i < state.items.length; i++) {
+    var item = state.items[i];
+    if (item.awards) {
+      for (var a = 0; a < item.awards.length; a++) { sources[item.awards[a].source] = 1; }
+    } else if (item.source) {
+      sources[item.source] = 1;
+    }
   }
+  var srcKeys = Object.keys(sources);
+  if (state.tab === 'books') srcKeys.sort();
+
+  var html = '<div style="display:flex;flex-wrap:wrap;gap:6px;align-items:center">';
+  // Source row
+  html += '<span style="font-size:.75rem;color:var(--muted);margin-right:4px">来源</span>';
+  html += '<button class="filter-chip' + (state.sourceFilter === 'all' ? ' active' : '') + '" data-filter="source" data-val="all">All</button>';
+  for (var j = 0; j < srcKeys.length; j++) {
+    html += '<button class="filter-chip' + (state.sourceFilter === srcKeys[j] ? ' active' : '') + '" data-filter="source" data-val="' + srcKeys[j] + '">' + srcKeys[j] + '</button>';
+  }
+  html += '</div>';
+
+  // Year row
+  var filtered = state.sourceFilter === 'all' ? state.items : state.items.filter(function(i){
+    if (i.awards) {
+      for (var a2 = 0; a2 < i.awards.length; a2++) { if (i.awards[a2].source === state.sourceFilter) return true; }
+      return false;
+    }
+    return i.source === state.sourceFilter;
+  });
+  var years = getYears(filtered);
+  html += '<div style="display:flex;flex-wrap:wrap;gap:6px;align-items:center;margin-top:6px">';
+  html += '<span style="font-size:.75rem;color:var(--muted);margin-right:4px">年份</span>';
+  html += '<button class="filter-chip' + (state.yearFilter === 'all' ? ' active' : '') + '" data-filter="year" data-val="all">All</button>';
+  for (var y = 0; y < years.length; y++) {
+    html += '<button class="filter-chip' + (state.yearFilter === years[y] ? ' active' : '') + '" data-filter="year" data-val="' + years[y] + '">' + years[y] + '</button>';
+  }
+  html += '</div>';
+
   document.getElementById('filter-bar').innerHTML = html;
 }
 
 function renderCards() {
   var filtered = state.items;
-  if (state.filter !== 'all') filtered = filtered.filter(function(i){ return i.source === state.filter; });
+  // Source filter (check awards array for merged items, or source field for unmerged)
+  if (state.sourceFilter !== 'all') {
+    filtered = filtered.filter(function(i){
+      if (i.awards) {
+        for (var a = 0; a < i.awards.length; a++) { if (i.awards[a].source === state.sourceFilter) return true; }
+        return false;
+      }
+      return i.source === state.sourceFilter;
+    });
+  }
+  // Year filter
+  if (state.yearFilter !== 'all') filtered = filtered.filter(function(i){ return i.year === state.yearFilter; });
+  // Search
   if (state.search) {
     var q = state.search.toLowerCase();
     filtered = filtered.filter(function(i){
       return (i.title||'').toLowerCase().indexOf(q) >= 0 || (i.creator||'').toLowerCase().indexOf(q) >= 0;
     });
   }
+
+  // Default: show 10 latest when both filters are "all"
+  var showAll = !(state.sourceFilter === 'all' && state.yearFilter === 'all');
+  if (!showAll && state.defaultLimit > 0) filtered = filtered.slice(0, state.defaultLimit);
 
   var container = document.getElementById('content');
 
@@ -537,9 +634,12 @@ function renderCards() {
         '<div class="card-title">' + (item.title||item.creator||'') + '</div>' +
         (item.title && item.creator && item.title !== item.creator ? '<div class="card-sub">' + item.creator + '</div>' : '') +
         '<div class="card-badges">' +
-          '<span class="badge">' + item.source + '</span>' +
-          '<span class="badge">' + item.award + '</span>' +
           (item.year ? '<span class="badge">' + item.year + '</span>' : '') +
+          (item.awards
+            ? (item.awards.length > 1
+                ? '<span class="badge" style="background:var(--accent);color:#fff">' + item.awards.length + ' awards</span>'
+                : item.awards.map(function(a){ return '<span class="badge">' + a.source + ' · ' + a.award + '</span>'; }).join(''))
+            : (item.source ? '<span class="badge">' + item.source + ' · ' + item.award + '</span>' : '')) +
         '</div>' +
       '</div>' +
     '</div>';
@@ -558,7 +658,8 @@ function showModal(item) {
     imgHtml +
     '<div class="modal-body">' +
       '<h2>' + (item.title||item.creator||'') + '</h2>' +
-      '<div class="meta">' + (item.title && item.creator && item.title !== item.creator ? item.creator + ' · ' : '') + item.source + ' · ' + item.award + ' · ' + (item.year||'') + '</div>' +
+      '<div class="meta">' + (item.title && item.creator && item.title !== item.creator ? item.creator + ' · ' : '') + (item.year||'') + '</div>' +
+      (item.awards ? '<div class="card-badges" style="margin-bottom:12px">' + item.awards.map(function(a){ return '<span class="badge">' + a.source + ' · ' + a.award + '</span>'; }).join(' ') + '</div>' : (item.source ? '<div class="card-badges" style="margin-bottom:12px"><span class="badge">' + item.source + ' · ' + item.award + '</span></div>' : '')) +
       (item.extract ? '<div class="summary">' + item.extract.substring(0, 600) + '...</div>' : '') +
       '<div class="modal-actions">' +
         '<button class="btn primary" id="modal-fav">' + (isFav ? '★ 已收藏' : '☆ 收藏') + '</button>' +
@@ -670,7 +771,14 @@ async function init() {
 // ===== EVENT HANDLERS =====
 document.getElementById('filter-bar').addEventListener('click', function(e){
   if (e.target.classList.contains('filter-chip')) {
-    state.filter = e.target.dataset.src;
+    var ftype = e.target.dataset.filter;
+    var val = e.target.dataset.val;
+    if (ftype === 'source') {
+      state.sourceFilter = val;
+      state.yearFilter = 'all';
+    } else if (ftype === 'year') {
+      state.yearFilter = val;
+    }
     renderFilters();
     renderCards();
   }
@@ -709,7 +817,8 @@ document.querySelector('.tabs').addEventListener('click', function(e){
     document.querySelectorAll('.tab').forEach(function(t){ t.classList.remove('active'); });
     e.target.classList.add('active');
     state.tab = e.target.dataset.tab;
-    state.filter = 'all';
+    state.sourceFilter = 'all';
+    state.yearFilter = 'all';
     state.search = '';
     document.getElementById('search').value = '';
     document.getElementById('banner').innerHTML = '';
