@@ -199,6 +199,20 @@ footer {
 
 <script>
 // ===== CONFIG =====
+var VERSION = 'v2';
+(function checkVersion(){
+  var v = localStorage.getItem('mbr_version');
+  if (v !== VERSION) {
+    var keys = [];
+    for (var i = 0; i < localStorage.length; i++) {
+      var k = localStorage.key(i);
+      if (k.indexOf('mbr_') === 0) keys.push(k);
+    }
+    for (var j = 0; j < keys.length; j++) localStorage.removeItem(keys[j]);
+    localStorage.setItem('mbr_version', VERSION);
+  }
+})();
+
 const MOVIE_AWARDS = [
   {src:'Cannes',award:'Palme d\'Or',qid:'Q179808',p:'work'},
   {src:'Cannes',award:'Grand Prix',qid:'Q28455848',p:'work'},
@@ -313,7 +327,14 @@ async function fetchAward(cfg) {
   else q = buildPersonSimpleQuery(cfg.qid);
 
   var rows;
-  try { rows = await sparql(q, 25000); } catch(e) { return []; }
+  try { rows = await sparql(q, 25000); } catch(e) {
+    console.warn('SPARQL failed:', cfg.qid, e.message);
+    throw e; // Don't cache failures
+  }
+
+  if (!rows || rows.length === 0) {
+    console.warn('SPARQL returned 0 rows:', cfg.qid);
+  }
 
   var items = [];
   for (var i = 0; i < rows.length; i++) {
@@ -418,7 +439,10 @@ async function fetchAll(type) {
       var items = await fetchAward(awards[i]);
       for (var j = 0; j < items.length; j++) { items[j]._type = type; }
       allItems = allItems.concat(items);
-    } catch(e) { failures++; }
+    } catch(e) {
+      failures++;
+      console.error('Award fetch failed:', awards[i].qid, awards[i].src, e.message);
+    }
   }
 
   // Try enrich from Wikipedia (non-blocking)
