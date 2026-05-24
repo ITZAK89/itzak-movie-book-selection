@@ -211,7 +211,7 @@ function debug(msg) {
 }
 
 // ===== CONFIG =====
-var VERSION = 'v17';
+var VERSION = 'v18';
 var SKIP_BOOKS = true;
 var TEST_ONLY_CANNES = true;
 (function checkVersion(){
@@ -307,11 +307,7 @@ function buildQuery(cfg) {
   if (cfg.p === 'work') {
     return 'SELECT ?item ?itemLabel ?creator ?creatorLabel ?year ?article WHERE { ?item wdt:P166 wd:' + qid + '; wdt:P31/wdt:P279* wd:Q11424. OPTIONAL { ?item wdt:P57 ?creator. } OPTIONAL { ?item p:P166 ?s. ?s ps:P166 wd:' + qid + '. ?s pq:P585 ?d. BIND(YEAR(?d) AS ?year) } OPTIONAL { ?article schema:about ?item; schema:inLanguage "en"; schema:isPartOf <https://en.wikipedia.org/>. } SERVICE wikibase:label { bd:serviceParam wikibase:language "en,zh". } } ORDER BY DESC(?year) LIMIT 20';
   }
-  // person_simple: just name + year, no film link
-  if (cfg.p === 'person_simple') {
-    return 'SELECT ?person ?personLabel ?year WHERE { ?person wdt:P166 wd:' + qid + '; wdt:P31 wd:Q5. OPTIONAL { ?person p:P166 ?s. ?s ps:P166 wd:' + qid + '. ?s pq:P585 ?d. BIND(YEAR(?d) AS ?year) } SERVICE wikibase:label { bd:serviceParam wikibase:language "en,zh". } } ORDER BY DESC(?year) LIMIT 20';
-  }
-  // person pattern: award → person → film (NO schema:about to avoid slowdown)
+  // person pattern: award → person → film (no schema:about — faster)
   return 'SELECT ?person ?personLabel ?work ?workLabel ?year WHERE { ?person wdt:P166 wd:' + qid + '; wdt:P31 wd:Q5. OPTIONAL { ?person p:P166 ?s. ?s ps:P166 wd:' + qid + '. ?s pq:P585 ?d. BIND(YEAR(?d) AS ?year) } OPTIONAL { ?s pq:P1686 ?work. } SERVICE wikibase:label { bd:serviceParam wikibase:language "en,zh". } } ORDER BY DESC(?year) LIMIT 20';
 }
 
@@ -348,7 +344,7 @@ function sleep(ms) { return new Promise(function(resolve){ setTimeout(resolve, m
 
 async function rateLimit() {
   var elapsed = Date.now() - lastQueryTime;
-  if (elapsed < 2000) await sleep(2000 - elapsed);
+  if (elapsed < 5000) await sleep(5000 - elapsed);
   lastQueryTime = Date.now();
 }
 
@@ -366,7 +362,7 @@ async function fetchAward(cfg, isBook) {
 
   await rateLimit();
 
-  var timeout = (cfg.p === 'person') ? 60000 : 30000;
+  var timeout = (cfg.p === 'person') ? 90000 : 30000;
   var rows;
   try { rows = await runSparql(q, timeout); } catch(e) {
     console.warn('SPARQL failed:', cfg.qid, e.message);
@@ -381,21 +377,21 @@ async function fetchAward(cfg, isBook) {
   var items = [];
   for (var i = 0; i < rows.length; i++) {
     var r = rows[i];
-    if (cfg.p === 'person_simple') {
-      // Just person name + year, film matched later via Wikipedia page
-      var pLabel = r.personLabel ? r.personLabel.value : '';
-      if (!pLabel) continue;
+    if (cfg.p === 'person') {
+      // Award → person → film
+      var workLabel = r.workLabel ? r.workLabel.value : null;
+      var personLabel = r.personLabel ? r.personLabel.value : '';
+      if (!workLabel) continue; // Skip if no film linked
       items.push({
-        title: null, // filled later by matchWinnersToFilms
-        creator: pLabel,
+        title: workLabel,
+        creator: personLabel,
         year: r.year ? r.year.value : '',
         source: cfg.src,
         award: cfg.award,
-        wikiUrl: null,
-        wikiTitle: null,
-        _pendingMatch: true
+        wikiUrl: r.article ? r.article.value : null,
+        wikiTitle: r.article ? wikiTitleFromUrl(r.article.value) : null
       });
-    } else if (cfg.p === 'person') {
+    } else {
       // Award → film
       items.push({
         title: r.itemLabel ? r.itemLabel.value : '',
@@ -468,97 +464,6 @@ async function enrich(items) {
       items[k].originalimage = enrichMap[t].orig;
     }
   }
-  return items;
-}
-
-// ===== WIKIPEDIA WINNER-FILM MATCHING =====
-async function matchWinnersToFilms(items) {
-  var pending = items.filter(function(i){ return i._pendingMatch; });
-  if (pending.length === 0) return items;
-
-  // Group pending by year
-  var yearsNeeded = {};
-  for (var i = 0; i < pending.length; i++) { yearsNeeded[pending[i].year] = 1; }
-  var years = Object.keys(yearsNeeded).sort(function(a,b){ return b.localeCompare(a); });
-
-  var pageData = {}; // year -> [{award, winner, film}]
-  for (var y = 0; y < years.length; y++) {
-    var year = years[y];
-    // Only Cannes for now
-    var pageName = year + '_Cannes_Film_Festival';
-    var url = 'https://en.wikipedia.org/w/api.php?origin=*&action=parse&page=' + encodeURIComponent(pageName) + '&prop=text&format=json';
-    debug('  Wiki page fetch: ' + pageName);
-    try {
-      var r = await fetch(url);
-      if (!r.ok) { debug('  Wiki HTTP ' + r.status); continue; }
-      var d = await r.json();
-      var html = d.parse.text['*'];
-      var parser = new DOMParser();
-      var doc = parser.parseFromString(html, 'text/html');
-      var tables = doc.querySelectorAll('table.wikitable');
-      var rows_found = [];
-      for (var t = 0; t < tables.length; t++) {
-        var trs = tables[t].querySelectorAll('tr');
-        if (trs.length < 2) continue;
-        // Detect columns from first row
-        var ths = trs[0].querySelectorAll('th');
-        var headers = [];
-        for (var h = 0; h < ths.length; h++) { headers.push(ths[h].textContent.trim().toLowerCase()); }
-        var awardCol = -1, winnerCol = -1, filmCol = -1;
-        for (var c = 0; c < headers.length; c++) {
-          var ht = headers[c];
-          if (ht.indexOf('award')>=0 || ht.indexOf('category')>=0 || ht.indexOf('prize')>=0) awardCol = c;
-          if (ht.indexOf('winner')>=0 || ht.indexOf('recipient')>=0 || ht.indexOf('name')>=0) winnerCol = c;
-          if (ht.indexOf('film')>=0 || ht.indexOf('work')>=0 || ht.indexOf('title')>=0) filmCol = c;
-        }
-        if (awardCol < 0 && headers.length >= 1) awardCol = 0;
-        if (winnerCol < 0 && headers.length >= 2) winnerCol = 1;
-        if (filmCol < 0 && headers.length >= 3) filmCol = 2;
-        if (filmCol < 0 && headers.length >= 2) filmCol = 1;
-
-        for (var ri = 1; ri < trs.length; ri++) {
-          var tds = trs[ri].querySelectorAll('td');
-          if (tds.length < 2) continue;
-          var rawAward = (awardCol >= 0 && tds[awardCol]) ? tds[awardCol].textContent.replace(/\[.*?\]/g,'').trim() : '';
-          var rawWinner = (winnerCol >= 0 && tds[winnerCol]) ? tds[winnerCol].textContent.replace(/\[.*?\]/g,'').trim() : '';
-          var rawFilm = (filmCol >= 0 && tds[filmCol]) ? tds[filmCol].textContent.replace(/\[.*?\]/g,'').trim() : '';
-          if (!rawAward || !rawWinner) continue;
-          rows_found.push({award: rawAward, winner: rawWinner, film: rawFilm});
-          debug('    Wiki row: ' + rawAward + ' | ' + rawWinner + ' | ' + rawFilm);
-        }
-      }
-      pageData[year] = rows_found;
-      debug('  Wiki ' + pageName + ': ' + rows_found.length + ' rows');
-    } catch(e) { debug('  Wiki error: ' + e.message); }
-  }
-
-  // Match pending items to Wikipedia rows
-  for (var i = 0; i < pending.length; i++) {
-    var p = pending[i];
-    var rows = pageData[p.year] || [];
-    var bestMatch = null;
-    for (var j = 0; j < rows.length; j++) {
-      var row = rows[j];
-      // Fuzzy match: winner name contains creator or vice versa
-      var wLower = row.winner.toLowerCase();
-      var cLower = (p.creator||'').toLowerCase();
-      if (wLower.indexOf(cLower) >= 0 || cLower.indexOf(wLower) >= 0) {
-        // Also check award type matches roughly
-        var awardMatch = row.award.toLowerCase().indexOf(p.award.toLowerCase().replace('best ','')) >= 0
-                      || p.award.toLowerCase().indexOf(row.award.toLowerCase().replace('best ','')) >= 0;
-        if (awardMatch) { bestMatch = row; break; }
-        if (!bestMatch) bestMatch = row; // fallback
-      }
-    }
-    if (bestMatch) {
-      p.title = bestMatch.film || null;
-      p._pendingMatch = false;
-      debug('  Matched: ' + p.creator + ' -> ' + p.title + ' (' + p.year + ')');
-    } else {
-      debug('  No match: ' + p.creator + ' ' + p.award + ' ' + p.year);
-    }
-  }
-
   return items;
 }
 
