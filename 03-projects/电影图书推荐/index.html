@@ -272,16 +272,25 @@ function cacheSet(k, data, ttl) {
 async function sparql(query, timeout) {
   timeout = timeout || 20000;
   var url = 'https://query.wikidata.org/sparql?format=json&query=' + encodeURIComponent(query);
-  var ctrl = new AbortController();
-  var t = setTimeout(function(){ ctrl.abort(); }, timeout);
   try {
     var r = await fetch(url, {
-      headers: {'Accept':'application/sparql-results+json','User-Agent':'MovieBookRec/1.0'},
-      signal: ctrl.signal
+      headers: {'Accept':'application/sparql-results+json','User-Agent':'MovieBookRec/1.0'}
     });
-    if (!r.ok) throw new Error('HTTP '+r.status);
-    return (await r.json()).results.bindings;
-  } finally { clearTimeout(t); }
+    if (!r.ok) {
+      debug('  SPARQL HTTP ' + r.status + ' for url len=' + url.length);
+      throw new Error('HTTP '+r.status);
+    }
+    var j = await r.json();
+    var bindings = j.results.bindings;
+    if (!bindings || bindings.length === 0) {
+      debug('  SPARQL 0 rows, sample url: ' + url.substring(0, 200));
+    }
+    return bindings;
+  } catch(e) {
+    if (e.message.indexOf('HTTP') === 0) throw e;
+    debug('  SPARQL error: ' + e.message);
+    throw e;
+  }
 }
 
 function buildWorkQuery(qid) {
@@ -657,8 +666,8 @@ async function init() {
   debug('Loading movies and books in parallel...');
   try {
     await Promise.all([loadData('movies'), loadData('books')]);
-    debug('All data loaded. Hiding debug panel.');
-    setTimeout(function(){ debugEl.style.display = 'none'; }, 2000);
+    debug('All data loaded. Debug panel stays visible for review.');
+    // Keep debug panel visible so user can copy text
   } catch(e) {
     debug('FATAL: ' + e.message + ' ' + (e.stack||''));
   }
