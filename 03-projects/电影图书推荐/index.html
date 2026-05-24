@@ -211,7 +211,7 @@ function debug(msg) {
 }
 
 // ===== CONFIG =====
-var VERSION = 'v19';
+var VERSION = 'v20';
 var SKIP_BOOKS = true;
 var TEST_ONLY_CANNES = true;
 (function checkVersion(){
@@ -392,6 +392,7 @@ async function fetchAward(cfg, isBook) {
       var workLabel = r.workLabel ? r.workLabel.value : null;
       var personLabel = r.personLabel ? r.personLabel.value : '';
       if (!workLabel) continue; // Skip if no film linked
+      debug('    person row: ' + personLabel + ' -> work: ' + workLabel + ' year: ' + (r.year ? r.year.value : '?'));
       items.push({
         title: workLabel,
         creator: personLabel,
@@ -885,7 +886,7 @@ async function init() {
   try {
     if (SKIP_BOOKS) { await loadData('movies'); }
     else { await Promise.all([loadData('movies'), loadData('books')]); }
-    // runAudit()
+    runAudit();
   } catch(e) {
     debug('FATAL: ' + e.message + ' ' + (e.stack||''));
   }
