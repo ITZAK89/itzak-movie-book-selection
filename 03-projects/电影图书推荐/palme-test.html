@@ -118,6 +118,7 @@ function parseWinners(html) {
       if (debugShown < 3) {
         var raw = []; for (var ci = 0; ci < Math.min(8, cells.length); ci++) raw.push('['+ci+']'+cells[ci].textContent.substring(0,40));
         console.log('  Row'+r+' ('+cells.length+'c): ' + raw.join(' | '));
+        console.log('    HTML: ' + rowEl.innerHTML.substring(0,300));
         debugShown++;
       }
       var first = cells[0].textContent.replace(/\[.*?\]/g,'').trim();
