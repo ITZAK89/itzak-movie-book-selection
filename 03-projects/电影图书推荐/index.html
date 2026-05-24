@@ -656,7 +656,7 @@ function renderCards() {
         '<div class="card-title">' + (item.title||item.creator||'') + '</div>' +
         (item.title && item.creator && item.title !== item.creator ? '<div class="card-sub">' + item.creator + '</div>' : '') +
         '<div class="card-badges">' +
-          (item.year ? '<span class="badge">' + item.year + '</span>' : '') +
+          (item.yearList && item.yearList.length > 1 ? '<span class="badge">' + item.yearList[item.yearList.length-1] + '–' + item.yearList[0] + '</span>' : (item.year ? '<span class="badge">' + item.year + '</span>' : '')) +
           (item.awards
             ? (item.awards.length > 1
                 ? '<span class="badge" style="background:var(--accent);color:#fff">' + item.awards.length + ' awards</span>'
