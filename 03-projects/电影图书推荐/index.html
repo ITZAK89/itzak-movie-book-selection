@@ -787,7 +787,7 @@ window.runAudit = function() {
   var items = dataStore.movies ? dataStore.movies.items : state.items;
   if (!items || items.length === 0) { debug('No data to audit'); return; }
 
-  var awards = MOVIE_AWARDS.map(function(a){ return a.src + ' ' + a.award; });
+  var awards = MOVIE_PAGES.map(function(a){ return a.src + ' ' + a.award; });
   debug('=== AUDIT: ' + awards.length + ' awards ===');
 
   // Group by year
