@@ -209,7 +209,7 @@ function debug(msg) {
 }
 
 // ===== CONFIG =====
-var VERSION = 'v5';
+var VERSION = 'v6';
 (function checkVersion(){
   var v = localStorage.getItem('mbr_version');
   if (v !== VERSION) {
@@ -303,7 +303,7 @@ function buildQuery(cfg) {
   var wikiPerson = 'OPTIONAL { ?article schema:about ?person; schema:inLanguage "en"; schema:isPartOf <https://en.wikipedia.org/>. }';
   var wikiWork = 'OPTIONAL { ?article schema:about ?work; schema:inLanguage "en"; schema:isPartOf <https://en.wikipedia.org/>. }';
   if (cfg.p === 'work') {
-    return 'SELECT ?item ?itemLabel ?creator ?creatorLabel ?year ?article WHERE { ?item wdt:P166 wd:' + qid + '. OPTIONAL { ?item wdt:P57 ?creator. } OPTIONAL { ?item wdt:P50 ?creator. } OPTIONAL { ?item p:P166 ?s. ?s ps:P166 wd:' + qid + '. ?s pq:P585 ?d. BIND(YEAR(?d) AS ?year) } ' + wiki + ' SERVICE wikibase:label { bd:serviceParam wikibase:language "en,zh". } } ORDER BY DESC(?year) LIMIT 20';
+    return 'SELECT ?item ?itemLabel ?creator ?creatorLabel ?year ?article WHERE { ?item wdt:P166 wd:' + qid + '; wdt:P31/wdt:P279* wd:Q11424. OPTIONAL { ?item wdt:P57 ?creator. } OPTIONAL { ?item p:P166 ?s. ?s ps:P166 wd:' + qid + '. ?s pq:P585 ?d. BIND(YEAR(?d) AS ?year) } ' + wiki + ' SERVICE wikibase:label { bd:serviceParam wikibase:language "en,zh". } } ORDER BY DESC(?year) LIMIT 20';
   }
   if (cfg.p === 'person') {
     return 'SELECT ?person ?personLabel ?work ?workLabel ?year ?article WHERE { ?person wdt:P166 wd:' + qid + '; wdt:P31 wd:Q5. OPTIONAL { ?person p:P166 ?s. ?s ps:P166 wd:' + qid + '. ?s pq:P585 ?d. BIND(YEAR(?d) AS ?year) } OPTIONAL { ?s pq:P1686 ?work. } ' + wikiWork + ' SERVICE wikibase:label { bd:serviceParam wikibase:language "en,zh". } } ORDER BY DESC(?year) LIMIT 20';
