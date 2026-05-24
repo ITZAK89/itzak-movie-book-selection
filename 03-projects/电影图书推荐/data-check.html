@@ -41,6 +41,7 @@ function parseWinners(html, name) {
     }
     if (filmCol < 0) filmCol = (headers.length >= 2 ? 1 : 0);
     if (directorCol < 0) directorCol = (headers.length >= 3 ? 2 : 1);
+    console.log('  Headers[' + t + ']: ' + headers.join(' | ') + ' => year=' + yearCol + ' film=' + filmCol + ' dir=' + directorCol);
     // For acting awards without director: use column 1 as actor, column 2 as film
     if (name.indexOf('Actor') >= 0 || name.indexOf('Actress') >= 0) {
       filmCol = headers.length >= 3 ? 2 : 1;
