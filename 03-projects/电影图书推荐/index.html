@@ -211,7 +211,7 @@ function debug(msg) {
 }
 
 // ===== CONFIG =====
-var VERSION = 'v8';
+var VERSION = 'v9';
 (function checkVersion(){
   var v = localStorage.getItem('mbr_version');
   if (v !== VERSION) {
@@ -911,6 +911,7 @@ if (window.__TEST_DATA__) {
 // ===== INIT =====
 async function init() {
   debugEl = document.getElementById('debug');
+  debugEl.style.display = 'block';
   debug('Init started');
   render();
   debug('Loading movies and books in parallel...');
