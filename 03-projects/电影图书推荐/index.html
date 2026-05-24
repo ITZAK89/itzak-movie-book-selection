@@ -177,6 +177,7 @@ footer {
   <div class="header-right">
     <span class="status-dot loading" id="status-dot" title="加载中"></span>
     <span class="status-text" id="status-text">加载中...</span>
+    <button class="theme-btn" id="export-btn" title="导出测试数据" style="font-size:.65rem;width:auto;padding:0 10px;border-radius:6px">Export</button>
     <button class="theme-btn" id="refresh-btn" title="刷新数据">&#8635;</button>
     <button class="theme-btn" id="theme-btn" title="切换主题">&#9788;</button>
   </div>
@@ -198,6 +199,7 @@ footer {
 <div id="modal-container"></div>
 <footer>数据来源: Wikipedia · Wikidata · TSPDT</footer>
 
+<script src="test-data.js"></script>
 <script>
 // ===== DEBUG =====
 var debugEl, debugLines = [];
@@ -777,6 +779,19 @@ async function refreshCurrent() {
   await loadData(state.tab, true);
 }
 
+// ===== TEST DATA MODE =====
+if (window.__TEST_DATA__) {
+  // Offline mode: use embedded test data, skip API calls
+  var init = function() {
+    dataStore.movies = window.__TEST_DATA__.movies;
+    dataStore.books = window.__TEST_DATA__.books;
+    state.items = dataStore[state.tab].items;
+    state.loading = false;
+    render();
+  };
+} else {
+  // Live mode: full init with API calls
+
 // ===== INIT =====
 async function init() {
   debugEl = document.getElementById('debug');
@@ -835,6 +850,15 @@ document.getElementById('theme-btn').addEventListener('click', function(){
 document.getElementById('refresh-btn').addEventListener('click', function(){
   refreshCurrent();
 });
+document.getElementById('export-btn').addEventListener('click', function(){
+  var data = { movies: dataStore.movies, books: dataStore.books };
+  var blob = new Blob(['window.__TEST_DATA__ = ' + JSON.stringify(data, null, 2) + ';'], {type: 'text/javascript'});
+  var url = URL.createObjectURL(blob);
+  var a = document.createElement('a');
+  a.href = url; a.download = 'test-data.js';
+  document.body.appendChild(a); a.click();
+  document.body.removeChild(a); URL.revokeObjectURL(url);
+});
 
 document.querySelector('.tabs').addEventListener('click', function(e){
   if (e.target.classList.contains('tab')) {
@@ -860,6 +884,7 @@ document.querySelector('.tabs').addEventListener('click', function(e){
 });
 
 init();
+} // close else block for test data mode
 </script>
 </body>
 </html>
