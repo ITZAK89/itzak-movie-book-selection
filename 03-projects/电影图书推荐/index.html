@@ -208,6 +208,8 @@ function debug(msg) {
   if (debugLines.length > 50) debugLines.shift();
   if (debugEl) debugEl.textContent = debugLines.join('\n');
   console.log(msg);
+  var prog = document.getElementById('load-progress');
+  if (prog) prog.textContent = msg;
 }
 
 // ===== CONFIG =====
@@ -713,7 +715,7 @@ function renderCards() {
   var container = document.getElementById('content');
 
   if (state.loading) {
-    container.innerHTML = '<div class="loading-overlay"><div class="spinner"></div>Loading...</div>';
+    container.innerHTML = '<div class="loading-overlay"><div class="spinner"></div><div id="load-progress">Loading...</div></div>';
     return;
   }
 
