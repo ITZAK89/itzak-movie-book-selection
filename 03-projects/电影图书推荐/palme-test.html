@@ -18,7 +18,7 @@ async function fetchPage(pageName) {
 
 function getFilmTitle(cellText) {
   // cell may contain "English Title  Original Title" - take first part
-  return cellText.replace(/\[.*?\]/g,'').trim().split(/  |\t/)[0].trim();
+  return cellText.replace(/\[.*?\]/g,'').replace(/[§*]/g,'').trim().split(/  |\t/)[0].trim();
 }
 
 function parseWinners(html) {
@@ -39,7 +39,7 @@ function parseWinners(html) {
       else continue;
       var fi = 1 - shift, di = 2 - shift;
       if (fi < 0) fi = 0; if (di < 0) di = 0;
-      var film = (fi < cells.length) ? getFilmTitle(cells[fi].textContent) : '';
+      var film = (fi < cells.length) ? getFilmTitle(cells[fi].textContent).replace(/[§*]/g,'') : '';
       if (!film) continue;
       var dir = (di < cells.length) ? cells[di].textContent.replace(/\[.*?\]/g,'').trim() : '';
       all.push({year: parseInt(year), film: film, director: dir, thumb: null, wpTitle: null});
