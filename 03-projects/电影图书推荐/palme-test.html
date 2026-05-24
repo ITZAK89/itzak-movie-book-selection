@@ -8,6 +8,7 @@ h2{color:#6c8cff;margin-top:24px}.grid{display:grid;grid-template-columns:repeat
 .card-body p{margin:0;font-size:.75rem;color:#aaa}.err{color:#f44336}.stat{color:#4caf50}
 </style></head><body>
 <select id="sel" style="font-size:16px;padding:8px;margin-bottom:12px;background:#333;color:#fff;border:1px solid #555"></select>
+<button id="go" style="font-size:16px;padding:8px 16px;margin-left:8px;background:#6c8cff;color:#fff;border:none;border-radius:4px;cursor:pointer">Go</button>
 <div id="out"></div>
 <script>
 var AWARDS = [
@@ -58,10 +59,15 @@ function parseWinners(html, layout) {
   for (var t = 0; t < tables.length; t++) {
     var rows = tables[t].querySelectorAll('tr');
     if (rows.length < 3) continue;
-    var prevYear = '';
+    var prevYear = '', debugShown = 0;
     for (var r = 1; r < rows.length; r++) {
       var cells = rows[r].querySelectorAll('td,th');
       if (cells.length < 2) continue;
+      if (debugShown < 3) {
+        var raw = []; for (var ci = 0; ci < Math.min(8, cells.length); ci++) raw.push('['+ci+']'+cells[ci].textContent.substring(0,40));
+        console.log('  Row'+r+' ('+cells.length+'c): ' + raw.join(' | '));
+        debugShown++;
+      }
       var first = cells[0].textContent.replace(/\[.*?\]/g,'').trim();
       var shift = 0, year;
       if (/^\d{4}$/.test(first) && parseInt(first) >= 1990) { year = first; prevYear = year; }
@@ -147,5 +153,6 @@ for (var i = 0; i < AWARDS.length; i++) {
   sel.innerHTML += '<option value="' + i + '">' + AWARDS[i].src + ' — ' + AWARDS[i].name + '</option>';
 }
 sel.onchange = function() { runOne(parseInt(sel.value)); };
+document.getElementById('go').onclick = function() { runOne(parseInt(sel.value)); };
 runOne(0);
 </script></body></html>
