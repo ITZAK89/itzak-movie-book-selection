@@ -177,6 +177,7 @@ footer {
   <div class="header-right">
     <span class="status-dot loading" id="status-dot" title="加载中"></span>
     <span class="status-text" id="status-text">加载中...</span>
+    <button class="theme-btn" id="refresh-btn" title="刷新数据">&#8635;</button>
     <button class="theme-btn" id="theme-btn" title="切换主题">&#9788;</button>
   </div>
 </header>
@@ -264,7 +265,6 @@ function buildWorkQuery(qid) {
     '?item wdt:P166 wd:' + qid + '.' +
     'OPTIONAL { ?item wdt:P57 ?creator. }' +
     'OPTIONAL { ?item wdt:P50 ?creator. }' +
-    'OPTIONAL { ?item wdt:P161 ?creator. }' +
     'OPTIONAL { ?item p:P166 ?s. ?s ps:P166 wd:' + qid + '. ?s pq:P585 ?d. BIND(YEAR(?d) AS ?year) }' +
     'SERVICE wikibase:label { bd:serviceParam wikibase:language "en,zh". }' +
     '} ORDER BY DESC(?year) LIMIT 20';
@@ -533,48 +533,80 @@ function showModal(item) {
   document.getElementById('modal-fav').onclick = function(){ toggleFav(id); showModal(item); };
 }
 
+// ===== DATA STORE =====
+var dataStore = { movies: null, books: null };
+
+async function loadData(type, forceRefresh) {
+  var cacheKey = 'full_' + type;
+  var cacheTTL = 3600000; // 1h
+
+  if (!forceRefresh) {
+    var cached = cacheGet(cacheKey);
+    if (cached) {
+      dataStore[type] = cached;
+      if (type === state.tab) {
+        state.items = cached.items;
+        state.loading = false;
+        state.cacheAge = '缓存';
+        render();
+      }
+      // Background refresh if cache older than half TTL
+      if (Date.now() - cached._ts > cacheTTL / 2) {
+        refreshInBackground(type, cacheKey, cacheTTL);
+      }
+      return;
+    }
+  }
+
+  state.loading = true;
+  render();
+
+  try {
+    dataStore[type] = await fetchAll(type);
+    cacheSet(cacheKey, dataStore[type], cacheTTL);
+    dataStore[type]._ts = Date.now();
+    if (type === state.tab) {
+      state.items = dataStore[type].items;
+      state.loading = false;
+      state.error = dataStore[type].failures > 0;
+      state.cacheAge = '实时';
+      render();
+    }
+  } catch(e) {
+    if (dataStore[type]) {
+      if (type === state.tab) document.getElementById('banner').innerHTML = '<div class="banner warn">实时更新失败，显示缓存</div>';
+    } else if (type === state.tab) {
+      state.loading = false;
+      state.error = true;
+      render();
+      document.getElementById('banner').innerHTML = '<div class="banner warn">无法加载数据，请检查网络</div>';
+    }
+  }
+}
+
+async function refreshInBackground(type, cacheKey, ttl) {
+  try {
+    var fresh = await fetchAll(type);
+    fresh._ts = Date.now();
+    cacheSet(cacheKey, fresh, ttl);
+    dataStore[type] = fresh;
+    if (type === state.tab) {
+      state.items = fresh.items;
+      state.cacheAge = '实时';
+      render();
+    }
+  } catch(e) {}
+}
+
+async function refreshCurrent() {
+  document.getElementById('banner').innerHTML = '';
+  await loadData(state.tab, true);
+}
+
 // ===== INIT =====
 async function init() {
   render();
-
-  for (var t = 0; t < 2; t++) {
-    var type = t === 0 ? 'movies' : 'books';
-    var cacheKey = 'full_' + type;
-    var cached = cacheGet(cacheKey);
-    var result;
-
-    if (cached) {
-      result = cached;
-      state.cacheAge = '缓存数据';
-      if (type === state.tab) {
-        state.items = result.items;
-        state.loading = false;
-        render();
-      }
-    }
-
-    // Fetch fresh in background
-    try {
-      var fresh = await fetchAll(type);
-      cacheSet(cacheKey, fresh, 3600000); // 1h TTL for current year data freshness
-      if (type === state.tab) {
-        state.items = fresh.items;
-        state.loading = false;
-        state.error = fresh.failures > 0;
-        state.cacheAge = '实时';
-        render();
-      }
-    } catch(e) {
-      if (!cached && type === state.tab) {
-        state.loading = false;
-        state.error = true;
-        render();
-        document.getElementById('banner').innerHTML = '<div class="banner warn">&#9888; 无法加载数据，请检查网络后刷新页面</div>';
-      } else if (cached && type === state.tab) {
-        document.getElementById('banner').innerHTML = '<div class="banner warn">&#9888; 实时数据更新失败，显示缓存数据</div>';
-      }
-    }
-  }
+  await Promise.all([loadData('movies'), loadData('books')]);
 }
 
 // ===== EVENT HANDLERS =====
@@ -610,6 +642,9 @@ document.getElementById('theme-btn').addEventListener('click', function(){
   document.body.classList.toggle('light');
   this.textContent = document.body.classList.contains('light') ? '☽' : '☀';
 });
+document.getElementById('refresh-btn').addEventListener('click', function(){
+  refreshCurrent();
+});
 
 document.querySelector('.tabs').addEventListener('click', function(e){
   if (e.target.classList.contains('tab')) {
@@ -619,10 +654,16 @@ document.querySelector('.tabs').addEventListener('click', function(e){
     state.filter = 'all';
     state.search = '';
     document.getElementById('search').value = '';
+    document.getElementById('banner').innerHTML = '';
 
-    var cacheKey = 'full_' + state.tab;
-    var cached = cacheGet(cacheKey);
-    if (cached) { state.items = cached.items; state.loading = false; state.cacheAge = '缓存'; }
+    if (dataStore[state.tab]) {
+      state.items = dataStore[state.tab].items;
+      state.loading = false;
+      state.cacheAge = dataStore[state.tab]._ts ? '缓存' : '';
+    } else {
+      state.loading = true;
+      loadData(state.tab);
+    }
     render();
   }
 });
