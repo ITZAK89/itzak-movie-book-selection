@@ -1,4 +1,4 @@
-<!DOCTYPE html><html lang="zh"><head><meta charset="UTF-8"><title>Cannes 奖项测试</title>
+<!DOCTYPE html><html lang="zh"><head><meta charset="UTF-8"><title>全部电影节奖项测试</title>
 <style>
 body{font:14px -apple-system,sans-serif;background:#111;color:#eee;padding:20px}
 h2{color:#6c8cff;margin-top:24px}.grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(200px,1fr));gap:12px}
@@ -10,12 +10,29 @@ h2{color:#6c8cff;margin-top:24px}.grid{display:grid;grid-template-columns:repeat
 <div id="out"></div>
 <script>
 var AWARDS = [
-  {name:'Palme d\'Or', page:'Palme_d%27Or', layout:'film_dir'},       // col1=film, col2=director
-  {name:'Grand Prix', page:'Grand_Prix_(Cannes_Film_Festival)', layout:'film_dir'},
-  {name:'Jury Prize', page:'Jury_Prize_(Cannes_Film_Festival)', layout:'film_dir'},
-  {name:'Best Director', page:'Cannes_Film_Festival_Award_for_Best_Director', layout:'dir_film'},  // col1=director, col2=film
-  {name:'Best Actor', page:'Cannes_Film_Festival_Award_for_Best_Actor', layout:'actor_film'},     // col1=actor, col2=film
-  {name:'Best Actress', page:'Cannes_Film_Festival_Award_for_Best_Actress', layout:'actor_film'}
+  // Cannes
+  {src:'Cannes',name:'Palme d\'Or', page:'Palme_d%27Or', layout:'film_dir'},
+  {src:'Cannes',name:'Grand Prix', page:'Grand_Prix_(Cannes_Film_Festival)', layout:'film_dir'},
+  {src:'Cannes',name:'Jury Prize', page:'Jury_Prize_(Cannes_Film_Festival)', layout:'film_dir'},
+  {src:'Cannes',name:'Best Director', page:'Cannes_Film_Festival_Award_for_Best_Director', layout:'dir_film'},
+  {src:'Cannes',name:'Best Actor', page:'Cannes_Film_Festival_Award_for_Best_Actor', layout:'actor_film'},
+  {src:'Cannes',name:'Best Actress', page:'Cannes_Film_Festival_Award_for_Best_Actress', layout:'actor_film'},
+  // Venice
+  {src:'Venice',name:'Golden Lion', page:'Golden_Lion', layout:'film_dir'},
+  {src:'Venice',name:'Silver Lion', page:'Silver_Lion', layout:'dir_film'},
+  {src:'Venice',name:'Volpi Cup Actor', page:'Volpi_Cup_for_Best_Actor', layout:'actor_film'},
+  {src:'Venice',name:'Volpi Cup Actress', page:'Volpi_Cup_for_Best_Actress', layout:'actor_film'},
+  // Berlin
+  {src:'Berlin',name:'Golden Bear', page:'Golden_Bear', layout:'film_dir'},
+  {src:'Berlin',name:'Silver Bear Jury', page:'Silver_Bear_Grand_Jury_Prize', layout:'film_dir'},
+  {src:'Berlin',name:'Silver Bear Director', page:'Silver_Bear_for_Best_Director', layout:'dir_film'},
+  {src:'Berlin',name:'Silver Bear Actor', page:'Silver_Bear_for_Best_Actor', layout:'actor_film'},
+  {src:'Berlin',name:'Silver Bear Actress', page:'Silver_Bear_for_Best_Actress', layout:'actor_film'},
+  // Oscars
+  {src:'Oscars',name:'Best Picture', page:'Academy_Award_for_Best_Picture', layout:'film_dir'},
+  {src:'Oscars',name:'Best Director', page:'Academy_Award_for_Best_Director', layout:'dir_film'},
+  {src:'Oscars',name:'Best Actor', page:'Academy_Award_for_Best_Actor', layout:'actor_film'},
+  {src:'Oscars',name:'Best Actress', page:'Academy_Award_for_Best_Actress', layout:'actor_film'}
 ];
 
 async function fetchPage(pageName) {
@@ -82,14 +99,14 @@ async function getPoster(film, year) {
 
 async function run() {
   var out = document.getElementById('out');
-  out.innerHTML = '<p>Fetching 6 Cannes award pages...</p>';
+  out.innerHTML = '<p>Fetching ' + AWARDS.length + ' award pages...</p>';
 
   for (var a = 0; a < AWARDS.length; a++) {
     var award = AWARDS[a];
     out.innerHTML += '<p>Fetching ' + award.name + '...</p>';
     var html = await fetchPage(award.page);
     var rows = parseWinners(html, award.layout);
-    out.innerHTML += '<p class="stat">' + award.name + ': ' + rows.length + ' films (1990-). Loading posters...</p>';
+    out.innerHTML += '<p class="stat">' + award.src + ' ' + award.name + ': ' + rows.length + ' films (1990-). Loading posters...</p>';
 
     // Load posters in batches of 6
     for (var i = 0; i < rows.length; i += 6) {
@@ -101,7 +118,7 @@ async function run() {
     var ok = rows.filter(function(r){ return r.thumb; }).length;
     out.innerHTML += '<p class="stat">Posters: ' + ok + '/' + rows.length + '</p>';
 
-    out.innerHTML += '<h2>' + award.name + ' (' + rows.length + ' films)</h2>';
+    out.innerHTML += '<h2>' + award.src + ' — ' + award.name + ' (' + rows.length + ' films)</h2>';
     out.innerHTML += '<div class="grid">';
     for (var j = 0; j < rows.length; j++) {
       var r = rows[j];
