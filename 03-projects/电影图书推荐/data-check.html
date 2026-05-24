@@ -1,0 +1,78 @@
+<!DOCTYPE html><html lang="zh"><head><meta charset="UTF-8"><title>数据检查</title>
+<style>body{font:14px monospace;background:#111;color:#eee;padding:20px}
+h2{color:#6c8cff}table{border-collapse:collapse;margin:10px 0;width:100%}
+td,th{border:1px solid #333;padding:4px 8px;text-align:left}
+th{color:#aaa}.ok{color:#4caf50}.err{color:#f44336}</style></head><body>
+<div id="out"></div>
+<script>
+var pages = [
+  // cols: 0-based index for [year, film, director_or_actor]
+  {name:'Palme d\'Or', page:'Palme_d%27Or', src:'Cannes', cols:[0,1,2]},
+  {name:'Grand Prix', page:'Grand_Prix_(Cannes_Film_Festival)', src:'Cannes', cols:[0,1,2]},
+  {name:'Jury Prize', page:'Jury_Prize_(Cannes_Film_Festival)', src:'Cannes', cols:[0,2,1]},
+  {name:'Best Director', page:'Cannes_Film_Festival_Award_for_Best_Director', src:'Cannes', cols:[0,2,1]},
+  {name:'Best Actor (actor|film)', page:'Cannes_Film_Festival_Award_for_Best_Actor', src:'Cannes', cols:[0,2,1]},
+  {name:'Best Actress (actress|film)', page:'Cannes_Film_Festival_Award_for_Best_Actress', src:'Cannes', cols:[0,2,1]}
+];
+
+async function fetchTable(pageName) {
+  var url = 'https://en.wikipedia.org/w/api.php?origin=*&action=parse&page=' + pageName + '&prop=text&format=json';
+  var r = await fetch(url);
+  if (!r.ok) throw new Error('HTTP ' + r.status);
+  var d = await r.json();
+  return d.parse.text['*'];
+}
+
+function parseWinners(html, pageCfg) {
+  var doc = new DOMParser().parseFromString(html, 'text/html');
+  var tables = doc.querySelectorAll('table.wikitable');
+  var allRows = [];
+
+  for (var t = 0; t < tables.length; t++) {
+    var rows = tables[t].querySelectorAll('tr');
+    if (rows.length < 3) continue;
+    var headers = [];
+    var ths = rows[0].querySelectorAll('th');
+    for (var h = 0; h < ths.length; h++) headers.push(ths[h].textContent.trim().toLowerCase());
+
+    var yearCol = pageCfg.cols[0], filmCol = pageCfg.cols[1], directorCol = pageCfg.cols[2];
+
+    for (var r = 1; r < rows.length; r++) {
+      var cells = rows[r].querySelectorAll('td');
+      if (cells.length < Math.max(yearCol, filmCol) + 1) continue;
+      var year = (cells[yearCol]||{}).textContent||'';
+      year = year.replace(/\[.*?\]/g,'').trim();
+      if (!year || !/^\d{4}$/.test(year) || parseInt(year) < 1990) continue;
+      var film = (cells[filmCol]||{}).textContent||'';
+      film = film.replace(/\[.*?\]/g,'').replace(/\s+/g,' ').trim();
+      var director = directorCol >= 0 ? ((cells[directorCol]||{}).textContent||'').replace(/\[.*?\]/g,'').trim() : '';
+      allRows.push({year: parseInt(year), film: film, director: director});
+    }
+  }
+  return allRows;
+}
+
+async function run() {
+  var out = document.getElementById('out');
+  out.innerHTML = '<p>Fetching 6 Cannes award pages...</p>';
+  for (var i = 0; i < pages.length; i++) {
+    var p = pages[i];
+    out.innerHTML += '<p>Fetching ' + p.name + '...</p>';
+    try {
+      var html = await fetchTable(p.page);
+      var rows = parseWinners(html, p);
+      out.innerHTML += '<p class="ok">Got ' + rows.length + ' rows (1990+)</p>';
+      out.innerHTML += '<h2>' + p.name + ' (' + rows.length + ' winners 1990-)</h2>';
+      out.innerHTML += '<table><tr><th>Year</th><th>Film</th><th>Director</th></tr>';
+      for (var j = 0; j < rows.length; j++) {
+        out.innerHTML += '<tr><td>' + rows[j].year + '</td><td>' + rows[j].film + '</td><td>' + rows[j].director + '</td></tr>';
+      }
+      out.innerHTML += '</table>';
+    } catch(e) {
+      out.innerHTML += '<p class="err">Error: ' + e.message + '</p>';
+    }
+  }
+  out.innerHTML += '<p>Done.</p>';
+}
+run();
+</script></body></html>
