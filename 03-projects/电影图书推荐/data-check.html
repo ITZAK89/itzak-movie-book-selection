@@ -65,23 +65,17 @@ function parseWinners(html, name) {
         continue;
       }
 
-      // Column indices depend on how many cells this row actually has
-      // Full rows: 6 cells = year|english|original|director|country|ref
-      // Missing original title: 5 cells = year|english|director|country|ref
-      var fi, di;
-      if (cells.length >= 6) { fi = 1; di = 3; }
-      else if (cells.length === 5) { fi = 1; di = 2; }
-      else if (cells.length === 4) { fi = 1; di = 2; }
-      else if (cells.length === 3) { fi = 1; di = 2; }
-      else continue;
-
-      fi -= shift; di -= shift;
-      if (fi < 0) fi = 0;
+      // DOM layout: Year(0) | Title(1) | Director(2) | Country(3) | Ref(4)
+      // Original Title is INSIDE cell[1], not a separate column
+      // Country/Ref may be missing due to rowspan
+      // shift=1 when year is missing (rowspan)
+      var fi = 1 - shift, di = 2 - shift;
+      if (fi < 0) fi = 0; if (di < 0) di = 0;
 
       var film = (fi < cells.length) ? cells[fi].textContent.replace(/\[.*?\]/g,'').replace(/\s+/g,' ').trim() : '';
       if (!film) continue;
 
-      var director = (di >= 0 && di < cells.length) ? cells[di].textContent.replace(/\[.*?\]/g,'').trim() : '';
+      var director = (di < cells.length) ? cells[di].textContent.replace(/\[.*?\]/g,'').trim() : '';
 
       allRows.push({year: parseInt(year), film: film, director: director});
     }
