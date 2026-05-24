@@ -342,8 +342,9 @@ async function fetchAward(cfg) {
   var q = buildQuery(cfg);
   debug('  calling runSparql for ' + cfg.qid);
 
+  var t = cfg.p === 'person' ? 90000 : 30000;
   var rows;
-  try { rows = await runSparql(q, 25000); } catch(e) {
+  try { rows = await runSparql(q, t); } catch(e) {
     console.warn('SPARQL failed:', cfg.qid, e.message);
     throw e; // Don't cache failures
   }
