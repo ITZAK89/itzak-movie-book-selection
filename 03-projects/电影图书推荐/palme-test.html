@@ -75,8 +75,11 @@ function parseWinners(html) {
     var filmCol = -1, winnerCol = -1;
     for (var c = 0; c < headers.length; c++) {
       var ht = headers[c];
-      // Film column: look for "english title", "film", "title"
-      if (filmCol < 0 && (ht.indexOf('english') >= 0 || ht.indexOf('film') >= 0)) filmCol = c;
+      // Film column: look for "english title", standalone "film", "title"
+      if (ht.indexOf('english') >= 0) filmCol = c;
+      // Only match standalone "film", not "year of film"
+      if (filmCol < 0 && ht === 'film') filmCol = c;
+      if (filmCol < 0 && ht.indexOf('film') >= 0 && ht.indexOf('year') < 0) filmCol = c;
       if (filmCol < 0 && ht.indexOf('title') >= 0 && ht.indexOf('original') < 0) filmCol = c;
       // Winner column: look for director, actor, actress, winner, recipient
       if (winnerCol < 0 && (ht.indexOf('director') >= 0 || ht.indexOf('réalisateur') >= 0)) winnerCol = c;
