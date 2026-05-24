@@ -209,7 +209,7 @@ function debug(msg) {
 }
 
 // ===== CONFIG =====
-var VERSION = 'v2';
+var VERSION = 'v3';
 (function checkVersion(){
   var v = localStorage.getItem('mbr_version');
   if (v !== VERSION) {
@@ -458,9 +458,9 @@ async function fetchAll(type) {
   }
 
   // Try enrich from Wikipedia (non-blocking)
-  try { await enrich(allItems); } catch(e) {}
+  if (allItems.length > 0) { try { await enrich(allItems); } catch(e) {} }
 
-  return { items: allItems, failures: failures };
+  return { items: allItems, failures: failures, _count: allItems.length };
 }
 
 // ===== UI STATE =====
@@ -602,9 +602,13 @@ async function loadData(type, forceRefresh) {
 
   try {
     dataStore[type] = await fetchAll(type);
-    debug(type + ': got ' + (dataStore[type].items ? dataStore[type].items.length : 0) + ' items');
+    debug(type + ': got ' + (dataStore[type].items ? dataStore[type].items.length : 0) + ' items, ' + dataStore[type].failures + ' failures');
     dataStore[type]._ts = Date.now();
-    cacheSet(cacheKey, dataStore[type], cacheTTL);
+    if (dataStore[type].items.length > 0) {
+      cacheSet(cacheKey, dataStore[type], cacheTTL);
+    } else {
+      debug(type + ': WARNING not caching empty result');
+    }
     if (type === state.tab) {
       state.items = dataStore[type].items;
       state.loading = false;
