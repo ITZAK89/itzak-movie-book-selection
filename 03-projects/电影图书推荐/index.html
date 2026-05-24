@@ -211,7 +211,7 @@ function debug(msg) {
 }
 
 // ===== CONFIG =====
-var VERSION = 'v18';
+var VERSION = 'v19';
 var SKIP_BOOKS = true;
 var TEST_ONLY_CANNES = true;
 (function checkVersion(){
@@ -364,9 +364,19 @@ async function fetchAward(cfg, isBook) {
 
   var timeout = (cfg.p === 'person') ? 90000 : 30000;
   var rows;
-  try { rows = await runSparql(q, timeout); } catch(e) {
-    console.warn('SPARQL failed:', cfg.qid, e.message);
-    throw e;
+  for (var attempt = 0; attempt < 2; attempt++) {
+    try {
+      rows = await runSparql(q, timeout);
+      break;
+    } catch(e) {
+      console.warn('SPARQL failed:', cfg.qid, e.message, 'attempt', attempt);
+      if (attempt === 0 && cfg.p === 'person') {
+        debug('  retrying ' + cfg.qid + ' in 10s...');
+        await sleep(10000);
+      } else {
+        throw e;
+      }
+    }
   }
 
   if (!rows || rows.length === 0) {
