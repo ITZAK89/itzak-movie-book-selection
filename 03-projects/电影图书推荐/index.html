@@ -211,7 +211,7 @@ function debug(msg) {
 }
 
 // ===== CONFIG =====
-var VERSION = 'v9';
+var VERSION = 'v10';
 (function checkVersion(){
   var v = localStorage.getItem('mbr_version');
   if (v !== VERSION) {
@@ -917,8 +917,7 @@ async function init() {
   debug('Loading movies and books in parallel...');
   try {
     await Promise.all([loadData('movies'), loadData('books')]);
-    // Data loaded, hide debug panel
-    debugEl.style.display = 'none';
+    // Keep debug panel visible for review
   } catch(e) {
     debug('FATAL: ' + e.message + ' ' + (e.stack||''));
   }
