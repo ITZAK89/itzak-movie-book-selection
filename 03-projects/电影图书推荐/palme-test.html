@@ -57,7 +57,7 @@ function parseWinners(html) {
   var all = [];
   for (var t = 0; t < tables.length; t++) {
     var rows = tables[t].querySelectorAll('tr');
-    if (rows.length < 3) continue;
+    if (rows.length < 2) continue;
     // Only parse tables where first data row has a 4-digit year
     var firstDataCells = rows[1] ? rows[1].querySelectorAll('td,th') : null;
     if (!firstDataCells || firstDataCells.length < 1) continue;
