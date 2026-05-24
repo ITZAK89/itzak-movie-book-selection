@@ -59,6 +59,11 @@ function parseWinners(html, layout) {
   for (var t = 0; t < tables.length; t++) {
     var rows = tables[t].querySelectorAll('tr');
     if (rows.length < 3) continue;
+    // Only parse tables where first data row has a 4-digit year (skip summary/other tables)
+    var firstDataCells = rows[1] ? rows[1].querySelectorAll('td,th') : null;
+    if (!firstDataCells || firstDataCells.length < 1) continue;
+    var testYear = firstDataCells[0].textContent.replace(/\[.*?\]/g,'').trim();
+    if (!/^\d{4}$/.test(testYear) || parseInt(testYear) < 1990) continue;
     var prevYear = '', debugShown = 0;
     for (var r = 1; r < rows.length; r++) {
       var cells = rows[r].querySelectorAll('td,th');
