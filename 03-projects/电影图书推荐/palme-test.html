@@ -63,8 +63,9 @@ function parseWinners(html) {
     var firstDataCells = rows[1] ? rows[1].querySelectorAll('td,th') : null;
     if (!firstDataCells || firstDataCells.length < 1) { console.log('  Table ' + t + ': skipped, no data cells'); continue; }
     var testYear = firstDataCells[0].textContent.replace(/\[.*?\]/g,'').trim();
-    console.log('  Table ' + t + ': testYear=' + testYear);
-    if (!/^\d{4}$/.test(testYear) || parseInt(testYear) < 1990) { console.log('  Table ' + t + ': skipped, testYear not a valid >=1990 year'); continue; }
+    // Extract year for formats: "1990", "1990(63rd)", "2020/21(93rd)"
+    var yearMatch = testYear.match(/^(\d{4})/);
+    if (!yearMatch || parseInt(yearMatch[1]) < 1990) { console.log('  Table ' + t + ': skipped, testYear=' + testYear); continue; }
 
     // Auto-detect columns from header row
     var headerCells = rows[0].querySelectorAll('th');
@@ -121,7 +122,8 @@ function parseWinners(html) {
       }
       var first = cells[0].textContent.replace(/\[.*?\]/g,'').trim();
       var shift = 0, year;
-      if (/^\d{4}$/.test(first) && parseInt(first) >= 1990) { year = first; prevYear = year; }
+      var ym = first.match(/^(\d{4})/);
+      if (ym && parseInt(ym[1]) >= 1990) { year = ym[1]; prevYear = year; }
       else if (prevYear) { year = prevYear; shift = 1; }
       else continue;
 
