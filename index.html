@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="zh">
+<html lang="en">
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -22,27 +22,48 @@ header {
   padding: 16px 24px; background: var(--surface); border-bottom: 1px solid var(--border);
   position: sticky; top: 0; z-index: 100;
 }
-header h1 { font-size: 1.2rem; font-weight: 700; }
+header h1 { font-size: 1.2rem; font-weight: 700; cursor: pointer; }
 .header-right { display: flex; align-items: center; gap: 12px; }
 .theme-btn {
   width: 36px; height: 36px; border-radius: 50%; border: 1px solid var(--border);
   background: var(--surface); color: var(--text); cursor: pointer; font-size: 1rem;
   display: flex; align-items: center; justify-content: center;
 }
-.status-dot { width: 8px; height: 8px; border-radius: 50%; display: inline-block; }
+.status-dot { width: 8px; height: 8px; border-radius: 50%; display: inline-block; flex-shrink: 0; }
 .status-dot.ok { background: #4caf50; }
 .status-dot.loading { background: #ff9800; animation: pulse 1s infinite; }
 .status-dot.error { background: #f44336; }
 @keyframes pulse { 0%,100%{opacity:1} 50%{opacity:.3} }
-.status-text { font-size: .75rem; color: var(--muted); }
+.header-menu { position: relative; }
+.header-dropdown {
+  display: none; position: absolute; right: 0; top: 100%; margin-top: 4px;
+  background: var(--surface); border: 1px solid var(--border); border-radius: 8px;
+  box-shadow: 0 4px 16px rgba(0,0,0,.12); min-width: 160px; padding: 4px; z-index: 150;
+}
+.header-dropdown.open { display: block; }
+.header-dropdown button {
+  display: block; width: 100%; padding: 8px 12px; border: none; border-radius: 6px;
+  background: none; color: var(--text); font-size: .82rem; cursor: pointer; text-align: left;
+}
+.header-dropdown button:hover { background: var(--hover); }
 
-.tabs { display: flex; gap: 0; border-bottom: 1px solid var(--border); background: var(--surface); padding: 0 24px; }
+.user-icon { display:inline-block; width:1em; height:1em; vertical-align:middle; position:relative }
+.user-icon::before {
+  content:''; position:absolute; top:0; left:50%; transform:translateX(-50%);
+  width:.4em; height:.4em; border-radius:50%; border:1.5px solid var(--text)
+}
+.user-icon::after {
+  content:''; position:absolute; top:.5em; left:50%; transform:translateX(-50%);
+  width:.8em; height:.45em; border-radius:.25em .25em 0 0; border:1.5px solid var(--text); border-bottom:none
+}
+
+.tabs { display: flex; align-items: center; justify-content: space-between; border-bottom: 1px solid var(--border); background: var(--surface); padding: 0 24px; }
 .tab {
   padding: 12px 24px; cursor: pointer; border: none; background: none;
   color: var(--muted); font-size: .9rem; font-weight: 500;
   border-bottom: 2px solid transparent; transition: all .2s;
 }
-.tab.active { color: var(--accent); border-bottom-color: var(--accent); }
+.tab.active { color: var(--text); border-bottom-color: var(--text); }
 .tab:hover { color: var(--text); }
 
 main { max-width: 1400px; margin: 0 auto; padding: 20px 24px; }
@@ -56,7 +77,7 @@ main { max-width: 1400px; margin: 0 auto; padding: 20px 24px; }
   font-size: .8rem; white-space: nowrap; transition: all .2s;
 }
 .filter-chip:hover { border-color: var(--accent); color: var(--text); }
-.filter-chip.active { background: var(--accent); color: #fff; border-color: var(--accent); }
+.filter-chip.active { background: var(--surface); color: var(--text); border-color: var(--text); }
 .search-box {
   margin-left: auto; padding: 8px 14px; border-radius: 20px; border: 1px solid var(--border);
   background: var(--surface); color: var(--text); font-size: .85rem; width: 220px;
@@ -97,14 +118,17 @@ main { max-width: 1400px; margin: 0 auto; padding: 20px 24px; }
   padding: 3px 8px; border-radius: 4px; font-size: .7rem; font-weight: 500;
   background: var(--badge); color: var(--accent);
 }
-.card-fav {
-  position: absolute; top: 8px; right: 8px; width: 28px; height: 28px;
+.card-fav, .card-watched {
+  position: absolute; right: 8px; width: 28px; height: 28px;
   border-radius: 50%; background: rgba(0,0,0,.5); border: none; color: #fff;
   cursor: pointer; font-size: .85rem; display: flex; align-items: center; justify-content: center;
   opacity: 0; transition: opacity .2s;
 }
-.card:hover .card-fav { opacity: 1; }
+.card-fav { top: 8px; }
+.card-watched { top: 40px; }
+.card:hover .card-fav, .card:hover .card-watched { opacity: 1; }
 .card-fav.saved { opacity: 1; color: #ffd700; }
+.card-watched.done { opacity: 1; color: #4caf50; }
 
 .empty-state {
   text-align: center; padding: 60px 20px; color: var(--muted);
@@ -149,7 +173,12 @@ main { max-width: 1400px; margin: 0 auto; padding: 20px 24px; }
 
 footer {
   text-align: center; padding: 24px; color: var(--muted); font-size: .75rem;
+  border-top: 1px solid var(--border);
 }
+footer a { color: var(--muted); text-decoration: underline; cursor: pointer; }
+footer a:hover { color: var(--text); }
+footer a { color: var(--muted); text-decoration: underline; cursor: pointer; }
+footer a:hover { color: var(--text); }
 
 @media (max-width: 768px) {
   .card-grid { grid-template-columns: repeat(auto-fill, minmax(160px, 1fr)); gap: 10px; }
@@ -166,31 +195,51 @@ footer {
 <body>
 
 <header>
-  <h1>Itzak's selection</h1>
+  <h1><img src="logo-icon.png" alt="" style="height:2.2em;vertical-align:middle;margin-right:0;display:inline-block">Itzak's selection</h1>
   <div class="header-right">
-    <span class="status-dot loading" id="status-dot" title="加载中"></span>
-    <span class="status-text" id="status-text">加载中...</span>
-    <button class="theme-btn" id="export-btn" title="导出测试数据" style="font-size:.65rem;width:auto;padding:0 10px;border-radius:6px">Export</button>
-    <button class="theme-btn" id="refresh-btn" title="刷新数据">&#8635;</button>
-    
+    <button class="theme-btn" id="draw-btn" title="Draw a random pick">&#9733;</button>
+    <div class="header-menu">
+      <button class="theme-btn" id="user-btn" title="My list" style="font-size:1.2rem"><span class="user-icon"></span></button>
+      <div class="header-dropdown" id="user-dropdown">
+        <button id="menu-all" style="font-weight:600">All</button>
+        <div style="margin:0 8px;border-top:1px solid var(--border)"></div>
+        <button id="menu-saved">&#9733; Saved <span id="saved-count"></span></button>
+        <button id="menu-watched">&#10003; Watched <span id="watched-count"></span></button>
+      </div>
+    </div>
+    <div class="header-menu">
+      <button class="theme-btn" id="gear-btn" title="Settings" style="font-size:1.4rem">&#9881;</button>
+      <div class="header-dropdown" id="gear-dropdown">
+        <div style="padding:8px 12px;font-size:.75rem;color:var(--muted);display:flex;align-items:center;gap:6px">
+          <span class="status-dot ok" id="gear-dot"></span>
+          <span id="gear-status">Ready</span>
+        </div>
+        <div style="margin:0 8px;border-top:1px solid var(--border)"></div>
+        <button id="menu-refresh">&#8635; Refresh</button>
+        <button id="menu-export">&#8615; Export Data</button>
+      </div>
+    </div>
   </div>
 </header>
 
 <div class="tabs">
-  <button class="tab active" data-tab="movies">Movies</button>
-  <button class="tab" data-tab="books">Books</button>
+  <div>
+    <button class="tab active" data-tab="movies">Movies</button>
+    <button class="tab" data-tab="books">Books</button>
+  </div>
+  <input type="text" class="search-box" id="search" placeholder="Search...">
 </div>
 
 <main>
   <div id="banner"></div>
-  <div id="debug" style="font-size:.75rem;color:var(--muted);margin-bottom:12px;font-family:monospace;max-height:300px;overflow-y:auto;background:var(--surface);border-radius:8px;padding:8px 12px;display:none"></div>
   <div class="filter-bar" id="filter-bar"></div>
-  <input type="text" class="search-box" id="search" placeholder="搜索...">
   <div id="content"></div>
 </main>
 
 <div id="modal-container"></div>
-<footer>数据来源: Wikipedia · Wikidata · TSPDT</footer>
+<footer>
+  <a id="about-link">About</a> &middot; Copyright &copy; itzak 2026
+</footer>
 
 <script src="test-data.js"></script>
 <script>
@@ -206,7 +255,8 @@ function debug(msg) {
 }
 
 // ===== CONFIG =====
-var VERSION = 'v24';
+var VERSION = 'v28';
+var TMDB_KEY = '130b06aea0e168efad5503ca8501942e';
 (function checkVersion(){
   var v = localStorage.getItem('mbr_version');
   if (v !== VERSION) {
@@ -242,7 +292,8 @@ const MOVIE_PAGES = [
   {src:'Oscars',award:'Best Picture', page:'Academy_Award_for_Best_Picture'},
   {src:'Oscars',award:'Best Director', page:'Academy_Award_for_Best_Director'},
   {src:'Oscars',award:'Best Actor', page:'Academy_Award_for_Best_Actor'},
-  {src:'Oscars',award:'Best Actress', page:'Academy_Award_for_Best_Actress'}
+  {src:'Oscars',award:'Best Actress', page:'Academy_Award_for_Best_Actress'},
+  {src:'Oscars',award:'Best International Film', page:'List_of_Academy_Award_winners_and_nominees_for_Best_International_Feature_Film'}
 ];
 
 const BOOK_PAGES = [
@@ -268,6 +319,36 @@ function cacheSet(k, data, ttl) {
   try { localStorage.setItem('mbr_' + k, JSON.stringify({data:data, ts:Date.now(), ttl:ttl})); } catch(x) {}
 }
 
+// ===== INCREMENTAL UPDATE =====
+function normWikiTitle(t) {
+  return decodeURIComponent(t).replace(/_/g, ' ');
+}
+
+async function batchCheckRevisions(pageNames) {
+  var titles = pageNames.join('%7C');
+  var url = 'https://en.wikipedia.org/w/api.php?origin=*&action=query&prop=revisions&format=json&titles=' + titles;
+  try {
+    var r = await fetch(url);
+    var d = await r.json();
+    if (d.error) {
+      debug('revision check API error: ' + (d.error.info || JSON.stringify(d.error)));
+      return null;
+    }
+    var revMap = {};
+    var pages = d.query.pages;
+    for (var pid in pages) {
+      var p = pages[pid];
+      if (p.revisions && p.revisions[0]) {
+        revMap[normWikiTitle(p.title)] = p.revisions[0].revid;
+      }
+    }
+    debug('revision check: ' + Object.keys(revMap).length + ' pages, ' + pageNames.length + ' expected');
+    return revMap;
+  } catch(e) {
+    debug('revision check failed: ' + e.message);
+    return null;
+  }
+}
 
 // ===== WIKIPEDIA AWARD PARSER =====
 async function fetchWikiPage(pageName) {
@@ -300,6 +381,7 @@ function parseAwardsTable(html) {
     var headerCells = rows[0].querySelectorAll("th");
     var headers = [];
     for (var h = 0; h < headerCells.length; h++) headers.push(headerCells[h].textContent.trim().toLowerCase());
+    if (headers.length < 2) continue; // skip navboxes and other non-data tables
 
     var filmCol = -1, winnerCol = -1;
     for (var c = 0; c < headers.length; c++) {
@@ -316,14 +398,17 @@ function parseAwardsTable(html) {
     if (winnerCol < 0) winnerCol = 1;
 
     // Detect Oscar-style tables with background winner marking
+    // Require 2+ background rows to avoid false positives from single special rows (e.g. COVID cancellation)
     var hasWinnerBg = false;
+    var bgRowCount = 0;
     for (var scan = 1; scan < Math.min(10, rows.length); scan++) {
       var scanRow = rows[scan]; if (!scanRow) continue;
       var scanCells = scanRow.querySelectorAll("td,th");
       for (var sc = 0; sc < scanCells.length; sc++) {
-        if ((scanCells[sc].getAttribute("style")||"").indexOf("background") >= 0) { hasWinnerBg = true; break; }
+        if ((scanCells[sc].getAttribute("style")||"").indexOf("background") >= 0) { bgRowCount++; break; }
       }
     }
+    hasWinnerBg = (bgRowCount >= 2);
 
     var prevYear = "", prevRowspan = 0;
     for (var r = 1; r < rows.length; r++) {
@@ -485,45 +570,123 @@ async function getWikiPoster(wpTitle) {
   } catch(e) { return null; }
 }
 
+var tmdbQueue = Promise.resolve();
+async function getTmdbPoster(title, year) {
+  if (!title || !year) return null;
+  var ck = 'tmdb_' + title.toLowerCase().replace(/[^a-z0-9]/g,'') + '_' + year;
+  var cached = cacheGet(ck);
+  if (cached !== null) return cached;
+  // Throttle TMDb calls to avoid rate limiting
+  tmdbQueue = tmdbQueue.then(function(){ return new Promise(function(rs){ setTimeout(rs, 200); }); });
+  await tmdbQueue;
+  try {
+    var r = await fetch("https://api.themoviedb.org/3/search/movie?api_key=" + TMDB_KEY + "&query=" + encodeURIComponent(title) + "&year=" + year);
+    if (!r.ok) return null;
+    var d = await r.json();
+    var poster = null;
+    if (d.results && d.results.length > 0) {
+      // Prefer exact title match
+      for (var i = 0; i < d.results.length; i++) {
+        var rTitle = (d.results[i].title || '').toLowerCase();
+        if (rTitle === title.toLowerCase() && d.results[i].poster_path) {
+          poster = "https://image.tmdb.org/t/p/w342" + d.results[i].poster_path;
+          break;
+        }
+      }
+      // Fallback: first result with poster
+      if (!poster) {
+        for (var j = 0; j < d.results.length; j++) {
+          if (d.results[j].poster_path) {
+            poster = "https://image.tmdb.org/t/p/w342" + d.results[j].poster_path;
+            break;
+          }
+        }
+      }
+    }
+    cacheSet(ck, poster, 7776000000); // 90d TTL
+    return poster;
+  } catch(e) { return null; }
+}
+
 async function fetchMovieAwards() {
+  var pageNames = MOVIE_PAGES.map(function(p) { return p.page; });
+  var revs = await batchCheckRevisions(pageNames);
   var allItems = [];
+  var skipped = 0, fetched = 0;
   for (var i = 0; i < MOVIE_PAGES.length; i++) {
     var p = MOVIE_PAGES[i];
-    debug("Wiki fetch: " + p.src + " " + p.award);
-    try {
-      var html = await fetchWikiPage(p.page);
-      var rows = parseAwardsTable(html);
-      for (var j = 0; j < rows.length; j++) {
-        rows[j].source = p.src;
-        rows[j].award = p.award;
-        rows[j]._type = "movies";
+    var cacheKey = 'page_mov_' + p.page;
+    var cached = cacheGet(cacheKey);
+    var nTitle = normWikiTitle(p.page);
+    var currentRev = revs ? revs[nTitle] : undefined;
+    var needFetch = !cached || (currentRev && cached.revId !== currentRev);
+
+    if (needFetch) {
+      debug("Wiki fetch: " + p.src + " " + p.award + (cached ? ' (changed)' : ''));
+      try {
+        var html = await fetchWikiPage(p.page);
+        var rows = parseAwardsTable(html);
+        for (var j = 0; j < rows.length; j++) {
+          rows[j].source = p.src;
+          rows[j].award = p.award;
+          rows[j]._type = "movies";
+        }
+        cacheSet(cacheKey, {items: rows, revId: currentRev || 0});
+        allItems = allItems.concat(rows);
+        fetched++;
+        debug("  -> " + rows.length + " items");
+      } catch(e) {
+        debug("  -> ERROR: " + e.message);
+        if (cached) { allItems = allItems.concat(cached.items); }
       }
-      debug("  -> " + rows.length + " items");
-      allItems = allItems.concat(rows);
-    } catch(e) { debug("  -> ERROR: " + e.message); }
+    } else {
+      skipped++;
+      allItems = allItems.concat(cached.items);
+    }
   }
+  debug('movies: ' + fetched + ' fetched, ' + skipped + ' skipped');
   return allItems;
 }
 
 // ===== BOOK WIKIPEDIA PARSER =====
 async function fetchBookAwards() {
+  var pageNames = BOOK_PAGES.map(function(p) { return p.page; });
+  var revs = await batchCheckRevisions(pageNames);
   var allItems = [];
+  var skipped = 0, fetched = 0;
   for (var i = 0; i < BOOK_PAGES.length; i++) {
     var p = BOOK_PAGES[i];
-    debug("Wiki fetch book: " + p.src + " " + p.award);
-    try {
-      var html = await fetchWikiPage(p.page);
-      var rows = parseBookTable(html, p);
-      for (var j = 0; j < rows.length; j++) {
-        rows[j].source = p.src;
-        rows[j].award = p.award;
-        rows[j]._type = "books";
-        if (p.type === 'person') { rows[j].title = rows[j].creator; rows[j].creator = ''; }
+    var cacheKey = 'page_bk_' + p.page;
+    var cached = cacheGet(cacheKey);
+    var nTitle = normWikiTitle(p.page);
+    var currentRev = revs ? revs[nTitle] : undefined;
+    var needFetch = !cached || (currentRev && cached.revId !== currentRev);
+
+    if (needFetch) {
+      debug("Wiki fetch book: " + p.src + " " + p.award + (cached ? ' (changed)' : ''));
+      try {
+        var html = await fetchWikiPage(p.page);
+        var rows = parseBookTable(html, p);
+        for (var j = 0; j < rows.length; j++) {
+          rows[j].source = p.src;
+          rows[j].award = p.award;
+          rows[j]._type = "books";
+          if (p.type === 'person') { rows[j].title = rows[j].creator; rows[j].creator = ''; }
+        }
+        cacheSet(cacheKey, {items: rows, revId: currentRev || 0});
+        allItems = allItems.concat(rows);
+        fetched++;
+        debug("  -> " + rows.length + " items");
+      } catch(e) {
+        debug("  -> ERROR: " + e.message);
+        if (cached) { allItems = allItems.concat(cached.items); }
       }
-      debug("  -> " + rows.length + " items");
-      allItems = allItems.concat(rows);
-    } catch(e) { debug("  -> ERROR: " + e.message); }
+    } else {
+      skipped++;
+      allItems = allItems.concat(cached.items);
+    }
   }
+  debug('books: ' + fetched + ' fetched, ' + skipped + ' skipped');
   return allItems;
 }
 
@@ -568,14 +731,23 @@ async function enrich(items) {
     var t = items[k].wikiTitle;
     if (t && enrichMap[t]) {
       items[k].extract = enrichMap[t].extract;
-      items[k].thumbnail = enrichMap[t].thumb;
-      items[k].originalimage = enrichMap[t].orig;
+      if (enrichMap[t].thumb) items[k].thumbnail = enrichMap[t].thumb;
+      if (enrichMap[t].orig) items[k].originalimage = enrichMap[t].orig;
     }
   }
   return items;
 }
 
 // ===== MERGE/DEDUP =====
+function shuffle(arr) {
+  var a = arr.slice();
+  for (var i = a.length - 1; i > 0; i--) {
+    var j = Math.floor(Math.random() * (i + 1));
+    var tmp = a[i]; a[i] = a[j]; a[j] = tmp;
+  }
+  return a;
+}
+
 function normTitle(t) { return (t||'').toLowerCase().replace(/\([^)]*\)/g,'').replace(/[^a-z0-9一-鿿]/g,'').trim(); }
 
 function mergeFilms(items) {
@@ -633,40 +805,48 @@ async function fetchAll(type) {
 
   if (type === 'movies') {
     allItems = await fetchMovieAwards();
-    // Load posters for items with wikiTitle
-    var posterOk = 0, totalWithTitle = 0;
+    // Load posters for items with wikiTitle (with per-item cache)
+    var posterOk = 0, totalWithTitle = 0, posterCached = 0;
     for (var i = 0; i < allItems.length; i++) { if (allItems[i].wikiTitle) totalWithTitle++; }
     for (var i = 0; i < allItems.length; i += 6) {
       var batch = allItems.slice(i, i + 6);
       await Promise.all(batch.map(async function(item) {
         if (item.wikiTitle) {
+          var pc = cacheGet('poster_' + item.wikiTitle);
+          if (pc) { item.thumbnail = pc; posterOk++; posterCached++; return; }
           item.thumbnail = await getWikiPoster(item.wikiTitle);
-          if (item.thumbnail) posterOk++;
+          if (!item.thumbnail) item.thumbnail = await getTmdbPoster(item.title, item.year);
+          if (item.thumbnail) { posterOk++; cacheSet('poster_' + item.wikiTitle, item.thumbnail, 604800000); }
         }
       }));
       if (i % 60 === 0 || i + 6 >= allItems.length) debug(type + ': posters ' + Math.min(i + 6, allItems.length) + '/' + allItems.length);
     }
-    debug(type + ': posters found ' + posterOk + '/' + allItems.length);
+    debug(type + ': posters found ' + posterOk + '/' + allItems.length + ' (' + posterCached + ' cached)');
   } else {
     allItems = await fetchBookAwards();
-    // Load posters for book items with wikiTitle
-    var posterOk = 0, totalWithTitle = 0;
+    // Load posters for book items with wikiTitle (with per-item cache)
+    var posterOk = 0, totalWithTitle = 0, posterCached = 0;
     for (var i = 0; i < allItems.length; i++) { if (allItems[i].wikiTitle) totalWithTitle++; }
     for (var i = 0; i < allItems.length; i += 6) {
       var batch = allItems.slice(i, i + 6);
       await Promise.all(batch.map(async function(item) {
         if (item.wikiTitle) {
+          var pc = cacheGet('poster_' + item.wikiTitle);
+          if (pc) { item.thumbnail = pc; posterOk++; posterCached++; return; }
           item.thumbnail = await getWikiPoster(item.wikiTitle);
-          if (item.thumbnail) posterOk++;
+          if (item.thumbnail) { posterOk++; cacheSet('poster_' + item.wikiTitle, item.thumbnail, 604800000); }
         }
       }));
     }
-    debug(type + ': posters found ' + posterOk + '/' + allItems.length);
+    debug(type + ': posters found ' + posterOk + '/' + allItems.length + ' (' + posterCached + ' cached)');
   }
 
   // Merge/dedup films by title
   if (type === 'movies') {
     allItems = mergeFilms(allItems);
+  } else {
+    // Sort books newest first
+    allItems.sort(function(a,b){ return (b.year||'').localeCompare(a.year||''); });
   }
 
   // Try enrich from Wikipedia (non-blocking)
@@ -676,19 +856,33 @@ async function fetchAll(type) {
 }
 
 // ===== UI STATE =====
-var state = { tab: 'movies', items: [], sourceFilter: 'all', yearFilter: 'all', search: '', loading: true, error: false, cacheAge: '', defaultLimit: 10 };
+var state = { tab: 'movies', items: [], sourceFilter: 'all', yearFilter: 'all', search: '', loading: true, error: false, cacheAge: '', defaultLimit: 10, listFilter: 'all' };
 var favorites = {};
 try { favorites = JSON.parse(localStorage.getItem('mbr_favorites') || '{}'); } catch(e) {}
+var watched = {};
+try { watched = JSON.parse(localStorage.getItem('mbr_watched') || '{}'); } catch(e) {}
 
 function saveFavs() { localStorage.setItem('mbr_favorites', JSON.stringify(favorites)); }
+function saveWatched() { localStorage.setItem('mbr_watched', JSON.stringify(watched)); }
 function toggleFav(id) { favorites[id] = !favorites[id]; saveFavs(); renderCards(); }
+function toggleWatched(id) { watched[id] = !watched[id]; saveWatched(); renderCards(); }
 
 function getItemId(item) { return (item._type||'') + '_' + (item.title||item.creator||'') + '_' + item.year; }
 
 // ===== RENDER =====
 function render() {
-  document.getElementById('status-dot').className = state.loading ? 'status-dot loading' : (state.error ? 'status-dot error' : 'status-dot ok');
-  document.getElementById('status-text').textContent = state.loading ? '加载中...' : (state.error ? '部分失败' : '已就绪' + (state.cacheAge ? ' · ' + state.cacheAge : ''));
+  var dot = document.getElementById('gear-dot');
+  var st = document.getElementById('gear-status');
+  if (dot && st) {
+    dot.className = 'status-dot ' + (state.loading ? 'loading' : (state.error ? 'error' : 'ok'));
+    st.textContent = state.loading ? 'Loading...' : (state.error ? 'Partial error' : 'Ready' + (state.cacheAge ? ' · ' + state.cacheAge : ''));
+  }
+  // Update user menu counts
+  var sc = document.getElementById('saved-count');
+  var wc = document.getElementById('watched-count');
+  if (sc) sc.textContent = '(' + Object.keys(favorites).filter(function(k){ return favorites[k]; }).length + ')';
+  if (wc) wc.textContent = '(' + Object.keys(watched).filter(function(k){ return watched[k]; }).length + ')';
+
   renderFilters();
   renderCards();
 }
@@ -718,14 +912,15 @@ function renderFilters() {
   var srcKeys = Object.keys(sources);
   if (state.tab === 'books') srcKeys.sort();
 
-  var html = '<div style="display:flex;flex-wrap:wrap;gap:6px;align-items:center">';
+  var html = '<table style="border-spacing:0"><tr>';
   // Source row
-  html += '<span style="font-size:.75rem;color:var(--muted);margin-right:4px">来源</span>';
+  html += '<td style="font-size:.75rem;color:var(--muted);text-align:right;padding:0 4px 0 0;white-space:nowrap;vertical-align:top;padding-top:5px">Source</td>';
+  html += '<td style="display:flex;flex-wrap:wrap;gap:6px;padding:0">';
   html += '<button class="filter-chip' + (state.sourceFilter === 'all' ? ' active' : '') + '" data-filter="source" data-val="all">All</button>';
   for (var j = 0; j < srcKeys.length; j++) {
     html += '<button class="filter-chip' + (state.sourceFilter === srcKeys[j] ? ' active' : '') + '" data-filter="source" data-val="' + srcKeys[j] + '">' + srcKeys[j] + '</button>';
   }
-  html += '</div>';
+  html += '</td></tr>';
 
   // Year row
   var filtered = state.sourceFilter === 'all' ? state.items : state.items.filter(function(i){
@@ -736,13 +931,14 @@ function renderFilters() {
     return i.source === state.sourceFilter;
   });
   var years = getYears(filtered);
-  html += '<div style="display:flex;flex-wrap:wrap;gap:6px;align-items:center;margin-top:6px">';
-  html += '<span style="font-size:.75rem;color:var(--muted);margin-right:4px">年份</span>';
+  html += '<tr>';
+  html += '<td style="font-size:.75rem;color:var(--muted);text-align:right;padding:6px 4px 0 0;white-space:nowrap;vertical-align:top;padding-top:11px">Year</td>';
+  html += '<td style="display:flex;flex-wrap:wrap;gap:6px;padding:6px 0 0 0">';
   html += '<button class="filter-chip' + (state.yearFilter === 'all' ? ' active' : '') + '" data-filter="year" data-val="all">All</button>';
   for (var y = 0; y < years.length; y++) {
     html += '<button class="filter-chip' + (state.yearFilter === years[y] ? ' active' : '') + '" data-filter="year" data-val="' + years[y] + '">' + years[y] + '</button>';
   }
-  html += '</div>';
+  html += '</td></tr></table>';
 
   document.getElementById('filter-bar').innerHTML = html;
 }
@@ -773,10 +969,16 @@ function renderCards() {
       return (i.title||'').toLowerCase().indexOf(q) >= 0 || (i.creator||'').toLowerCase().indexOf(q) >= 0;
     });
   }
+  // List filter (saved / watched)
+  if (state.listFilter === 'saved') {
+    filtered = filtered.filter(function(i){ return favorites[getItemId(i)]; });
+  } else if (state.listFilter === 'watched') {
+    filtered = filtered.filter(function(i){ return watched[getItemId(i)]; });
+  }
 
-  // Default: show 10 latest when both filters are "all"
-  var showAll = !(state.sourceFilter === 'all' && state.yearFilter === 'all');
-  if (!showAll && state.defaultLimit > 0) filtered = filtered.slice(0, state.defaultLimit);
+  // Default: show 10 random when no filters active
+  var showAll = !(state.sourceFilter === 'all' && state.yearFilter === 'all' && state.listFilter === 'all' && !state.search);
+  if (!showAll && state.defaultLimit > 0) filtered = shuffle(filtered).slice(0, state.defaultLimit);
 
   var container = document.getElementById('content');
 
@@ -786,7 +988,7 @@ function renderCards() {
   }
 
   if (filtered.length === 0) {
-    container.innerHTML = '<div class="empty-state"><div class="icon">&#128218;</div><p>无结果</p><p class="muted">尝试调整筛选或搜索条件</p></div>';
+    container.innerHTML = '<div class="empty-state"><div class="icon">&#128218;</div><p>No results</p><p class="muted">Try adjusting filters or search terms</p></div>';
     return;
   }
 
@@ -795,6 +997,7 @@ function renderCards() {
     var item = filtered[i];
     var id = getItemId(item);
     var isFav = favorites[id];
+    var isWatched = watched[id];
     var imgHtml;
     if (item.thumbnail) {
       imgHtml = '<img class="card-img" src="' + item.thumbnail + '" alt="" loading="lazy" onerror="this.className=\'card-img placeholder\';this.textContent=\'' + (item.title||item.creator||'') + '\'">';
@@ -802,7 +1005,8 @@ function renderCards() {
       imgHtml = '<div class="card-img placeholder">' + (item.title||item.creator||'') + '</div>';
     }
     html += '<div class="card" data-id="' + id + '" style="position:relative">' +
-      '<button class="card-fav' + (isFav ? ' saved' : '') + '" data-fav="' + id + '" title="收藏">&#9733;</button>' +
+      '<button class="card-watched' + (isWatched ? ' done' : '') + '" data-watched="' + id + '" title="Watched">&#10003;</button>' +
+      '<button class="card-fav' + (isFav ? ' saved' : '') + '" data-fav="' + id + '" title="Save">&#9733;</button>' +
       imgHtml +
       '<div class="card-body">' +
         '<div class="card-title">' + (item.title||item.creator||'') + '</div>' +
@@ -822,9 +1026,31 @@ function renderCards() {
   container.innerHTML = html;
 }
 
+function showAbout() {
+  var html = '<div class="modal-overlay" id="modal-overlay"><div class="modal">' +
+    '<button class="modal-close" id="modal-close">&times;</button>' +
+    '<div class="modal-body">' +
+      '<h2>About Itzak\'s Selection</h2>' +
+      '<p style="margin-top:12px;line-height:1.7">A curated collection of award-winning films and books, aggregating data from major international film festivals and literary prizes. No editorial judgment — every entry earned its place by winning or being shortlisted for a major award.</p>' +
+      '<h3 style="margin-top:20px">Data Sources</h3>' +
+      '<p style="margin-top:8px;line-height:1.7">All data is fetched live from Wikipedia award pages. Film posters and book covers come from the Wikipedia REST API. Covers 21 film awards across Cannes, Venice, Berlin, and the Oscars, plus 8 literary prizes including the Booker, Nobel, Pulitzer, and National Book Award.</p>' +
+      '<h3 style="margin-top:20px">How It Works</h3>' +
+      '<p style="margin-top:8px;line-height:1.7">Award data is parsed from Wikipedia tables and cached locally for fast loading. The refresh button checks for Wikipedia page updates incrementally — only changed pages are re-fetched. Everything runs in the browser; no server, no database, no frameworks.</p>' +
+      '<h3 style="margin-top:20px">Random Draw</h3>' +
+      '<p style="margin-top:8px;line-height:1.7">Click the ⭐ button in the header to draw a random pick from the current filter pool — like opening a blind box. The 10 cards shown on the default view are also randomly shuffled each time you load or switch tabs.</p>' +
+      '<h3 style="margin-top:20px">Tech</h3>' +
+      '<p style="margin-top:8px;line-height:1.7">Pure static HTML/CSS/JavaScript. Single self-contained file. Works offline after first load. Built with Wikipedia APIs and vanilla DOM scripting.</p>' +
+    '</div>' +
+  '</div></div>';
+  document.getElementById('modal-container').innerHTML = html;
+  document.getElementById('modal-close').onclick = function(){ document.getElementById('modal-container').innerHTML = ''; };
+  document.getElementById('modal-overlay').onclick = function(e){ if (e.target === this) document.getElementById('modal-container').innerHTML = ''; };
+}
+
 function showModal(item) {
   var id = getItemId(item);
   var isFav = favorites[id];
+  var isWatched = watched[id];
   var imgHtml = item.originalimage ? '<img class="modal-img" src="' + item.originalimage + '" alt="">' : (item.thumbnail ? '<img class="modal-img" src="' + item.thumbnail + '" alt="">' : '');
   var wikiLink = item.wikiUrl ? '<a class="btn external" href="' + item.wikiUrl + '" target="_blank">Wikipedia →</a>' : '';
   var html = '<div class="modal-overlay" id="modal-overlay"><div class="modal">' +
@@ -836,7 +1062,8 @@ function showModal(item) {
       (item.awards ? '<div class="card-badges" style="margin-bottom:12px">' + item.awards.map(function(a){ return '<span class="badge">' + a.source + ' · ' + a.award + '</span>'; }).join(' ') + '</div>' : (item.source ? '<div class="card-badges" style="margin-bottom:12px"><span class="badge">' + item.source + ' · ' + item.award + '</span></div>' : '')) +
       (item.extract ? '<div class="summary">' + item.extract.substring(0, 600) + '...</div>' : '') +
       '<div class="modal-actions">' +
-        '<button class="btn primary" id="modal-fav">' + (isFav ? '★ 已收藏' : '☆ 收藏') + '</button>' +
+        '<button class="btn primary" id="modal-fav">' + (isFav ? '★ Saved' : '☆ Save') + '</button>' +
+        '<button class="btn primary" id="modal-watched">' + (isWatched ? '✓ Watched' : '✓ Watch') + '</button>' +
         wikiLink +
       '</div>' +
     '</div>' +
@@ -846,11 +1073,14 @@ function showModal(item) {
   document.getElementById('modal-close').onclick = function(){ document.getElementById('modal-container').innerHTML = ''; };
   document.getElementById('modal-overlay').onclick = function(e){ if (e.target === this) document.getElementById('modal-container').innerHTML = ''; };
   document.getElementById('modal-fav').onclick = function(){ toggleFav(id); showModal(item); };
+  document.getElementById('modal-watched').onclick = function(){ toggleWatched(id); showModal(item); };
 }
 
 // ===== AUDIT =====
 window.runAudit = function() {
-  if (!debugEl) { debugEl = document.getElementById('debug'); debugEl.style.display = 'block'; }
+  debugEl = document.getElementById('debug');
+  if (!debugEl) { console.log('Audit skipped - no debug panel'); return; }
+  debugEl.style.display = 'block';
   var items = dataStore.movies ? dataStore.movies.items : state.items;
   if (!items || items.length === 0) { debug('No data to audit'); return; }
 
@@ -912,7 +1142,7 @@ async function loadData(type, forceRefresh) {
       if (type === state.tab) {
         state.items = cached.items;
         state.loading = false;
-        state.cacheAge = '缓存';
+        state.cacheAge = 'Cached';
         render();
       }
       return;
@@ -936,18 +1166,18 @@ async function loadData(type, forceRefresh) {
       state.items = dataStore[type].items;
       state.loading = false;
       state.error = dataStore[type].failures > 0;
-      state.cacheAge = '实时';
+      state.cacheAge = 'Live';
       render();
     }
   } catch(e) {
     debug(type + ': fetch failed - ' + e.message);
     if (dataStore[type]) {
-      if (type === state.tab) document.getElementById('banner').innerHTML = '<div class="banner warn">实时更新失败，显示缓存</div>';
+      if (type === state.tab) document.getElementById('banner').innerHTML = '<div class="banner warn">Live update failed, showing cached data</div>';
     } else if (type === state.tab) {
       state.loading = false;
       state.error = true;
       render();
-      document.getElementById('banner').innerHTML = '<div class="banner warn">无法加载数据，请检查网络</div>';
+      document.getElementById('banner').innerHTML = '<div class="banner warn">Failed to load data, check your network</div>';
     }
   }
 }
@@ -960,7 +1190,7 @@ async function refreshInBackground(type, cacheKey, ttl) {
     dataStore[type] = fresh;
     if (type === state.tab) {
       state.items = fresh.items;
-      state.cacheAge = '实时';
+      state.cacheAge = 'Live';
       render();
     }
   } catch(e) {}
@@ -968,6 +1198,7 @@ async function refreshInBackground(type, cacheKey, ttl) {
 
 async function refreshCurrent() {
   document.getElementById('banner').innerHTML = '';
+  debugLines = [];
   await loadData(state.tab, true);
 }
 
@@ -988,8 +1219,6 @@ if (window.__TEST_DATA__) {
 
 // ===== INIT =====
 async function init() {
-  debugEl = document.getElementById('debug');
-  debugEl.style.display = 'block';
   debug('Init started');
   render();
   debug('Loading movies and books in parallel...');
@@ -1017,6 +1246,29 @@ document.getElementById('filter-bar').addEventListener('click', function(e){
   }
 });
 
+function drawRandom() {
+  // Pick from all items matching current source + year filters (not just displayed 10)
+  var pool = state.items;
+  if (state.sourceFilter !== 'all') {
+    pool = pool.filter(function(i){
+      if (i.awards) {
+        for (var a = 0; a < i.awards.length; a++) { if (i.awards[a].source === state.sourceFilter) return true; }
+        return false;
+      }
+      return i.source === state.sourceFilter;
+    });
+  }
+  if (state.yearFilter !== 'all') {
+    pool = pool.filter(function(i){
+      if (i.yearList) return i.yearList.indexOf(state.yearFilter) >= 0;
+      return i.year === state.yearFilter;
+    });
+  }
+  if (pool.length === 0) return;
+  var pick = pool[Math.floor(Math.random() * pool.length)];
+  showModal(pick);
+}
+
 document.getElementById('search').addEventListener('input', function(){
   state.search = this.value;
   renderCards();
@@ -1025,6 +1277,12 @@ document.getElementById('search').addEventListener('input', function(){
 document.getElementById('content').addEventListener('click', function(e){
   var card = e.target.closest('.card');
   var favBtn = e.target.closest('.card-fav');
+  var watchedBtn = e.target.closest('.card-watched');
+  if (watchedBtn) {
+    e.stopPropagation();
+    toggleWatched(watchedBtn.dataset.watched);
+    return;
+  }
   if (favBtn) {
     e.stopPropagation();
     toggleFav(favBtn.dataset.fav);
@@ -1037,10 +1295,31 @@ document.getElementById('content').addEventListener('click', function(e){
   }
 });
 
-document.getElementById('refresh-btn').addEventListener('click', function(){
+document.getElementById('draw-btn').addEventListener('click', function(){
+  drawRandom();
+});
+
+// Dropdown toggles
+function toggleDropdown(btnId, ddId) {
+  document.getElementById(btnId).addEventListener('click', function(e){
+    e.stopPropagation();
+    var dd = document.getElementById(ddId);
+    var wasOpen = dd.classList.contains('open');
+    // Close all dropdowns first
+    document.querySelectorAll('.header-dropdown').forEach(function(d){ d.classList.remove('open'); });
+    if (!wasOpen) dd.classList.add('open');
+  });
+}
+toggleDropdown('gear-btn', 'gear-dropdown');
+toggleDropdown('user-btn', 'user-dropdown');
+document.addEventListener('click', function(){
+  document.querySelectorAll('.header-dropdown').forEach(function(d){ d.classList.remove('open'); });
+});
+
+document.getElementById('menu-refresh').addEventListener('click', function(){
   refreshCurrent();
 });
-document.getElementById('export-btn').addEventListener('click', function(){
+document.getElementById('menu-export').addEventListener('click', function(){
   var data = { movies: dataStore.movies, books: dataStore.books };
   var blob = new Blob(['window.__TEST_DATA__ = ' + JSON.stringify(data, null, 2) + ';'], {type: 'text/javascript'});
   var url = URL.createObjectURL(blob);
@@ -1050,6 +1329,34 @@ document.getElementById('export-btn').addEventListener('click', function(){
   document.body.removeChild(a); URL.revokeObjectURL(url);
 });
 
+// User menu handlers
+document.getElementById('menu-all').addEventListener('click', function(){
+  state.listFilter = 'all';
+  render();
+});
+document.getElementById('menu-saved').addEventListener('click', function(){
+  state.listFilter = 'saved';
+  render();
+});
+document.getElementById('menu-watched').addEventListener('click', function(){
+  state.listFilter = 'watched';
+  render();
+});
+
+document.querySelector('header h1').addEventListener('click', function(){
+  state.sourceFilter = 'all';
+  state.yearFilter = 'all';
+  state.listFilter = 'all';
+  state.search = '';
+  document.getElementById('search').value = '';
+  render();
+});
+
+document.getElementById('about-link').addEventListener('click', function(e){
+  e.preventDefault();
+  showAbout();
+});
+
 document.querySelector('.tabs').addEventListener('click', function(e){
   if (e.target.classList.contains('tab')) {
     document.querySelectorAll('.tab').forEach(function(t){ t.classList.remove('active'); });
@@ -1057,6 +1364,7 @@ document.querySelector('.tabs').addEventListener('click', function(e){
     state.tab = e.target.dataset.tab;
     state.sourceFilter = 'all';
     state.yearFilter = 'all';
+    state.listFilter = 'all';
     state.search = '';
     document.getElementById('search').value = '';
     document.getElementById('banner').innerHTML = '';
@@ -1064,7 +1372,7 @@ document.querySelector('.tabs').addEventListener('click', function(e){
     if (dataStore[state.tab]) {
       state.items = dataStore[state.tab].items;
       state.loading = false;
-      state.cacheAge = dataStore[state.tab]._ts ? '缓存' : '';
+      state.cacheAge = dataStore[state.tab]._ts ? 'Cached' : '';
     } else {
       state.loading = true;
       loadData(state.tab);
