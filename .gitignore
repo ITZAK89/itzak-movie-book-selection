@@ -1,5 +1,30 @@
+# ============================================
+# 此仓库仅包含 03-projects/电影图书推荐/ 项目
+# 其他所有 vault 内容均不追踪
+# ============================================
+
 .DS_Store
 .env
 *.env
-audio/
+
+# 不追踪项目以外的所有 vault 内容
+00-meta/
+04-areas/
+05-resources/
+08-templates/
+临时/
+CLAUDE.md
+
+# 其他项目
+03-projects/kocowa/
+03-projects/韩语学习网站/
+03-projects/.DS_Store
+
+# Obsidian 配置（属于 vault 级别，不属于项目）
+.obsidian/
+
+# Claude Code 配置（属于 vault 级别，不属于项目）
+.claude/
+
+# 项目内不追踪的文件
 03-projects/电影图书推荐/test-data.js
